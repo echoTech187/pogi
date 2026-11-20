@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full bg-[#f4f7f6]">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MedCred Concierge - Buku Besar Komisi Agen Lapangan & PIC</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Core Fonts & Styles -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="h-full bg-[#f4f7f6] text-slate-800 antialiased font-sans">
+  <!-- MOBILE BACKDROP OVERLAY -->
+  <div id="sidebarOverlay" onclick="toggleMobileSidebar(false)" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-40 hidden pointer-events-none transition-opacity lg:hidden"></div>
+
+  <div class="flex h-screen overflow-hidden">
+    <!-- APP SIDEBAR -->
+    <aside id="appSidebar" class="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] lg:w-64 bg-white border-r border-slate-200/90 flex flex-col shrink-0 transition-transform duration-300 ease-in-out -translate-x-full lg:translate-x-0 lg:static lg:inset-auto shadow-2xl lg:shadow-none">
+      <!-- Top Brand Header -->
+      <div class="px-4 py-4 border-b border-slate-100 flex items-center justify-between gap-2">
+        <div role="button" tabindex="0" data-nav-view="dashboard" onclick="switchView('dashboard')" class="flex items-center gap-2.5 cursor-pointer min-w-0">
+          <div class="w-9 h-9 rounded-xl bg-[#006948] flex items-center justify-center text-white shadow-xs shrink-0">
+            <span class="material-symbols-outlined text-xl fill">shield_with_heart</span>
+          </div>
+          <div class="min-w-0">
+            <div class="font-extrabold text-[13px] tracking-tight text-[#006948] leading-none">MEDCRED CONCIERGE</div>
+            <div class="text-[8.5px] text-slate-500 font-semibold leading-tight mt-0.5 truncate">Tata Kelola Medik &amp; Kredensial</div>
+          </div>
+        </div>
+        <button type="button" onclick="toggleMobileSidebar(false)" class="lg:hidden p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition" aria-label="Tutup Menu">
+          <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+      </div>
+
+      <!-- Navigation Menu ('MENU UTAMA') with Event Delegation + Clean onclick -->
+      <div id="sidebarNavContainer" class="px-3 py-4 flex-1 overflow-y-auto">
+        <div class="px-3 mb-2.5 text-[10px] font-bold tracking-wider text-slate-400 uppercase">
+          MENU UTAMA
+        </div>
+        <nav class="space-y-1">
+          <button type="button" id="nav-dashboard" data-nav-view="dashboard" onclick="switchView('dashboard')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold transition bg-[#006948] text-white shadow-xs active">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">grid_view</span>
+            <span class="pointer-events-none">Ringkasan Utama</span>
+          </button>
+          <button type="button" id="nav-doctors" data-nav-view="doctors" onclick="switchView('doctors')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">group</span>
+            <span class="pointer-events-none">Daftar Dokter &amp; Nakes</span>
+          </button>
+          <button type="button" id="nav-psv" data-nav-view="psv" onclick="switchView('psv')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">verified_user</span>
+            <span class="pointer-events-none">Verifikasi Kredensial</span>
+          </button>
+          <button type="button" id="nav-compliance" data-nav-view="compliance" onclick="switchView('compliance')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">folder_shared</span>
+            <span class="pointer-events-none">Kepatuhan Dokumen</span>
+          </button>
+          <button type="button" id="nav-audit" data-nav-view="audit" onclick="switchView('audit')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">receipt_long</span>
+            <span class="pointer-events-none">Log Audit &amp; Kepatuhan</span>
+          </button>
+          <button type="button" id="nav-committee" data-nav-view="committee" onclick="switchView('committee')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">clinical_notes</span>
+            <span class="pointer-events-none">Komite Medik &amp; SPK/RKK</span>
+          </button>
+          <button type="button" id="nav-invoicing" data-nav-view="invoicing" onclick="switchView('invoicing')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">payments</span>
+            <span class="pointer-events-none">Penagihan &amp; Faktur</span>
+          </button>
+          <button type="button" id="nav-commissions" data-nav-view="commissions" onclick="switchView('commissions')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">account_balance_wallet</span>
+            <span class="pointer-events-none">Komisi Agen &amp; PIC</span>
+          </button>
+          <button type="button" id="nav-settings" data-nav-view="settings" onclick="switchView('settings')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">settings</span>
+            <span class="pointer-events-none">Pengaturan</span>
+          </button>
+        </nav>
+
+        <!-- Quick Portal Switcher for Doctor QR Self-Service -->
+        <div class="mt-6 pt-4 border-t border-slate-100">
+          <div class="px-3 mb-2 text-[10px] font-bold tracking-wider text-slate-400 uppercase">
+            PORTAL MANDIRI DOKTER
+          </div>
+          <button type="button" id="nav-qr-portal" data-nav-view="qr-portal" onclick="openQrSelfPortal('doc-elena', 'existing')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-emerald-50/70">
+            <span class="material-symbols-outlined text-[18px] text-[#006948] pointer-events-none">qr_code_2</span>
+            <span class="pointer-events-none">Form Registrasi &amp; QR Dokter</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Bottom Profile Card in Sidebar -->
+      <div class="p-3 border-t border-slate-100 bg-slate-50/60">
+        <div class="p-2.5 rounded-xl bg-white border border-slate-200/80 flex items-center justify-between gap-2 shadow-2xs">
+          <div role="button" tabindex="0" onclick="handleBottomProfileClick()" class="flex items-center gap-2.5 min-w-0 cursor-pointer">
+            <div id="sidebarBottomAvatar" class="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-800 to-teal-600 text-white font-bold text-xs flex items-center justify-center shrink-0 ring-2 ring-emerald-100">
+              EV
+            </div>
+            <div class="min-w-0">
+              <div id="sidebarBottomName" class="text-xs font-bold text-slate-900 truncate">Dr. Eleanor Vance</div>
+              <div id="sidebarBottomRole" class="text-[9px] font-bold text-[#006948] uppercase tracking-wider truncate">KETUA SUBKOMITE KREDENSIAL</div>
+            </div>
+          </div>
+          <button type="button" onclick="performLogout()" title="Keluar / Buka Halaman Login" class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition shrink-0">
+            <span class="material-symbols-outlined text-base">logout</span>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONSOLE WRAPPER -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <!-- TOP STICKY HEADER -->
+      <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-xs border-b border-slate-200/90 shrink-0 w-full">
+        <div class="h-14 sm:h-16 px-3.5 sm:px-6 flex items-center justify-between gap-2">
+          <!-- Left: Mobile Menu + Faskes Selector + Accreditation Badge -->
+          <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+            <button type="button" onclick="toggleMobileSidebar(true)" class="lg:hidden p-2 -ml-1 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition shrink-0" aria-label="Buka Menu">
+              <span class="material-symbols-outlined text-2xl">menu</span>
+            </button>
+
+            <div class="relative">
+              <button type="button" id="headerOrgScopeBtn" onclick="toggleOrgScopeDropdown()" class="flex items-center gap-2 bg-slate-50 hover:bg-slate-100 transition border border-slate-200/80 rounded-xl px-2.5 sm:px-3 py-1.5 cursor-pointer min-w-0 max-w-[190px] sm:max-w-sm">
+                <span class="material-symbols-outlined text-[#006948] text-base shrink-0">public</span>
+                <span id="selectedOrgScopeLabel" class="text-xs font-bold text-slate-800 truncate">Semua Wilayah Nasional (148)</span>
+                <span class="material-symbols-outlined text-sm text-slate-400 shrink-0">expand_more</span>
+              </button>
+              <div id="orgScopeDropdown" class="hidden absolute left-0 mt-2 w-80 bg-white rounded-2xl shadow-2xl border border-slate-200 py-2.5 z-50 text-xs">
+                <div class="px-3.5 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Filter Cakupan Layanan</div>
+                <button type="button" onclick="selectOrgScope('all')" class="w-full text-left px-3.5 py-2 hover:bg-emerald-50 text-slate-700 flex items-center justify-between font-semibold">
+                  <span class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-[#006948]">public</span> Semua Layanan Nasional</span>
+                  <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-[#006948] text-[10px] font-bold">148 Tiket</span>
+                </button>
+                <button type="button" onclick="selectOrgScope('b2c')" class="w-full text-left px-3.5 py-2 hover:bg-emerald-50 text-slate-700 flex items-center justify-between font-semibold">
+                  <span class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-blue-600">person</span> Jalur B2C Dokter Mandiri</span>
+                  <span class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 text-[10px] font-bold">92 Tiket</span>
+                </button>
+                <button type="button" onclick="selectOrgScope('b2b')" class="w-full text-left px-3.5 py-2 hover:bg-emerald-50 text-slate-700 flex items-center justify-between font-semibold">
+                  <span class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-purple-600">corporate_fare</span> Jalur B2B Mitra Faskes</span>
+                  <span class="px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 text-[10px] font-bold">56 Tiket</span>
+                </button>
+                <div class="my-1.5 border-t border-slate-100"></div>
+                <div class="px-3.5 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Mitra Faskes Spesifik</div>
+                <button type="button" onclick="selectPartnerScope('part-1')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 text-slate-700 flex items-center justify-between text-xs">
+                  <span class="truncate">Klinik Pratama Sehat Bersama (Surabaya)</span>
+                  <span class="text-[10px] text-slate-400 font-mono">12 Dr</span>
+                </button>
+                <button type="button" onclick="selectPartnerScope('part-2')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 text-slate-700 flex items-center justify-between text-xs">
+                  <span class="truncate">RS Citra Medika Jaringan Jabar (Bandung)</span>
+                  <span class="text-[10px] text-slate-400 font-mono">24 Dr</span>
+                </button>
+                <button type="button" onclick="selectPartnerScope('part-3')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 text-slate-700 flex items-center justify-between text-xs">
+                  <span class="truncate">Klinik Spesialis Kasih Medika (Yogyakarta)</span>
+                  <span class="text-[10px] text-slate-400 font-mono">8 Dr</span>
+                </button>
+              </div>
+            </div>
+
+
+          </div>
+
+          <!-- Center: Global Search Input (Admin) OR Doctor Status Pill (Doctor) -->
+          <div id="headerSearchContainer" class="relative flex-1 max-w-sm mx-2 hidden md:block">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-base">search</span>
+            <input id="globalSearchInput" type="text" oninput="handleGlobalSearch(this.value)" placeholder="Cari dokter, nomor STR, SIP, atau ..." class="w-full pl-9 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#006948] focus:bg-white transition" />
+          </div>
+
+          <div id="headerDoctorPill" class="hidden items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-xl text-xs font-bold text-[#006948] max-w-md truncate">
+            <span class="material-symbols-outlined text-base shrink-0">shield_with_heart</span>
+            <span id="headerDoctorPillText" class="truncate">Portal Mandiri Dokter</span>
+          </div>
+
+          <!-- Right: Quick Actions (QR) + Notification + User Avatar -->
+          <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            <button type="button" onclick="toggleMobileSearchBar()" class="md:hidden p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition" title="Cari Dokter">
+              <span class="material-symbols-outlined text-xl">search</span>
+            </button>
+
+            <button id="headerBtnQrModal" type="button" onclick="openQrModal()" class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-[#006948] rounded-xl text-[11px] font-bold transition">
+              <span class="material-symbols-outlined text-sm">qr_code_2</span>
+              <span class="hidden xl:inline">Link QR Dokter</span>
+            </button>
+
+            <div class="relative">
+              <button type="button" id="headerNotificationBtn" onclick="toggleNotificationDropdown()" class="relative p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition" title="Notifikasi Operasional">
+                <span class="material-symbols-outlined text-xl">notifications</span>
+                <span id="headerNotificationBadge" class="w-2 h-2 rounded-full bg-rose-500 absolute top-2 right-2 ring-2 ring-white"></span>
+              </button>
+              <div id="notificationDropdown" class="hidden absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-slate-200 z-50 overflow-hidden text-xs">
+                <div class="p-3.5 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[#006948] text-base">notifications_active</span>
+                    <span class="font-bold text-slate-900 text-xs">Notifikasi Operasional Concierge</span>
+                  </div>
+                  <button type="button" onclick="markAllNotificationsRead()" class="text-[10px] font-bold text-[#006948] hover:underline">Tandai Dibaca</button>
+                </div>
+                <div class="divide-y divide-slate-100 max-h-80 overflow-y-auto">
+                  <div class="p-3 hover:bg-slate-50 transition cursor-pointer flex gap-3 items-start" onclick="openDoctorDetailModal('doc-sophia'); toggleNotificationDropdown(false);">
+                    <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 font-bold text-xs mt-0.5">SA</div>
+                    <div class="flex-1 space-y-0.5">
+                      <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-900">Dr. Sophia Al-Mansoor</span>
+                        <span class="text-[9px] text-slate-400">10m lalu</span>
+                      </div>
+                      <p class="text-slate-600 text-[11px]">Unggah revisi SIP Faskes 2 (SIP2_Revisi.pdf). Menunggu kurasi admin.</p>
+                      <div class="pt-1 flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[9px] font-bold">Perlu Review</span>
+                        <span class="text-[10px] text-[#006948] font-bold hover:underline">Buka Berkas &rarr;</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="p-3 hover:bg-slate-50 transition cursor-pointer flex gap-3 items-start" onclick="openMassReminderModal('doc-elena'); toggleNotificationDropdown(false);">
+                    <div class="w-8 h-8 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 font-bold text-xs mt-0.5">ER</div>
+                    <div class="flex-1 space-y-0.5">
+                      <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-900">Dr. Elena Rostova</span>
+                        <span class="text-[9px] text-rose-500 font-bold">14 Hari Lagi</span>
+                      </div>
+                      <p class="text-slate-600 text-[11px]">STR Spesialis berakhir 15 Des 2026. Belum ada bukti perpanjangan.</p>
+                      <div class="pt-1 flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 text-[9px] font-bold">Peringatan Kritis</span>
+                        <span class="text-[10px] text-[#006948] font-bold hover:underline">Kirim Tautan QR WA &rarr;</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="p-3 hover:bg-slate-50 transition cursor-pointer flex gap-3 items-start" onclick="openDoctorDetailModal('doc-bagus'); toggleNotificationDropdown(false);">
+                    <div class="w-8 h-8 rounded-full bg-emerald-100 text-[#006948] flex items-center justify-center shrink-0 font-bold text-xs mt-0.5">BS</div>
+                    <div class="flex-1 space-y-0.5">
+                      <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-900">Dr. Bagus Setiawan</span>
+                        <span class="text-[9px] text-slate-400">1 jam lalu</span>
+                      </div>
+                      <p class="text-slate-600 text-[11px]">e-SIP Kemenkes &amp; Rekomendasi Kolegium Terbit (100% Selesai).</p>
+                      <div class="pt-1 flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-[#006948] text-[9px] font-bold">Selesai &amp; Terbit</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="p-3 hover:bg-slate-50 transition cursor-pointer flex gap-3 items-start" onclick="openDoctorDetailModal('doc-marcus'); toggleNotificationDropdown(false);">
+                    <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 font-bold text-xs mt-0.5">MV</div>
+                    <div class="flex-1 space-y-0.5">
+                      <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-900">Dr. Marcus Vance</span>
+                        <span class="text-[9px] text-slate-400">3 jam lalu</span>
+                      </div>
+                      <p class="text-slate-600 text-[11px]">Pengajuan Kenaikan Jenjang Jabatan Fungsional Utama disetujui BKN.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="p-2.5 bg-slate-50 border-t border-slate-100 text-center">
+                  <button type="button" onclick="switchView('doctors'); toggleNotificationDropdown(false);" class="text-[11px] font-bold text-[#006948] hover:underline">Lihat Semua 148 Permohonan Berkas &rarr;</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="relative">
+              <button type="button" onclick="toggleUserDropdown()" class="flex items-center gap-2 p-1 rounded-full hover:bg-slate-100 transition">
+                <div id="headerTopAvatar" class="w-8 h-8 rounded-full bg-[#006948] text-white font-bold text-xs flex items-center justify-center shadow-xs">
+                  EV
+                </div>
+              </button>
+              <div id="userDropdown" class="hidden pointer-events-none absolute right-0 mt-2 w-60 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50 text-xs">
+                <div class="px-4 py-2.5 border-b border-slate-100">
+                  <div id="dropdownUserName" class="font-bold text-slate-900">Dr. Eleanor Vance</div>
+                  <div id="dropdownUserRole" class="text-[10px] text-[#006948] font-bold">Ketua Subkomite Kredensial</div>
+                </div>
+
+                <!-- Admin Dropdown Items -->
+                <button type="button" onclick="openQrModal(); toggleUserDropdown(false);" class="dropdown-admin-item w-full text-left px-4 py-2.5 hover:bg-slate-50 flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-sm text-[#006948]">qr_code_2</span> Buat Link QR Dokter
+                </button>
+                <button type="button" onclick="switchView('audit'); toggleUserDropdown(false);" class="dropdown-admin-item w-full text-left px-4 py-2.5 hover:bg-slate-50 flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-sm text-slate-600">receipt_long</span> Log Audit &amp; Kepatuhan
+                </button>
+
+                <!-- Doctor Dropdown Items -->
+                <button type="button" onclick="openQrSelfPortal(state.currentUser?.doctorId, 'existing'); toggleUserDropdown(false);" class="dropdown-doctor-item hidden w-full text-left px-4 py-2.5 hover:bg-slate-50 flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-sm text-[#006948]">upload_file</span> Form Unggah Berkas Mandiri
+                </button>
+                <button type="button" onclick="openDoctorDetail(state.currentUser?.doctorId); toggleUserDropdown(false);" class="dropdown-doctor-item hidden w-full text-left px-4 py-2.5 hover:bg-slate-50 flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-sm text-blue-600">badge</span> Status Kredensial Saya
+                </button>
+                <button type="button" onclick="openDoctorRkk(state.currentUser?.doctorId); toggleUserDropdown(false);" class="dropdown-doctor-item hidden w-full text-left px-4 py-2.5 hover:bg-slate-50 flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-sm text-emerald-600">clinical_notes</span> Kewenangan Klinis (SPK/RKK)
+                </button>
+
+                <div class="border-t border-slate-100 my-1"></div>
+                <button type="button" onclick="performLogout()" class="w-full text-left px-4 py-2.5 hover:bg-red-50 flex items-center gap-2 text-red-600 font-bold">
+                  <span class="material-symbols-outlined text-sm">logout</span> Halaman Login / Keluar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Expandable Mobile Search Drawer (< md) -->
+        <div id="mobileSearchDrawer" class="hidden md:hidden px-3.5 pb-3 pt-1 border-t border-slate-100 bg-white">
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-base">search</span>
+            <input id="mobileGlobalSearchInput" type="text" oninput="handleGlobalSearch(this.value)" placeholder="Cari dokter, nomor STR, SIP, atau NIP..." class="w-full pl-9 pr-9 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#006948]" />
+            <button type="button" onclick="toggleMobileSearchBar(false)" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1">
+              <span class="material-symbols-outlined text-base">close</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- SCROLLABLE WORKSPACE -->
+      <main id="mainContent" class="flex-1 overflow-y-auto p-3.5 sm:p-5 lg:p-6 bg-[#f4f7f6] w-full max-w-full overflow-x-hidden">
+        <section id="view-commissions" class="spa-view active space-y-4 sm:space-y-5"></section>
+      </main>
+    </div>
+  </div>
+
+  <div id="payoutSlipModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden pointer-events-none flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden">
+      <div class="p-4 border-b border-slate-100 flex items-center justify-between gap-2 bg-slate-50/80">
+        <div class="flex items-center gap-2 text-xs font-bold text-slate-800">
+          <span class="material-symbols-outlined text-[#006948] text-base">payments</span>
+          <span>Slip Transfer Komisi Agen (Resmi)</span>
+        </div>
+        <button type="button" onclick="closePayoutSlipModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
+          <span class="material-symbols-outlined text-base">close</span>
+        </button>
+      </div>
+
+      <div class="p-5 space-y-4 text-xs">
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-center space-y-1">
+          <div class="text-[10px] font-bold text-slate-400 uppercase">KODE TRANSAKSI PAYOUT</div>
+          <div id="slipComId" class="text-base font-mono font-black text-[#006948]">COM-2026-101</div>
+          <div id="slipStatusBadge" class="inline-block mt-1">
+            <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-[#006948] font-bold text-[10px]">
+              DITRANSFER BERHASIL (SETTLED)
+            </span>
+          </div>
+        </div>
+
+        <div class="space-y-2 border-y border-slate-100 py-3">
+          <div class="flex justify-between">
+            <span class="text-slate-500">Nama Penerima:</span>
+            <strong id="slipAgentName" class="text-slate-900 font-bold">Rahmat Hidayat</strong>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Peran &amp; Wilayah:</span>
+            <span id="slipAgentRole" class="text-slate-700">REFERRAL_AGENT (Jawa Timur)</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Rekening Tujuan:</span>
+            <span id="slipBankAccount" class="font-mono text-slate-800">BCA 8210-9912-33</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Tiket Sumber:</span>
+            <span id="slipTicketRef" class="font-mono text-slate-800">#MC-2026-8839</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Komisi Bruto:</span>
+            <span id="slipGrossAmount" class="font-mono text-slate-800">Rp 500.000</span>
+          </div>
+          <div class="flex justify-between text-rose-600">
+            <span>Potongan PPh 21 (5%):</span>
+            <span id="slipTaxAmount" class="font-mono font-semibold">-Rp 25.000</span>
+          </div>
+          <div class="flex justify-between text-sm font-extrabold text-[#006948] pt-1 border-t border-slate-200">
+            <span>Dana Bersih Ditransfer:</span>
+            <span id="slipNetAmount" class="font-mono">Rp 475.000</span>
+          </div>
+        </div>
+
+        <div class="text-[10px] text-slate-400 space-y-0.5 font-mono">
+          <div>No. Kliring BI-FAST: BIF-20261117-891024</div>
+          <div>Tanggal Transaksi: 17 Nov 2026, 09:30 WIB</div>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+          <button type="button" onclick="showToast('Cetak Berkas', 'Mengirim perintah cetak slip ke printer...', 'info')" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold transition flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm">print</span> Cetak Slip
+          </button>
+          <button type="button" onclick="closePayoutSlipModal()" class="px-4 py-2 bg-[#006948] hover:bg-[#005137] text-white rounded-xl font-bold transition">
+            Tutup
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data Store & Shared Shell Scripts -->
+  <script src="js/state.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Page-Specific Module Script -->
+  <script>
+function filterCommissions(filterType) {
+      state.commissionFilter = filterType;
+      renderCommissionsView();
+    }
+
+    function processCommissionPayout(comId) {
+      const com = state.commissions.find(c => c.id === comId);
+      if (!com) return;
+      com.status = 'PAID_OUT';
+      com.payoutDate = 'Hari ini, ' + new Date().toLocaleDateString('id-ID');
+
+      addAuditEntry(
+        'Siti Rahma, S.Farm (Finance Ops)',
+        'Pencairan Komisi Agen Lapangan',
+        'bg-indigo-100 text-indigo-800',
+        com.id + ' (' + com.agentName + ')',
+        'Pencairan dana bersih Rp ' + com.netAmount.toLocaleString('id-ID') + ' ke ' + com.bankAccount
+      );
+
+      showToast('Komisi Berhasil Dicairkan', `Transfer komisi ${com.id} sebesar Rp ${com.netAmount.toLocaleString('id-ID')} ke ${com.agentName} berhasil diproses.`, 'success');
+      renderCommissionsView();
+    }
+
+    function batchPayoutCommissions() {
+      const readyList = state.commissions.filter(c => c.status === 'READY_FOR_PAYOUT');
+      if (readyList.length === 0) {
+        showToast('Tidak Ada Komisi Siap Cair', 'Seluruh komisi aktif saat ini sudah selesai dicairkan.', 'info');
+        return;
+      }
+      readyList.forEach(com => {
+        com.status = 'PAID_OUT';
+        com.payoutDate = 'Hari ini, ' + new Date().toLocaleDateString('id-ID');
+      });
+      showToast('Batch Payout Berhasil', `${readyList.length} komisi agen dan koordinator wilayah sukses ditransfer serentak.`, 'success');
+      renderCommissionsView();
+    }
+
+    function renderCommissionsView() {
+      const container = document.getElementById('view-commissions');
+      if (!container) return;
+
+      const totalGross = state.commissions.filter(c => c.grossAmount > 0).reduce((acc, c) => acc + c.grossAmount, 0);
+      const totalTax = state.commissions.filter(c => c.taxPph > 0).reduce((acc, c) => acc + c.taxPph, 0);
+      const readyList = state.commissions.filter(c => c.status === 'READY_FOR_PAYOUT');
+      const paidOutList = state.commissions.filter(c => c.status === 'PAID_OUT');
+      const readyNet = readyList.reduce((acc, c) => acc + c.netAmount, 0);
+      const paidOutNet = paidOutList.reduce((acc, c) => acc + c.netAmount, 0);
+
+      const filtered = state.commissions.filter(c => {
+        if (state.commissionFilter === 'READY_FOR_PAYOUT') return c.status === 'READY_FOR_PAYOUT';
+        if (state.commissionFilter === 'PAID_OUT') return c.status === 'PAID_OUT';
+        if (state.commissionFilter === 'CLAWBACK') return c.status === 'CLAWBACK';
+        return true;
+      });
+
+      container.innerHTML = `
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <div class="text-[10px] font-bold text-[#006948] uppercase tracking-wider">MODUL 6 • BUKU BESAR KOMISI &amp; MITRA LAPANGAN</div>
+            <h2 class="text-base sm:text-xl font-extrabold text-slate-900">Buku Besar Komisi Agen &amp; PIC Layanan</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Pencatatan hak komisi referral agen akuisisi daerah, PIC faskes, dan koordinator wilayah berdasar tiket selesai.</p>
+          </div>
+          <button type="button" onclick="batchPayoutCommissions()" class="px-3.5 py-2 bg-[#006948] hover:bg-[#005137] text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 self-start sm:self-center shadow-2xs">
+            <span class="material-symbols-outlined text-sm">payments</span> Cairkan Semua Komisi Siap (Rp ${readyNet.toLocaleString('id-ID')})
+          </button>
+        </div>
+
+        <!-- 4 KPI BUKU BESAR -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+            <span class="text-[10px] font-bold text-slate-400 uppercase">KOMISI BRUTO TERBUKUKAN</span>
+            <div class="text-lg sm:text-xl font-extrabold text-slate-900 mt-1">Rp ${totalGross.toLocaleString('id-ID')}</div>
+            <div class="text-[10px] text-slate-500 mt-1">Dasar Perhitungan Tiket Selesai</div>
+          </div>
+          <div class="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+            <span class="text-[10px] font-bold text-rose-700 uppercase">POTONGAN PPH 21 (5%)</span>
+            <div class="text-lg sm:text-xl font-extrabold text-rose-800 mt-1">Rp ${totalTax.toLocaleString('id-ID')}</div>
+            <div class="text-[10px] text-rose-700 mt-1">Kepatuhan Pajak Penghasilan</div>
+          </div>
+          <div class="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+            <span class="text-[10px] font-bold text-blue-700 uppercase">KOMISI BERSIH SIAP CAIR</span>
+            <div class="text-lg sm:text-xl font-extrabold text-blue-800 mt-1">Rp ${readyNet.toLocaleString('id-ID')}</div>
+            <div class="text-[10px] text-blue-700 mt-1">${readyList.length} Agen Menunggu Transfer</div>
+          </div>
+          <div class="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+            <span class="text-[10px] font-bold text-emerald-700 uppercase">SUDAH DITRANSFER (PAID)</span>
+            <div class="text-lg sm:text-xl font-extrabold text-[#006948] mt-1">Rp ${paidOutNet.toLocaleString('id-ID')}</div>
+            <div class="text-[10px] text-emerald-800 mt-1">${paidOutList.length} Transaksi Tuntas</div>
+          </div>
+        </div>
+
+        <!-- TABEL KOMISI -->
+        <div class="bg-white border border-slate-200 rounded-2xl shadow-xs overflow-hidden">
+          <div class="p-4 bg-slate-50/70 border-b border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <button type="button" onclick="filterCommissions('all')" class="px-3 py-1.5 rounded-xl font-bold transition shadow-2xs ${state.commissionFilter === 'all' ? 'bg-[#006948] text-white' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'}">
+                Semua Komisi (${state.commissions.length})
+              </button>
+              <button type="button" onclick="filterCommissions('READY_FOR_PAYOUT')" class="px-3 py-1.5 rounded-xl font-semibold transition ${state.commissionFilter === 'READY_FOR_PAYOUT' ? 'bg-[#006948] text-white' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'}">
+                Siap Cair (${readyList.length})
+              </button>
+              <button type="button" onclick="filterCommissions('PAID_OUT')" class="px-3 py-1.5 rounded-xl font-semibold transition ${state.commissionFilter === 'PAID_OUT' ? 'bg-[#006948] text-white' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'}">
+                Sudah Ditransfer (${paidOutList.length})
+              </button>
+              <button type="button" onclick="filterCommissions('CLAWBACK')" class="px-3 py-1.5 rounded-xl font-semibold transition ${state.commissionFilter === 'CLAWBACK' ? 'bg-[#006948] text-white' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'}">
+                Penyesuaian Clawback (${state.commissions.filter(c => c.status === 'CLAWBACK').length})
+              </button>
+            </div>
+            <span class="text-[11px] text-slate-500 font-medium">Aturan: RULES.md Bagian 4.3</span>
+          </div>
+
+          <!-- MOBILE TOUCH CARDS (< md) -->
+          <div class="md:hidden divide-y divide-slate-100">
+            ${filtered.map(com => `
+              <div class="p-4 space-y-3 hover:bg-slate-50/60 transition">
+                <div class="flex items-start justify-between gap-2">
+                  <div>
+                    <div class="font-mono text-xs font-bold text-slate-900">${com.id}</div>
+                    <div class="font-bold text-slate-900 text-xs mt-0.5">${com.agentName}</div>
+                    <div class="text-[10px] text-slate-500">${com.agentRole} (${com.agentArea})</div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold ${com.status === 'PAID_OUT' ? 'bg-emerald-100 text-[#006948]' : 'bg-blue-100 text-blue-800'}">
+                    ● ${com.status === 'PAID_OUT' ? 'Terbayar' : 'Siap Cair'}
+                  </span>
+                </div>
+                <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-between text-xs">
+                  <div>
+                    <div class="text-[10px] text-slate-400 font-semibold uppercase">Rekening Bank</div>
+                    <div class="text-[11px] font-medium text-slate-800">${com.bankAccount}</div>
+                    <div class="text-[10px] text-[#006948] font-mono mt-0.5">${com.ticketRef} (${com.doctorName})</div>
+                  </div>
+                  <div class="text-right">
+                    <div class="text-[10px] text-slate-400 font-semibold uppercase">Komisi Bersih</div>
+                    <div class="font-mono font-extrabold text-[#006948]">Rp ${com.netAmount.toLocaleString('id-ID')}</div>
+                    <div class="text-[9.5px] text-slate-400">PPh: -Rp ${com.taxPph.toLocaleString('id-ID')}</div>
+                  </div>
+                </div>
+                <div class="flex items-center justify-end gap-2 pt-1 flex-wrap">
+                  ${com.status === 'PAID_OUT' ? `
+                    <button type="button" onclick="openPayoutSlipModal('${com.id}')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold flex items-center gap-1 transition">
+                      <span class="material-symbols-outlined text-xs">receipt_long</span>
+                      <span>Slip Transfer</span>
+                    </button>
+                    <span class="text-xs text-[#006948] font-bold flex items-center gap-1 py-1">
+                      <span class="material-symbols-outlined text-sm">verified</span> Ditransfer
+                    </span>
+                  ` : `
+                    <button type="button" onclick="processCommissionPayout('${com.id}')" class="px-3 py-1.5 bg-[#006948] hover:bg-[#005137] text-white rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-2xs">
+                      <span class="material-symbols-outlined text-xs">payments</span>
+                      <span>Cairkan Komisi</span>
+                    </button>
+                  `}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+
+          <!-- DESKTOP & TABLET TABLE (md+) -->
+          <div class="hidden md:block overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-50/90 border-b border-slate-200 text-slate-400 font-extrabold uppercase text-[10px] tracking-wider">
+                  <th class="py-3 px-4">KODE &amp; TANGGAL</th>
+                  <th class="py-3 px-4">AGEN &amp; REKENING</th>
+                  <th class="py-3 px-4">PERAN &amp; WILAYAH</th>
+                  <th class="py-3 px-4">TIKET SUMBER</th>
+                  <th class="py-3 px-4">BRUTO &amp; PPH 21</th>
+                  <th class="py-3 px-4">KOMISI BERSIH</th>
+                  <th class="py-3 px-4">STATUS PAYOUT</th>
+                  <th class="py-3 px-4 text-right">AKSI</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 text-slate-700">
+                ${filtered.map(com => `
+                  <tr class="hover:bg-slate-50/70 transition">
+                    <td class="py-3.5 px-4 whitespace-nowrap">
+                      <div class="font-mono text-xs font-bold text-slate-900">${com.id}</div>
+                      <div class="text-[10px] text-slate-500 mt-0.5">${com.date}</div>
+                    </td>
+                    <td class="py-3.5 px-4">
+                      <div class="font-bold text-slate-900 text-xs">${com.agentName}</div>
+                      <div class="font-mono text-[10.5px] text-slate-500 mt-0.5">${com.bankAccount}</div>
+                    </td>
+                    <td class="py-3.5 px-4 whitespace-nowrap">
+                      <span class="px-2 py-0.5 rounded text-[9.5px] font-bold ${com.agentRole === 'REFERRAL_AGENT' ? 'bg-blue-50 text-blue-700' : (com.agentRole === 'HANDLING_PIC' ? 'bg-emerald-50 text-[#006948]' : 'bg-purple-50 text-purple-700')}">
+                        ${com.agentRole}
+                      </span>
+                      <div class="text-[10px] text-slate-400 mt-0.5">${com.agentArea}</div>
+                    </td>
+                    <td class="py-3.5 px-4">
+                      <div class="font-semibold text-slate-800 text-xs truncate max-w-[180px]">${com.doctorName}</div>
+                      <div class="font-mono text-[10.5px] text-slate-500 mt-0.5">${com.ticketRef}</div>
+                    </td>
+                    <td class="py-3.5 px-4 whitespace-nowrap font-mono text-[11px]">
+                      <div>Rp ${com.grossAmount.toLocaleString('id-ID')}</div>
+                      <div class="text-[9.5px] text-rose-600 mt-0.5">PPh: -Rp ${com.taxPph.toLocaleString('id-ID')}</div>
+                    </td>
+                    <td class="py-3.5 px-4 whitespace-nowrap font-mono font-extrabold text-slate-900 text-xs">
+                      Rp ${com.netAmount.toLocaleString('id-ID')}
+                    </td>
+                    <td class="py-3.5 px-4 whitespace-nowrap">
+                      ${com.status === 'PAID_OUT' ? `
+                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-100 text-[#006948] font-bold text-[10px]">
+                          <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Ditransfer
+                        </span>
+                        <div class="text-[9px] text-slate-400 mt-0.5">${com.payoutDate}</div>
+                      ` : (com.status === 'READY_FOR_PAYOUT' ? `
+                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 font-bold text-[10px]">
+                          <span class="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span> Siap Cair
+                        </span>
+                        <div class="text-[9px] text-blue-700 mt-0.5 font-medium">Tiket Selesai &amp; Lunas</div>
+                      ` : `
+                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 font-bold text-[10px]">
+                          <span class="w-1.5 h-1.5 rounded-full bg-rose-600"></span> Clawback
+                        </span>
+                        <div class="text-[9px] text-rose-700 mt-0.5 font-medium">Penyesuaian Refund</div>
+                      `)}
+                    </td>
+                    <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                      ${com.status === 'READY_FOR_PAYOUT' ? `
+                        <button type="button" onclick="processCommissionPayout('${com.id}')" class="px-3 py-1.5 bg-[#006948] hover:bg-[#005137] text-white rounded-lg text-[11px] font-bold transition shadow-2xs">
+                          Cairkan Payout
+                        </button>
+                      ` : `
+                        <button type="button" onclick="openPayoutSlipModal('${com.id}')" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[11px] font-medium transition">
+                          Bukti Transfer
+                        </button>
+                      `}
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+
+
+    // =========================================================================
+    // KEPATUHAN KOMPREHENSIF RULES.MD & README.MD NASIONAL
+    // =========================================================================
+
+    // 1. Pembatalan Tiket (RULES.md Bagian 2 & Bagian 4.3)
+
+function openPayoutSlipModal(comId) {
+      const com = state.commissions.find(c => c.id === comId);
+      if (!com) return;
+
+      const comIdEl = document.getElementById('slipComId');
+      const agentNameEl = document.getElementById('slipAgentName');
+      const agentRoleEl = document.getElementById('slipAgentRole');
+      const bankEl = document.getElementById('slipBankAccount');
+      const ticketEl = document.getElementById('slipTicketRef');
+      const grossEl = document.getElementById('slipGrossAmount');
+      const taxEl = document.getElementById('slipTaxAmount');
+      const netEl = document.getElementById('slipNetAmount');
+
+      if (comIdEl) comIdEl.textContent = com.id;
+      if (agentNameEl) agentNameEl.textContent = com.agentName;
+      if (agentRoleEl) agentRoleEl.textContent = `${com.agentRole} (${com.agentArea})`;
+      if (bankEl) bankEl.textContent = com.bankAccount;
+      if (ticketEl) ticketEl.textContent = `${com.ticketRef} (${com.doctorName})`;
+      if (grossEl) grossEl.textContent = 'Rp ' + com.grossAmount.toLocaleString('id-ID');
+      if (taxEl) taxEl.textContent = '-Rp ' + com.taxPph.toLocaleString('id-ID');
+      if (netEl) netEl.textContent = 'Rp ' + com.netAmount.toLocaleString('id-ID');
+
+      const modal = document.getElementById('payoutSlipModal');
+      if (modal) modal.classList.remove('hidden', 'pointer-events-none');
+    }
+
+    function closePayoutSlipModal() {
+      const modal = document.getElementById('payoutSlipModal');
+      if (modal) modal.classList.add('hidden', 'pointer-events-none');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initAppShell('commissions');
+      renderCommissionsView();
+    });
+  </script>
+</body>
+</html>

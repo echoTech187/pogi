@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full bg-[#f4f7f6]">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MedCred Concierge - Detail Berkas & Profil Dokter</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Core Fonts & Styles -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="h-full bg-[#f4f7f6] text-slate-800 antialiased font-sans">
+  <!-- MOBILE BACKDROP OVERLAY -->
+  <div id="sidebarOverlay" onclick="toggleMobileSidebar(false)" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-40 hidden pointer-events-none transition-opacity lg:hidden"></div>
+
+  <div class="flex h-screen overflow-hidden">
+    <!-- APP SIDEBAR -->
+    <aside id="appSidebar" class="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] lg:w-64 bg-white border-r border-slate-200/90 flex flex-col shrink-0 transition-transform duration-300 ease-in-out -translate-x-full lg:translate-x-0 lg:static lg:inset-auto shadow-2xl lg:shadow-none">
+      <!-- Top Brand Header -->
+      <div class="px-4 py-4 border-b border-slate-100 flex items-center justify-between gap-2">
+        <div role="button" tabindex="0" data-nav-view="dashboard" onclick="switchView('dashboard')" class="flex items-center gap-2.5 cursor-pointer min-w-0">
+          <div class="w-9 h-9 rounded-xl bg-[#006948] flex items-center justify-center text-white shadow-xs shrink-0">
+            <span class="material-symbols-outlined text-xl fill">shield_with_heart</span>
+          </div>
+          <div class="min-w-0">
+            <div class="font-extrabold text-[13px] tracking-tight text-[#006948] leading-none">MEDCRED CONCIERGE</div>
+            <div class="text-[8.5px] text-slate-500 font-semibold leading-tight mt-0.5 truncate">Tata Kelola Medik &amp; Kredensial</div>
+          </div>
+        </div>
+        <button type="button" onclick="toggleMobileSidebar(false)" class="lg:hidden p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition" aria-label="Tutup Menu">
+          <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+      </div>
+
+      <!-- Navigation Menu ('MENU UTAMA') with Event Delegation + Clean onclick -->
+      <div id="sidebarNavContainer" class="px-3 py-4 flex-1 overflow-y-auto">
+        <div class="px-3 mb-2.5 text-[10px] font-bold tracking-wider text-slate-400 uppercase">
+          MENU UTAMA
+        </div>
+        <nav class="space-y-1">
+          <button type="button" id="nav-dashboard" data-nav-view="dashboard" onclick="switchView('dashboard')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold transition bg-[#006948] text-white shadow-xs active">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">grid_view</span>
+            <span class="pointer-events-none">Ringkasan Utama</span>
+          </button>
+          <button type="button" id="nav-doctors" data-nav-view="doctors" onclick="switchView('doctors')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">group</span>
+            <span class="pointer-events-none">Daftar Dokter &amp; Nakes</span>
+          </button>
+          <button type="button" id="nav-psv" data-nav-view="psv" onclick="switchView('psv')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">verified_user</span>
+            <span class="pointer-events-none">Verifikasi Kredensial</span>
+          </button>
+          <button type="button" id="nav-compliance" data-nav-view="compliance" onclick="switchView('compliance')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">folder_shared</span>
+            <span class="pointer-events-none">Kepatuhan Dokumen</span>
+          </button>
+          <button type="button" id="nav-audit" data-nav-view="audit" onclick="switchView('audit')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">receipt_long</span>
+            <span class="pointer-events-none">Log Audit &amp; Kepatuhan</span>
+          </button>
+          <button type="button" id="nav-committee" data-nav-view="committee" onclick="switchView('committee')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">clinical_notes</span>
+            <span class="pointer-events-none">Komite Medik &amp; SPK/RKK</span>
+          </button>
+          <button type="button" id="nav-invoicing" data-nav-view="invoicing" onclick="switchView('invoicing')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">payments</span>
+            <span class="pointer-events-none">Penagihan &amp; Faktur</span>
+          </button>
+          <button type="button" id="nav-commissions" data-nav-view="commissions" onclick="switchView('commissions')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">account_balance_wallet</span>
+            <span class="pointer-events-none">Komisi Agen &amp; PIC</span>
+          </button>
+          <button type="button" id="nav-settings" data-nav-view="settings" onclick="switchView('settings')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">settings</span>
+            <span class="pointer-events-none">Pengaturan</span>
+          </button>
+        </nav>
+
+        <!-- Quick Portal Switcher for Doctor QR Self-Service -->
+        <div class="mt-6 pt-4 border-t border-slate-100">
+          <div class="px-3 mb-2 text-[10px] font-bold tracking-wider text-slate-400 uppercase">
+            PORTAL MANDIRI DOKTER
+          </div>
+          <button type="button" id="nav-qr-portal" data-nav-view="qr-portal" onclick="openQrSelfPortal('doc-elena', 'existing')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-emerald-50/70">
+            <span class="material-symbols-outlined text-[18px] text-[#006948] pointer-events-none">qr_code_2</span>
+            <span class="pointer-events-none">Form Registrasi &amp; QR Dokter</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Bottom Profile Card in Sidebar -->
+      <div class="p-3 border-t border-slate-100 bg-slate-50/60">
+        <div class="p-2.5 rounded-xl bg-white border border-slate-200/80 flex items-center justify-between gap-2 shadow-2xs">
+          <div role="button" tabindex="0" onclick="handleBottomProfileClick()" class="flex items-center gap-2.5 min-w-0 cursor-pointer">
+            <div id="sidebarBottomAvatar" class="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-800 to-teal-600 text-white font-bold text-xs flex items-center justify-center shrink-0 ring-2 ring-emerald-100">
+              EV
+            </div>
+            <div class="min-w-0">
+              <div id="sidebarBottomName" class="text-xs font-bold text-slate-900 truncate">Dr. Eleanor Vance</div>
+              <div id="sidebarBottomRole" class="text-[9px] font-bold text-[#006948] uppercase tracking-wider truncate">KETUA SUBKOMITE KREDENSIAL</div>
+            </div>
+          </div>
+          <button type="button" onclick="performLogout()" title="Keluar / Buka Halaman Login" class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition shrink-0">
+            <span class="material-symbols-outlined text-base">logout</span>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONSOLE WRAPPER -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <!-- TOP STICKY HEADER -->
+      <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-xs border-b border-slate-200/90 shrink-0 w-full">
+        <div class="h-14 sm:h-16 px-3.5 sm:px-6 flex items-center justify-between gap-2">
+          <!-- Left: Mobile Menu + Faskes Selector + Accreditation Badge -->
+          <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+            <button type="button" onclick="toggleMobileSidebar(true)" class="lg:hidden p-2 -ml-1 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition shrink-0" aria-label="Buka Menu">
+              <span class="material-symbols-outlined text-2xl">menu</span>
+            </button>
+
+            <div class="relative">
+              <button type="button" id="headerOrgScopeBtn" onclick="toggleOrgScopeDropdown()" class="flex items-center gap-2 bg-slate-50 hover:bg-slate-100 transition border border-slate-200/80 rounded-xl px-2.5 sm:px-3 py-1.5 cursor-pointer min-w-0 max-w-[190px] sm:max-w-sm">
+                <span class="material-symbols-outlined text-[#006948] text-base shrink-0">public</span>
+                <span id="selectedOrgScopeLabel" class="text-xs font-bold text-slate-800 truncate">Semua Wilayah Nasional (148)</span>
+                <span class="material-symbols-outlined text-sm text-slate-400 shrink-0">expand_more</span>
+              </button>
+              <div id="orgScopeDropdown" class="hidden absolute left-0 mt-2 w-80 bg-white rounded-2xl shadow-2xl border border-slate-200 py-2.5 z-50 text-xs">
+                <div class="px-3.5 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Filter Cakupan Layanan</div>
+                <button type="button" onclick="selectOrgScope('all')" class="w-full text-left px-3.5 py-2 hover:bg-emerald-50 text-slate-700 flex items-center justify-between font-semibold">
+                  <span class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-[#006948]">public</span> Semua Layanan Nasional</span>
+                  <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-[#006948] text-[10px] font-bold">148 Tiket</span>
+                </button>
+                <button type="button" onclick="selectOrgScope('b2c')" class="w-full text-left px-3.5 py-2 hover:bg-emerald-50 text-slate-700 flex items-center justify-between font-semibold">
+                  <span class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-blue-600">person</span> Jalur B2C Dokter Mandiri</span>
+                  <span class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 text-[10px] font-bold">92 Tiket</span>
+                </button>
+                <button type="button" onclick="selectOrgScope('b2b')" class="w-full text-left px-3.5 py-2 hover:bg-emerald-50 text-slate-700 flex items-center justify-between font-semibold">
+                  <span class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-purple-600">corporate_fare</span> Jalur B2B Mitra Faskes</span>
+                  <span class="px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 text-[10px] font-bold">56 Tiket</span>
+                </button>
+                <div class="my-1.5 border-t border-slate-100"></div>
+                <div class="px-3.5 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Mitra Faskes Spesifik</div>
+                <button type="button" onclick="selectPartnerScope('part-1')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 text-slate-700 flex items-center justify-between text-xs">
+                  <span class="truncate">Klinik Pratama Sehat Bersama (Surabaya)</span>
+                  <span class="text-[10px] text-slate-400 font-mono">12 Dr</span>
+                </button>
+                <button type="button" onclick="selectPartnerScope('part-2')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 text-slate-700 flex items-center justify-between text-xs">
+                  <span class="truncate">RS Citra Medika Jaringan Jabar (Bandung)</span>
+                  <span class="text-[10px] text-slate-400 font-mono">24 Dr</span>
+                </button>
+                <button type="button" onclick="selectPartnerScope('part-3')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 text-slate-700 flex items-center justify-between text-xs">
+                  <span class="truncate">Klinik Spesialis Kasih Medika (Yogyakarta)</span>
+                  <span class="text-[10px] text-slate-400 font-mono">8 Dr</span>
+                </button>
+              </div>
+            </div>
+
+
+          </div>
+
+          <!-- Center: Global Search Input (Admin) OR Doctor Status Pill (Doctor) -->
+          <div id="headerSearchContainer" class="relative flex-1 max-w-sm mx-2 hidden md:block">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-base">search</span>
+            <input id="globalSearchInput" type="text" oninput="handleGlobalSearch(this.value)" placeholder="Cari dokter, nomor STR, SIP, atau ..." class="w-full pl-9 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#006948] focus:bg-white transition" />
+          </div>
+
+          <div id="headerDoctorPill" class="hidden items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-xl text-xs font-bold text-[#006948] max-w-md truncate">
+            <span class="material-symbols-outlined text-base shrink-0">shield_with_heart</span>
+            <span id="headerDoctorPillText" class="truncate">Portal Mandiri Dokter</span>
+          </div>
+
+          <!-- Right: Quick Actions (QR) + Notification + User Avatar -->
+          <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            <button type="button" onclick="toggleMobileSearchBar()" class="md:hidden p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition" title="Cari Dokter">
+              <span class="material-symbols-outlined text-xl">search</span>
+            </button>
+
+            <button id="headerBtnQrModal" type="button" onclick="openQrModal()" class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-[#006948] rounded-xl text-[11px] font-bold transition">
+              <span class="material-symbols-outlined text-sm">qr_code_2</span>
+              <span class="hidden xl:inline">Link QR Dokter</span>
+            </button>
+
+            <div class="relative">
+              <button type="button" id="headerNotificationBtn" onclick="toggleNotificationDropdown()" class="relative p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition" title="Notifikasi Operasional">
+                <span class="material-symbols-outlined text-xl">notifications</span>
+                <span id="headerNotificationBadge" class="w-2 h-2 rounded-full bg-rose-500 absolute top-2 right-2 ring-2 ring-white"></span>
+              </button>
+              <div id="notificationDropdown" class="hidden absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-slate-200 z-50 overflow-hidden text-xs">
+                <div class="p-3.5 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[#006948] text-base">notifications_active</span>
+                    <span class="font-bold text-slate-900 text-xs">Notifikasi Operasional Concierge</span>
+                  </div>
+                  <button type="button" onclick="markAllNotificationsRead()" class="text-[10px] font-bold text-[#006948] hover:underline">Tandai Dibaca</button>
+                </div>
+                <div class="divide-y divide-slate-100 max-h-80 overflow-y-auto">
+                  <div class="p-3 hover:bg-slate-50 transition cursor-pointer flex gap-3 items-start" onclick="openDoctorDetailModal('doc-sophia'); toggleNotificationDropdown(false);">
+                    <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 font-bold text-xs mt-0.5">SA</div>
+                    <div class="flex-1 space-y-0.5">
+                      <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-900">Dr. Sophia Al-Mansoor</span>
+                        <span class="text-[9px] text-slate-400">10m lalu</span>
+                      </div>
+                      <p class="text-slate-600 text-[11px]">Unggah revisi SIP Faskes 2 (SIP2_Revisi.pdf). Menunggu kurasi admin.</p>
+                      <div class="pt-1 flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[9px] font-bold">Perlu Review</span>
+                        <span class="text-[10px] text-[#006948] font-bold hover:underline">Buka Berkas &rarr;</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="p-3 hover:bg-slate-50 transition cursor-pointer flex gap-3 items-start" onclick="openMassReminderModal('doc-elena'); toggleNotificationDropdown(false);">
+                    <div class="w-8 h-8 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 font-bold text-xs mt-0.5">ER</div>
+                    <div class="flex-1 space-y-0.5">
+                      <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-900">Dr. Elena Rostova</span>
+                        <span class="text-[9px] text-rose-500 font-bold">14 Hari Lagi</span>
+                      </div>
+                      <p class="text-slate-600 text-[11px]">STR Spesialis berakhir 15 Des 2026. Belum ada bukti perpanjangan.</p>
+                      <div class="pt-1 flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 text-[9px] font-bold">Peringatan Kritis</span>
+                        <span class="text-[10px] text-[#006948] font-bold hover:underline">Kirim Tautan QR WA &rarr;</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="p-3 hover:bg-slate-50 transition cursor-pointer flex gap-3 items-start" onclick="openDoctorDetailModal('doc-bagus'); toggleNotificationDropdown(false);">
+                    <div class="w-8 h-8 rounded-full bg-emerald-100 text-[#006948] flex items-center justify-center shrink-0 font-bold text-xs mt-0.5">BS</div>
+                    <div class="flex-1 space-y-0.5">
+                      <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-900">Dr. Bagus Setiawan</span>
+                        <span class="text-[9px] text-slate-400">1 jam lalu</span>
+                      </div>
+                      <p class="text-slate-600 text-[11px]">e-SIP Kemenkes &amp; Rekomendasi Kolegium Terbit (100% Selesai).</p>
+                      <div class="pt-1 flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-[#006948] text-[9px] font-bold">Selesai &amp; Terbit</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="p-3 hover:bg-slate-50 transition cursor-pointer flex gap-3 items-start" onclick="openDoctorDetailModal('doc-marcus'); toggleNotificationDropdown(false);">
+                    <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 font-bold text-xs mt-0.5">MV</div>
+                    <div class="flex-1 space-y-0.5">
+                      <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-900">Dr. Marcus Vance</span>
+                        <span class="text-[9px] text-slate-400">3 jam lalu</span>
+                      </div>
+                      <p class="text-slate-600 text-[11px]">Pengajuan Kenaikan Jenjang Jabatan Fungsional Utama disetujui BKN.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="p-2.5 bg-slate-50 border-t border-slate-100 text-center">
+                  <button type="button" onclick="switchView('doctors'); toggleNotificationDropdown(false);" class="text-[11px] font-bold text-[#006948] hover:underline">Lihat Semua 148 Permohonan Berkas &rarr;</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="relative">
+              <button type="button" onclick="toggleUserDropdown()" class="flex items-center gap-2 p-1 rounded-full hover:bg-slate-100 transition">
+                <div id="headerTopAvatar" class="w-8 h-8 rounded-full bg-[#006948] text-white font-bold text-xs flex items-center justify-center shadow-xs">
+                  EV
+                </div>
+              </button>
+              <div id="userDropdown" class="hidden pointer-events-none absolute right-0 mt-2 w-60 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50 text-xs">
+                <div class="px-4 py-2.5 border-b border-slate-100">
+                  <div id="dropdownUserName" class="font-bold text-slate-900">Dr. Eleanor Vance</div>
+                  <div id="dropdownUserRole" class="text-[10px] text-[#006948] font-bold">Ketua Subkomite Kredensial</div>
+                </div>
+
+                <!-- Admin Dropdown Items -->
+                <button type="button" onclick="openQrModal(); toggleUserDropdown(false);" class="dropdown-admin-item w-full text-left px-4 py-2.5 hover:bg-slate-50 flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-sm text-[#006948]">qr_code_2</span> Buat Link QR Dokter
+                </button>
+                <button type="button" onclick="switchView('audit'); toggleUserDropdown(false);" class="dropdown-admin-item w-full text-left px-4 py-2.5 hover:bg-slate-50 flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-sm text-slate-600">receipt_long</span> Log Audit &amp; Kepatuhan
+                </button>
+
+                <!-- Doctor Dropdown Items -->
+                <button type="button" onclick="openQrSelfPortal(state.currentUser?.doctorId, 'existing'); toggleUserDropdown(false);" class="dropdown-doctor-item hidden w-full text-left px-4 py-2.5 hover:bg-slate-50 flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-sm text-[#006948]">upload_file</span> Form Unggah Berkas Mandiri
+                </button>
+                <button type="button" onclick="openDoctorDetail(state.currentUser?.doctorId); toggleUserDropdown(false);" class="dropdown-doctor-item hidden w-full text-left px-4 py-2.5 hover:bg-slate-50 flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-sm text-blue-600">badge</span> Status Kredensial Saya
+                </button>
+                <button type="button" onclick="openDoctorRkk(state.currentUser?.doctorId); toggleUserDropdown(false);" class="dropdown-doctor-item hidden w-full text-left px-4 py-2.5 hover:bg-slate-50 flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-sm text-emerald-600">clinical_notes</span> Kewenangan Klinis (SPK/RKK)
+                </button>
+
+                <div class="border-t border-slate-100 my-1"></div>
+                <button type="button" onclick="performLogout()" class="w-full text-left px-4 py-2.5 hover:bg-red-50 flex items-center gap-2 text-red-600 font-bold">
+                  <span class="material-symbols-outlined text-sm">logout</span> Halaman Login / Keluar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Expandable Mobile Search Drawer (< md) -->
+        <div id="mobileSearchDrawer" class="hidden md:hidden px-3.5 pb-3 pt-1 border-t border-slate-100 bg-white">
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-base">search</span>
+            <input id="mobileGlobalSearchInput" type="text" oninput="handleGlobalSearch(this.value)" placeholder="Cari dokter, nomor STR, SIP, atau NIP..." class="w-full pl-9 pr-9 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#006948]" />
+            <button type="button" onclick="toggleMobileSearchBar(false)" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1">
+              <span class="material-symbols-outlined text-base">close</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- SCROLLABLE WORKSPACE -->
+      <main id="mainContent" class="flex-1 overflow-y-auto p-3.5 sm:p-5 lg:p-6 bg-[#f4f7f6] w-full max-w-full overflow-x-hidden">
+        <section id="view-doctor-detail" class="spa-view active space-y-4 sm:space-y-5"></section>
+      </main>
+    </div>
+  </div>
+
+  
+
+  <!-- Data Store & Shared Shell Scripts -->
+  <script src="js/state.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Page-Specific Module Script -->
+  <script>
+function renderDoctorDetailView() {
+      const container = document.getElementById('view-doctor-detail');
+      if (!container) return;
+      const isDoctor = state.currentUser?.role === 'doctor';
+      const isPartner = state.currentUser?.role === 'partner';
+      const doc = (isDoctor || isPartner)
+        ? (state.doctors.find(d => d.id === state.currentUser.doctorId) || state.doctors[0])
+        : (state.doctors.find(d => d.id === state.selectedDoctorId) || state.doctors[0]);
+      const comp = getDocCompletion(doc);
+      const qrUrl = `https://kredensial.rsud.go.id/unggah/${doc.qrSlug}`;
+      const qrSvg = generateDeterministicQrSvg(qrUrl + doc.pin);
+
+      container.innerHTML = `
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5 flex-wrap">
+            <span class="text-xs font-mono font-extrabold text-[#006948] bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-200">${doc.regId}</span>
+            <span class="text-xs text-slate-400">/</span>
+            <span class="text-xs font-extrabold text-slate-900">${doc.name}</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${doc.clientType === 'B2C' ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'bg-amber-50 text-amber-800 border border-amber-200'}">
+              ${doc.clientType === 'B2C' ? 'Klien Mandiri (B2C)' : 'Mitra Faskes (B2B)'}
+            </span>
+          </div>
+
+          <div class="flex items-center gap-2 flex-wrap">
+            ${isDoctor ? `
+              <button type="button" onclick="openQrSelfPortal('${doc.id}', 'existing')" class="px-3.5 py-2 bg-[#006948] hover:bg-[#005137] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                <span class="material-symbols-outlined text-sm">upload_file</span> Unggah / Perbarui Berkas
+              </button>
+              <button type="button" onclick="sendWhatsAppConcierge('${doc.id}')" class="px-3 py-2 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                <span class="material-symbols-outlined text-sm">chat</span> Hubungi Konsultan
+              </button>
+            ` : `
+              <button type="button" onclick="advancePipelineStage('${doc.id}', 'submitted_instansi')" class="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition" title="Submit ke portal Kemenkes RI">
+                <span class="material-symbols-outlined text-sm">send</span> Ajukan ke Kemenkes
+              </button>
+              <button type="button" onclick="advancePipelineStage('${doc.id}', 'need_revision')" class="px-3 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition" title="Minta dokter unggah ulang berkas">
+                <span class="material-symbols-outlined text-sm">edit_note</span> Minta Revisi
+              </button>
+              <button type="button" onclick="advancePipelineStage('${doc.id}', 'completed')" class="px-3 py-2 bg-[#006948] hover:bg-[#005137] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition" title="Tandai izin resmi telah keluar">
+                <span class="material-symbols-outlined text-sm">verified</span> Izin Terbit
+              </button>
+              <button type="button" onclick="openCancelTicketModal('${doc.id}')" class="px-3 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition" title="Batalkan Pengajuan Berkas Sesuai State Machine">
+                <span class="material-symbols-outlined text-sm">block</span> Batalkan
+              </button>
+              <button type="button" onclick="sendWhatsAppConcierge('${doc.id}')" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                <span class="material-symbols-outlined text-sm">chat</span> WhatsApp
+              </button>
+            `}
+          </div>
+        </div>
+
+        <!-- Kartu Pelacakan Status Pengurusan Permohonan Concierge -->
+        <div class="bg-white border-2 border-[#006948]/30 rounded-2xl p-4 sm:p-5 shadow-xs space-y-4">
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+            <div>
+              <div class="text-[10px] font-bold uppercase tracking-wider text-[#006948] flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>STATUS PENGURUSAN PERMOHONAN KE INSTANSI PEMERINTAH</span>
+              </div>
+              <h3 class="text-base sm:text-lg font-extrabold text-slate-900 mt-1">${doc.serviceType}</h3>
+              <p class="text-xs text-slate-500 mt-0.5">${doc.clientOrg} • Tujuan: <strong>${doc.instansiTarget}</strong></p>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              ${getStatusBadgeHtml(doc)}
+            </div>
+          </div>
+
+          <!-- Step Progress Bar -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs pt-1">
+            <div class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200">
+              <div class="text-[10px] font-bold text-[#006948]">Langkah 1</div>
+              <div class="font-extrabold text-emerald-950 mt-0.5">1. Pendaftaran</div>
+              <div class="text-[10px] text-emerald-700 mt-0.5">Berkas Lengkap</div>
+            </div>
+            <div class="p-2.5 rounded-xl ${doc.pipelineStatus !== 'curation' ? 'bg-emerald-50 border border-emerald-200' : 'bg-blue-100 border-2 border-blue-400 font-extrabold'}">
+              <div class="text-[10px] font-bold ${doc.pipelineStatus !== 'curation' ? 'text-[#006948]' : 'text-blue-800'}">Langkah 2</div>
+              <div class="font-extrabold text-slate-900 mt-0.5">2. Kurasi MedCred</div>
+              <div class="text-[10px] text-slate-600 mt-0.5">${doc.pipelineStatus === 'curation' ? 'Sedang Berjalan' : 'Lolos Kurasi'}</div>
+            </div>
+            <div class="p-2.5 rounded-xl ${doc.pipelineStatus === 'submitted_instansi' || doc.pipelineStatus === 'instansi_progress' ? 'bg-indigo-100 border-2 border-indigo-400 font-extrabold' : (doc.pipelineStatus === 'completed' ? 'bg-emerald-50 border border-emerald-200' : 'bg-slate-50 border border-slate-200')}">
+              <div class="text-[10px] font-bold ${doc.pipelineStatus === 'submitted_instansi' ? 'text-indigo-800' : 'text-slate-500'}">Langkah 3</div>
+              <div class="font-extrabold text-slate-900 mt-0.5">3. Proses Kemenkes</div>
+              <div class="text-[10px] text-slate-600 mt-0.5">${doc.instansiRegNo}</div>
+            </div>
+            <div class="p-2.5 rounded-xl ${doc.pipelineStatus === 'completed' ? 'bg-emerald-100 border-2 border-emerald-500 font-extrabold' : 'bg-slate-50 border border-slate-200'}">
+              <div class="text-[10px] font-bold ${doc.pipelineStatus === 'completed' ? 'text-emerald-800' : 'text-slate-400'}">Langkah 4</div>
+              <div class="font-extrabold text-slate-900 mt-0.5">4. Terbit Resmi</div>
+              <div class="text-[10px] text-slate-600 mt-0.5">${doc.pipelineStatus === 'completed' ? 'Dokumen Diserahkan' : 'Target SLA'}</div>
+            </div>
+          </div>
+
+          <!-- Alert jika tiket dibatalkan -->
+          ${doc.pipelineStatus === 'cancelled' ? `
+            <div class="p-3.5 rounded-xl bg-rose-50 border border-rose-300 flex items-start justify-between gap-3 text-xs">
+              <div class="flex items-start gap-2.5 min-w-0">
+                <span class="material-symbols-outlined text-rose-700 text-xl shrink-0 mt-0.5">cancel</span>
+                <div>
+                  <div class="font-extrabold text-rose-950">PERMOHONAN TIKET DIBATALKAN (CANCELLED):</div>
+                  <div class="text-rose-900 mt-0.5 leading-relaxed">${doc.cancelReason || 'Dibatalkan atas permohonan dokter/faskes.'} • ${doc.cancelNotes || 'Riwayat pembatalan dicatat di ticket_stage_histories.'}</div>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 bg-rose-200 text-rose-900 font-bold rounded-lg text-[10px] shrink-0">
+                Tiket Ditutup
+              </span>
+            </div>
+          ` : ''}
+
+          <!-- SLA Warning Alert jika mendekati batas SLA -->
+          ${doc.slaStatus === 'WARNING' ? `
+            <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-300 flex items-center justify-between gap-3 text-xs">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <span class="material-symbols-outlined text-amber-700 text-xl shrink-0">timer</span>
+                <div>
+                  <div class="font-extrabold text-amber-950">PERINGATAN SLA (RULES.MD BAGIAN 4.1):</div>
+                  <div class="text-amber-900 mt-0.5">${doc.slaNote || 'Tiket mendekati batas durasi SLA instansi (Sisa waktu <24 jam).'}</div>
+                </div>
+              </div>
+              <button type="button" onclick="escalateSlaAlert('${doc.id}')" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-bold shrink-0 text-xs flex items-center gap-1 shadow-2xs">
+                <span class="material-symbols-outlined text-xs">priority_high</span> Eskalasi ke Regional PIC
+              </button>
+            </div>
+          ` : ''}
+
+          <!-- Alert jika ada revisi -->
+          ${doc.pipelineStatus === 'need_revision' ? `
+            <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-300 flex items-start justify-between gap-3 text-xs">
+              <div class="flex items-start gap-2.5 min-w-0">
+                <span class="material-symbols-outlined text-amber-700 text-xl shrink-0 mt-0.5">warning</span>
+                <div>
+                  <div class="font-extrabold text-amber-950">PERBAIKAN DOKUMEN DIBUTUHKAN:</div>
+                  <div class="text-amber-900 mt-0.5 leading-relaxed">${doc.revisionNote || 'Dokumen logbook tindakan memerlukan legalisir tanda tangan supervisor.'}</div>
+                </div>
+              </div>
+              <button type="button" onclick="openQrSelfPortal('${doc.id}', 'existing')" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-bold shrink-0 text-xs">
+                Unggah Perbaikan
+              </button>
+            </div>
+          ` : ''}
+
+          <!-- Grid Info Detail Tiket -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 rounded-xl p-3 border border-slate-200 text-xs">
+            <div>
+              <span class="text-slate-400 text-[10px] uppercase font-bold block">No. Tiket Concierge</span>
+              <strong class="font-mono text-slate-800 text-xs">${doc.regId}</strong>
+            </div>
+            <div>
+              <span class="text-slate-400 text-[10px] uppercase font-bold block">No. Resi Kemenkes/KKI</span>
+              <strong class="font-mono text-emerald-800 text-xs">${doc.instansiRegNo}</strong>
+            </div>
+            <div>
+              <span class="text-slate-400 text-[10px] uppercase font-bold block">Target Estimasi (SLA)</span>
+              <strong class="text-slate-800 text-xs">${doc.targetSla}</strong>
+            </div>
+            <div>
+              <span class="text-slate-400 text-[10px] uppercase font-bold block">Konsultan PIC MedCred</span>
+              <strong class="text-slate-800 text-xs">${doc.picConcierge}</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Profil Dokter (User) Card -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-2xs flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div class="flex items-start sm:items-center gap-3.5 sm:gap-4 min-w-0">
+            <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl ${doc.avatarBg} font-extrabold text-lg sm:text-xl flex items-center justify-center shrink-0">
+              ${doc.initials}
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center gap-2 flex-wrap">
+                <h2 class="text-lg sm:text-xl font-extrabold text-slate-900">${doc.name}</h2>
+                ${getStatusBadgeHtml(doc)}
+              </div>
+              <p class="text-xs text-slate-600 mt-0.5">${doc.specialty} • ${doc.clientOrg}</p>
+              <div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 text-[11px] text-slate-500 font-mono">
+                <span>Tiket: <strong class="text-slate-800">${doc.regId}</strong></span>
+                <span>•</span>
+                <span>NIP: <strong class="text-slate-800">${doc.nip}</strong></span>
+                <span>•</span>
+                <span>NIK: <strong class="text-slate-800">${doc.isNikUnmasked ? (doc.nik || '3273240888000001') : ((doc.nik || '3273240888000001').substring(0, 4) + '************' + (doc.nik || '3273240888000001').substring(12))}</strong>
+                  <button type="button" onclick="openUnmaskNikModal('${doc.id}')" class="inline-flex items-center text-slate-400 hover:text-[#006948] transition align-middle ml-0.5" title="Buka Sensor NIK (Kepatuhan UU PDP No. 27/2022)">
+                    <span class="material-symbols-outlined text-[13px]">visibility</span>
+                  </button>
+                </span>
+                <span>•</span>
+                <span>STR: <strong class="text-slate-800">${doc.str}</strong></span>
+                <span>•</span>
+                <span>Kontak: <strong class="text-slate-700">${doc.phone}</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between sm:justify-start gap-4 bg-slate-50 border border-slate-200 rounded-xl p-3.5 px-5 shrink-0">
+            <div class="text-2xl font-extrabold text-[#006948]">${comp.pct}%</div>
+            <div>
+              <div class="text-xs font-bold text-slate-900">${comp.validCount} dari ${comp.total} Berkas Sah</div>
+              <div class="text-[10px] text-slate-500 mt-0.5">${doc.validUntilLabel}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Daftar Dokumen Persyaratan Kemenkes & RS -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+              <span class="material-symbols-outlined text-[#006948] text-lg">checklist</span>
+              Rincian Dokumen Administrasi &amp; Lampiran Kemenkes RI (${doc.credentials.length} Berkas)
+            </h3>
+            <span class="text-xs text-slate-500">${comp.validCount} Terverifikasi Sah • ${comp.psvCount} Antrean Kurasi</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+            ${doc.credentials.map((cred, idx) => {
+              if (cred.status === 'valid') {
+                return `
+                  <div class="bg-white border border-slate-200 rounded-xl p-3.5 flex items-start justify-between gap-2.5 shadow-2xs">
+                    <div class="flex items-start gap-2.5 min-w-0">
+                      <span class="material-symbols-outlined text-[#006948] text-xl fill shrink-0">check_circle</span>
+                      <div class="min-w-0">
+                        <div class="text-xs font-bold text-slate-900">${cred.title}</div>
+                        <div class="text-[11px] text-slate-500 mt-0.5">${cred.detail}</div>
+                        ${cred.fileName ? `<div class="text-[10px] font-mono text-[#006948] mt-1 truncate">📎 ${cred.fileName}</div>` : ''}
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                      ${cred.fileName ? `
+                        <button type="button" onclick="previewCredentialDocument('${cred.title}', '${cred.fileName}')" class="p-1 text-slate-400 hover:text-slate-700 transition" title="Lihat Berkas">
+                          <span class="material-symbols-outlined text-sm">visibility</span>
+                        </button>
+                      ` : ''}
+                      <span class="px-2 py-0.5 bg-emerald-50 text-[#006948] text-[10px] font-bold rounded-md">Sah</span>
+                    </div>
+                  </div>
+                `;
+              } else if (cred.status === 'psv') {
+                return `
+                  <div class="bg-blue-50/70 border border-blue-200 rounded-xl p-3.5 flex items-start justify-between gap-2.5">
+                    <div class="flex items-start gap-2.5 min-w-0">
+                      <span class="material-symbols-outlined text-blue-600 text-xl shrink-0">fact_check</span>
+                      <div class="min-w-0">
+                        <div class="text-xs font-bold text-slate-900">${cred.title}</div>
+                        <div class="text-[11px] text-blue-900 mt-0.5">${cred.detail}</div>
+                        ${cred.fileName ? `<div class="text-[10px] font-mono text-blue-700 mt-1 truncate">📎 ${cred.fileName}</div>` : ''}
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-1 shrink-0">
+                      ${cred.fileName ? `
+                        <button type="button" onclick="previewCredentialDocument('${cred.title}', '${cred.fileName}')" class="p-1 text-blue-600 hover:text-blue-800 transition" title="Lihat Berkas">
+                          <span class="material-symbols-outlined text-sm">visibility</span>
+                        </button>
+                      ` : ''}
+                      <span class="px-2 py-1 bg-blue-100 text-blue-800 text-[10px] font-bold rounded-lg">Proses Kurasi</span>
+                    </div>
+                  </div>
+                `;
+              } else {
+                return `
+                  <div class="bg-amber-50/70 border border-amber-200 rounded-xl p-3.5 flex items-start justify-between gap-2.5">
+                    <div class="flex items-start gap-2.5 min-w-0">
+                      <span class="material-symbols-outlined text-amber-600 text-xl shrink-0">warning</span>
+                      <div class="min-w-0">
+                        <div class="text-xs font-bold text-slate-900">${cred.title}</div>
+                        <div class="text-[11px] text-amber-900 mt-0.5">${cred.detail}</div>
+                      </div>
+                    </div>
+                    <div class="flex flex-col gap-1 shrink-0">
+                      <button type="button" onclick="openQrSelfPortal('${doc.id}', 'existing')" class="px-2.5 py-1 bg-amber-600 hover:bg-amber-700 text-white text-[10px] font-bold rounded-lg transition">
+                        Unggah
+                      </button>
+                    </div>
+                  </div>
+                `;
+              }
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+function verifyCredentialItem(doctorId, idx) {
+      if (state.currentUser?.role === 'doctor') {
+        showToast('Akses Dibatasi', 'Verifikasi dan pengesahan PSV hanya dapat dilakukan oleh Verifikator Komite Medik / Admin RS.', 'warning');
+        return;
+      }
+      const doc = state.doctors.find(d => d.id === doctorId);
+      if (!doc) return;
+      const cred = doc.credentials[idx];
+      cred.status = 'valid';
+      cred.detail = 'Terverifikasi Sah oleh Subkomite Kredensial (19 Nov 2026)';
+      if (!cred.fileName) {
+        cred.fileName = `${(CREDENTIAL_STANDARDS[idx] && CREDENTIAL_STANDARDS[idx].code) || 'DOC'}_${doc.qrSlug}_2026.pdf`;
+      }
+      const comp = getDocCompletion(doc);
+      if (comp.isComplete) {
+        doc.statusLabel = 'Terverifikasi';
+        doc.criticalExpiry = false;
+      }
+      addAuditEntry(
+        'Dr. Eleanor Vance (Ketua Subkomite)',
+        'Pengesahan Berkas Dokter',
+        'bg-emerald-100 text-emerald-800',
+        `${doc.name} (${doc.regId})`,
+        `Mengesahkan berkas ${cred.title} (${comp.validCount}/${comp.total} lengkap).`
+      );
+      showToast('Berkas Disahkan', `${cred.title} milik ${doc.name} telah terverifikasi sah.`, 'success');
+      renderDoctorDetailView();
+    }
+
+    // =========================================================================
+    // VIEW 2B: PORTAL PENDAFTARAN & UNGGAH MANDIRI DOKTER (QR FORM)
+    // =========================================================================
+
+    // =========================================================================
+    // DOKUMEN UPLOAD & CUSTOM CREDENTIALS HANDLERS
+    // =========================================================================
+
+// =========================================================================
+    // HELPER: TARGET DOKTER UNTUK PORTAL QR & PENDAFTARAN BARU
+    // =========================================================================
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initAppShell('doctors');
+      const urlParams = new URLSearchParams(window.location.search);
+      const docId = urlParams.get('id');
+      if (docId) state.selectedDoctorId = docId;
+      renderDoctorDetailView();
+    });
+  </script>
+</body>
+</html>

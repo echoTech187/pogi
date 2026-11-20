@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full bg-[#f4f7f6]">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MedCred Concierge - Ringkasan Layanan Nasional</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Core Fonts & Styles -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="h-full bg-[#f4f7f6] text-slate-800 antialiased font-sans">
+  <!-- MOBILE BACKDROP OVERLAY -->
+  <div id="sidebarOverlay" onclick="toggleMobileSidebar(false)" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-40 hidden pointer-events-none transition-opacity lg:hidden"></div>
+
+  <div class="flex h-screen overflow-hidden">
+    <!-- APP SIDEBAR -->
+    <aside id="appSidebar" class="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] lg:w-64 bg-white border-r border-slate-200/90 flex flex-col shrink-0 transition-transform duration-300 ease-in-out -translate-x-full lg:translate-x-0 lg:static lg:inset-auto shadow-2xl lg:shadow-none">
+      <!-- Top Brand Header -->
+      <div class="px-4 py-4 border-b border-slate-100 flex items-center justify-between gap-2">
+        <div role="button" tabindex="0" data-nav-view="dashboard" onclick="switchView('dashboard')" class="flex items-center gap-2.5 cursor-pointer min-w-0">
+          <div class="w-9 h-9 rounded-xl bg-[#006948] flex items-center justify-center text-white shadow-xs shrink-0">
+            <span class="material-symbols-outlined text-xl fill">shield_with_heart</span>
+          </div>
+          <div class="min-w-0">
+            <div class="font-extrabold text-[13px] tracking-tight text-[#006948] leading-none">MEDCRED CONCIERGE</div>
+            <div class="text-[8.5px] text-slate-500 font-semibold leading-tight mt-0.5 truncate">Tata Kelola Medik &amp; Kredensial</div>
+          </div>
+        </div>
+        <button type="button" onclick="toggleMobileSidebar(false)" class="lg:hidden p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition" aria-label="Tutup Menu">
+          <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+      </div>
+
+      <!-- Navigation Menu ('MENU UTAMA') with Event Delegation + Clean onclick -->
+      <div id="sidebarNavContainer" class="px-3 py-4 flex-1 overflow-y-auto">
+        <div class="px-3 mb-2.5 text-[10px] font-bold tracking-wider text-slate-400 uppercase">
+          MENU UTAMA
+        </div>
+        <nav class="space-y-1">
+          <button type="button" id="nav-dashboard" data-nav-view="dashboard" onclick="switchView('dashboard')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold transition bg-[#006948] text-white shadow-xs active">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">grid_view</span>
+            <span class="pointer-events-none">Ringkasan Utama</span>
+          </button>
+          <button type="button" id="nav-doctors" data-nav-view="doctors" onclick="switchView('doctors')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">group</span>
+            <span class="pointer-events-none">Daftar Dokter &amp; Nakes</span>
+          </button>
+          <button type="button" id="nav-psv" data-nav-view="psv" onclick="switchView('psv')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">verified_user</span>
+            <span class="pointer-events-none">Verifikasi Kredensial</span>
+          </button>
+          <button type="button" id="nav-compliance" data-nav-view="compliance" onclick="switchView('compliance')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">folder_shared</span>
+            <span class="pointer-events-none">Kepatuhan Dokumen</span>
+          </button>
+          <button type="button" id="nav-audit" data-nav-view="audit" onclick="switchView('audit')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">receipt_long</span>
+            <span class="pointer-events-none">Log Audit &amp; Kepatuhan</span>
+          </button>
+          <button type="button" id="nav-committee" data-nav-view="committee" onclick="switchView('committee')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">clinical_notes</span>
+            <span class="pointer-events-none">Komite Medik &amp; SPK/RKK</span>
+          </button>
+          <button type="button" id="nav-invoicing" data-nav-view="invoicing" onclick="switchView('invoicing')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">payments</span>
+            <span class="pointer-events-none">Penagihan &amp; Faktur</span>
+          </button>
+          <button type="button" id="nav-commissions" data-nav-view="commissions" onclick="switchView('commissions')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">account_balance_wallet</span>
+            <span class="pointer-events-none">Komisi Agen &amp; PIC</span>
+          </button>
+          <button type="button" id="nav-settings" data-nav-view="settings" onclick="switchView('settings')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">settings</span>
+            <span class="pointer-events-none">Pengaturan</span>
+          </button>
+        </nav>
+
+        <!-- Quick Portal Switcher for Doctor QR Self-Service -->
+        <div class="mt-6 pt-4 border-t border-slate-100">
+          <div class="px-3 mb-2 text-[10px] font-bold tracking-wider text-slate-400 uppercase">
+            PORTAL MANDIRI DOKTER
+          </div>
+          <button type="button" id="nav-qr-portal" data-nav-view="qr-portal" onclick="openQrSelfPortal('doc-elena', 'existing')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-emerald-50/70">
+            <span class="material-symbols-outlined text-[18px] text-[#006948] pointer-events-none">qr_code_2</span>
+            <span class="pointer-events-none">Form Registrasi &amp; QR Dokter</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Bottom Profile Card in Sidebar -->
+      <div class="p-3 border-t border-slate-100 bg-slate-50/60">
+        <div class="p-2.5 rounded-xl bg-white border border-slate-200/80 flex items-center justify-between gap-2 shadow-2xs">
+          <div role="button" tabindex="0" onclick="handleBottomProfileClick()" class="flex items-center gap-2.5 min-w-0 cursor-pointer">
+            <div id="sidebarBottomAvatar" class="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-800 to-teal-600 text-white font-bold text-xs flex items-center justify-center shrink-0 ring-2 ring-emerald-100">
+              EV
+            </div>
+            <div class="min-w-0">
+              <div id="sidebarBottomName" class="text-xs font-bold text-slate-900 truncate">Dr. Eleanor Vance</div>
+              <div id="sidebarBottomRole" class="text-[9px] font-bold text-[#006948] uppercase tracking-wider truncate">KETUA SUBKOMITE KREDENSIAL</div>
+            </div>
+          </div>
+          <button type="button" onclick="performLogout()" title="Keluar / Buka Halaman Login" class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition shrink-0">
+            <span class="material-symbols-outlined text-base">logout</span>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONSOLE WRAPPER -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <!-- TOP STICKY HEADER -->
+      <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-xs border-b border-slate-200/90 shrink-0 w-full">
+        <div class="h-14 sm:h-16 px-3.5 sm:px-6 flex items-center justify-between gap-2">
+          <!-- Left: Mobile Menu + Faskes Selector + Accreditation Badge -->
+          <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+            <button type="button" onclick="toggleMobileSidebar(true)" class="lg:hidden p-2 -ml-1 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition shrink-0" aria-label="Buka Menu">
+              <span class="material-symbols-outlined text-2xl">menu</span>
+            </button>
+
+            <div class="relative">
+              <button type="button" id="headerOrgScopeBtn" onclick="toggleOrgScopeDropdown()" class="flex items-center gap-2 bg-slate-50 hover:bg-slate-100 transition border border-slate-200/80 rounded-xl px-2.5 sm:px-3 py-1.5 cursor-pointer min-w-0 max-w-[190px] sm:max-w-sm">
+                <span class="material-symbols-outlined text-[#006948] text-base shrink-0">public</span>
+                <span id="selectedOrgScopeLabel" class="text-xs font-bold text-slate-800 truncate">Semua Wilayah Nasional (148)</span>
+                <span class="material-symbols-outlined text-sm text-slate-400 shrink-0">expand_more</span>
+              </button>
+              <div id="orgScopeDropdown" class="hidden absolute left-0 mt-2 w-80 bg-white rounded-2xl shadow-2xl border border-slate-200 py-2.5 z-50 text-xs">
+                <div class="px-3.5 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Filter Cakupan Layanan</div>
+                <button type="button" onclick="selectOrgScope('all')" class="w-full text-left px-3.5 py-2 hover:bg-emerald-50 text-slate-700 flex items-center justify-between font-semibold">
+                  <span class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-[#006948]">public</span> Semua Layanan Nasional</span>
+                  <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-[#006948] text-[10px] font-bold">148 Tiket</span>
+                </button>
+                <button type="button" onclick="selectOrgScope('b2c')" class="w-full text-left px-3.5 py-2 hover:bg-emerald-50 text-slate-700 flex items-center justify-between font-semibold">
+                  <span class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-blue-600">person</span> Jalur B2C Dokter Mandiri</span>
+                  <span class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 text-[10px] font-bold">92 Tiket</span>
+                </button>
+                <button type="button" onclick="selectOrgScope('b2b')" class="w-full text-left px-3.5 py-2 hover:bg-emerald-50 text-slate-700 flex items-center justify-between font-semibold">
+                  <span class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-purple-600">corporate_fare</span> Jalur B2B Mitra Faskes</span>
+                  <span class="px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 text-[10px] font-bold">56 Tiket</span>
+                </button>
+                <div class="my-1.5 border-t border-slate-100"></div>
+                <div class="px-3.5 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Mitra Faskes Spesifik</div>
+                <button type="button" onclick="selectPartnerScope('part-1')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 text-slate-700 flex items-center justify-between text-xs">
+                  <span class="truncate">Klinik Pratama Sehat Bersama (Surabaya)</span>
+                  <span class="text-[10px] text-slate-400 font-mono">12 Dr</span>
+                </button>
+                <button type="button" onclick="selectPartnerScope('part-2')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 text-slate-700 flex items-center justify-between text-xs">
+                  <span class="truncate">RS Citra Medika Jaringan Jabar (Bandung)</span>
+                  <span class="text-[10px] text-slate-400 font-mono">24 Dr</span>
+                </button>
+                <button type="button" onclick="selectPartnerScope('part-3')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 text-slate-700 flex items-center justify-between text-xs">
+                  <span class="truncate">Klinik Spesialis Kasih Medika (Yogyakarta)</span>
+                  <span class="text-[10px] text-slate-400 font-mono">8 Dr</span>
+                </button>
+              </div>
+            </div>
+
+
+          </div>
+
+          <!-- Center: Global Search Input (Admin) OR Doctor Status Pill (Doctor) -->
+          <div id="headerSearchContainer" class="relative flex-1 max-w-sm mx-2 hidden md:block">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-base">search</span>
+            <input id="globalSearchInput" type="text" oninput="handleGlobalSearch(this.value)" placeholder="Cari dokter, nomor STR, SIP, atau ..." class="w-full pl-9 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#006948] focus:bg-white transition" />
+          </div>
+
+          <div id="headerDoctorPill" class="hidden items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-xl text-xs font-bold text-[#006948] max-w-md truncate">
+            <span class="material-symbols-outlined text-base shrink-0">shield_with_heart</span>
+            <span id="headerDoctorPillText" class="truncate">Portal Mandiri Dokter</span>
+          </div>
+
+          <!-- Right: Quick Actions (QR) + Notification + User Avatar -->
+          <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            <button type="button" onclick="toggleMobileSearchBar()" class="md:hidden p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition" title="Cari Dokter">
+              <span class="material-symbols-outlined text-xl">search</span>
+            </button>
+
+            <button id="headerBtnQrModal" type="button" onclick="openQrModal()" class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-[#006948] rounded-xl text-[11px] font-bold transition">
+              <span class="material-symbols-outlined text-sm">qr_code_2</span>
+              <span class="hidden xl:inline">Link QR Dokter</span>
+            </button>
+
+            <div class="relative">
+              <button type="button" id="headerNotificationBtn" onclick="toggleNotificationDropdown()" class="relative p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition" title="Notifikasi Operasional">
+                <span class="material-symbols-outlined text-xl">notifications</span>
+                <span id="headerNotificationBadge" class="w-2 h-2 rounded-full bg-rose-500 absolute top-2 right-2 ring-2 ring-white"></span>
+              </button>
+              <div id="notificationDropdown" class="hidden absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-slate-200 z-50 overflow-hidden text-xs">
+                <div class="p-3.5 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[#006948] text-base">notifications_active</span>
+                    <span class="font-bold text-slate-900 text-xs">Notifikasi Operasional Concierge</span>
+                  </div>
+                  <button type="button" onclick="markAllNotificationsRead()" class="text-[10px] font-bold text-[#006948] hover:underline">Tandai Dibaca</button>
+                </div>
+                <div class="divide-y divide-slate-100 max-h-80 overflow-y-auto">
+                  <div class="p-3 hover:bg-slate-50 transition cursor-pointer flex gap-3 items-start" onclick="openDoctorDetailModal('doc-sophia'); toggleNotificationDropdown(false);">
+                    <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 font-bold text-xs mt-0.5">SA</div>
+                    <div class="flex-1 space-y-0.5">
+                      <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-900">Dr. Sophia Al-Mansoor</span>
+                        <span class="text-[9px] text-slate-400">10m lalu</span>
+                      </div>
+                      <p class="text-slate-600 text-[11px]">Unggah revisi SIP Faskes 2 (SIP2_Revisi.pdf). Menunggu kurasi admin.</p>
+                      <div class="pt-1 flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[9px] font-bold">Perlu Review</span>
+                        <span class="text-[10px] text-[#006948] font-bold hover:underline">Buka Berkas &rarr;</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="p-3 hover:bg-slate-50 transition cursor-pointer flex gap-3 items-start" onclick="openMassReminderModal('doc-elena'); toggleNotificationDropdown(false);">
+                    <div class="w-8 h-8 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 font-bold text-xs mt-0.5">ER</div>
+                    <div class="flex-1 space-y-0.5">
+                      <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-900">Dr. Elena Rostova</span>
+                        <span class="text-[9px] text-rose-500 font-bold">14 Hari Lagi</span>
+                      </div>
+                      <p class="text-slate-600 text-[11px]">STR Spesialis berakhir 15 Des 2026. Belum ada bukti perpanjangan.</p>
+                      <div class="pt-1 flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 text-[9px] font-bold">Peringatan Kritis</span>
+                        <span class="text-[10px] text-[#006948] font-bold hover:underline">Kirim Tautan QR WA &rarr;</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="p-3 hover:bg-slate-50 transition cursor-pointer flex gap-3 items-start" onclick="openDoctorDetailModal('doc-bagus'); toggleNotificationDropdown(false);">
+                    <div class="w-8 h-8 rounded-full bg-emerald-100 text-[#006948] flex items-center justify-center shrink-0 font-bold text-xs mt-0.5">BS</div>
+                    <div class="flex-1 space-y-0.5">
+                      <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-900">Dr. Bagus Setiawan</span>
+                        <span class="text-[9px] text-slate-400">1 jam lalu</span>
+                      </div>
+                      <p class="text-slate-600 text-[11px]">e-SIP Kemenkes &amp; Rekomendasi Kolegium Terbit (100% Selesai).</p>
+                      <div class="pt-1 flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-[#006948] text-[9px] font-bold">Selesai &amp; Terbit</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="p-3 hover:bg-slate-50 transition cursor-pointer flex gap-3 items-start" onclick="openDoctorDetailModal('doc-marcus'); toggleNotificationDropdown(false);">
+                    <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 font-bold text-xs mt-0.5">MV</div>
+                    <div class="flex-1 space-y-0.5">
+                      <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-900">Dr. Marcus Vance</span>
+                        <span class="text-[9px] text-slate-400">3 jam lalu</span>
+                      </div>
+                      <p class="text-slate-600 text-[11px]">Pengajuan Kenaikan Jenjang Jabatan Fungsional Utama disetujui BKN.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="p-2.5 bg-slate-50 border-t border-slate-100 text-center">
+                  <button type="button" onclick="switchView('doctors'); toggleNotificationDropdown(false);" class="text-[11px] font-bold text-[#006948] hover:underline">Lihat Semua 148 Permohonan Berkas &rarr;</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="relative">
+              <button type="button" onclick="toggleUserDropdown()" class="flex items-center gap-2 p-1 rounded-full hover:bg-slate-100 transition">
+                <div id="headerTopAvatar" class="w-8 h-8 rounded-full bg-[#006948] text-white font-bold text-xs flex items-center justify-center shadow-xs">
+                  EV
+                </div>
+              </button>
+              <div id="userDropdown" class="hidden pointer-events-none absolute right-0 mt-2 w-60 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50 text-xs">
+                <div class="px-4 py-2.5 border-b border-slate-100">
+                  <div id="dropdownUserName" class="font-bold text-slate-900">Dr. Eleanor Vance</div>
+                  <div id="dropdownUserRole" class="text-[10px] text-[#006948] font-bold">Ketua Subkomite Kredensial</div>
+                </div>
+
+                <!-- Admin Dropdown Items -->
+                <button type="button" onclick="openQrModal(); toggleUserDropdown(false);" class="dropdown-admin-item w-full text-left px-4 py-2.5 hover:bg-slate-50 flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-sm text-[#006948]">qr_code_2</span> Buat Link QR Dokter
+                </button>
+                <button type="button" onclick="switchView('audit'); toggleUserDropdown(false);" class="dropdown-admin-item w-full text-left px-4 py-2.5 hover:bg-slate-50 flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-sm text-slate-600">receipt_long</span> Log Audit &amp; Kepatuhan
+                </button>
+
+                <!-- Doctor Dropdown Items -->
+                <button type="button" onclick="openQrSelfPortal(state.currentUser?.doctorId, 'existing'); toggleUserDropdown(false);" class="dropdown-doctor-item hidden w-full text-left px-4 py-2.5 hover:bg-slate-50 flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-sm text-[#006948]">upload_file</span> Form Unggah Berkas Mandiri
+                </button>
+                <button type="button" onclick="openDoctorDetail(state.currentUser?.doctorId); toggleUserDropdown(false);" class="dropdown-doctor-item hidden w-full text-left px-4 py-2.5 hover:bg-slate-50 flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-sm text-blue-600">badge</span> Status Kredensial Saya
+                </button>
+                <button type="button" onclick="openDoctorRkk(state.currentUser?.doctorId); toggleUserDropdown(false);" class="dropdown-doctor-item hidden w-full text-left px-4 py-2.5 hover:bg-slate-50 flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-sm text-emerald-600">clinical_notes</span> Kewenangan Klinis (SPK/RKK)
+                </button>
+
+                <div class="border-t border-slate-100 my-1"></div>
+                <button type="button" onclick="performLogout()" class="w-full text-left px-4 py-2.5 hover:bg-red-50 flex items-center gap-2 text-red-600 font-bold">
+                  <span class="material-symbols-outlined text-sm">logout</span> Halaman Login / Keluar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Expandable Mobile Search Drawer (< md) -->
+        <div id="mobileSearchDrawer" class="hidden md:hidden px-3.5 pb-3 pt-1 border-t border-slate-100 bg-white">
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-base">search</span>
+            <input id="mobileGlobalSearchInput" type="text" oninput="handleGlobalSearch(this.value)" placeholder="Cari dokter, nomor STR, SIP, atau NIP..." class="w-full pl-9 pr-9 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#006948]" />
+            <button type="button" onclick="toggleMobileSearchBar(false)" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1">
+              <span class="material-symbols-outlined text-base">close</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- SCROLLABLE WORKSPACE -->
+      <main id="mainContent" class="flex-1 overflow-y-auto p-3.5 sm:p-5 lg:p-6 bg-[#f4f7f6] w-full max-w-full overflow-x-hidden">
+        <section id="view-dashboard" class="spa-view active">
+          <div class="grid grid-cols-1 xl:grid-cols-12 gap-4 sm:gap-5 items-start">
+
+            <!-- ============================================================= -->
+            <!-- KOLOM KIRI UTAMA (8 KOLOM PADA XL)                            -->
+            <!-- ============================================================= -->
+            <div class="xl:col-span-8 space-y-4 sm:space-y-5 min-w-0">
+
+              <!-- A. HERO BANNER LAYANAN CONCIERGE NASIONAL -->
+              <div id="heroCycleBanner" class="bg-gradient-to-r from-[#022b1f] via-[#004d34] to-[#006948] rounded-2xl p-4 sm:p-5 text-white shadow-sm relative overflow-hidden">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
+                  <div class="flex items-start sm:items-center gap-3.5 min-w-0">
+                    <div class="w-11 h-11 rounded-full bg-emerald-400/20 border border-emerald-300/30 flex items-center justify-center shrink-0 mt-0.5 sm:mt-0">
+                      <span class="material-symbols-outlined text-2xl text-emerald-300">support_agent</span>
+                    </div>
+                    <div class="min-w-0">
+                      <div class="flex items-center gap-2 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-full bg-emerald-950/60 border border-emerald-400/40 text-[9px] font-extrabold tracking-wider uppercase text-emerald-200">
+                          CONCIERGE OPERASIONAL NASIONAL
+                        </span>
+                        <h2 class="text-base sm:text-lg font-extrabold tracking-tight text-white">
+                          Fasilitasi Administrasi &amp; Perizinan Dokter se-Indonesia
+                        </h2>
+                      </div>
+                      <p class="text-xs text-emerald-50/90 mt-1 leading-relaxed">
+                        Pendampingan pengurusan berkas ke <strong class="font-extrabold text-white">Kemenkes RI, KKI, Kolegium &amp; Dinkes</strong>. Melayani Dokter Mandiri (B2C) &amp; Mitra Faskes (B2B) di 38 Provinsi.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center gap-2 shrink-0 self-end sm:self-center">
+                    <button type="button" onclick="openQrSelfPortal(null, 'new')" class="px-3.5 py-2.5 bg-emerald-400 hover:bg-emerald-300 text-slate-950 rounded-xl text-xs font-extrabold shadow-xs transition flex items-center gap-1.5">
+                      <span class="material-symbols-outlined text-base">person_add</span>
+                      <span>+ Pengajuan Dokter Baru</span>
+                    </button>
+                    <button type="button" onclick="document.getElementById('heroCycleBanner').classList.add('hidden')" class="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white/80 hover:text-white transition" title="Tutup Banner">
+                      <span class="material-symbols-outlined text-base">close</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- B. WORKFLOW PIPELINE TRACKER (TAHAPAN PENGURUSAN KE INSTANSI) -->
+              <div class="bg-white border border-slate-200/90 rounded-2xl p-4 shadow-2xs space-y-2.5">
+                <div class="flex items-center justify-between flex-wrap gap-2">
+                  <div class="text-xs font-extrabold text-slate-800 flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-[#006948] text-base">alt_route</span>
+                    <span>Workflow Pipeline Pengurusan Berkas ke Instansi Pemerintah (Kemenkes/KKI):</span>
+                  </div>
+                  <span class="text-[11px] font-bold text-slate-500">Standar SLA: 7 — 14 Hari Kerja</span>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center text-xs">
+                  <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+                    <div class="text-[10px] font-bold text-slate-400">Tahap 1</div>
+                    <div class="font-extrabold text-slate-800 text-[11px] mt-0.5">Pendaftaran Masuk</div>
+                    <div class="text-[10px] text-slate-500 mt-0.5">Dokter / Mitra Upload</div>
+                  </div>
+                  <div class="p-2.5 rounded-xl bg-blue-50 border border-blue-200">
+                    <div class="text-[10px] font-bold text-blue-600">Tahap 2</div>
+                    <div class="font-extrabold text-blue-900 text-[11px] mt-0.5">Kurasi Berkas MedCred</div>
+                    <div class="text-[10px] text-blue-700 mt-0.5">Pengecekan Keabsahan</div>
+                  </div>
+                  <div class="p-2.5 rounded-xl bg-amber-50 border border-amber-200">
+                    <div class="text-[10px] font-bold text-amber-600">Tahap 3 (Opsional)</div>
+                    <div class="font-extrabold text-amber-900 text-[11px] mt-0.5">Perbaikan / Revisi</div>
+                    <div class="text-[10px] text-amber-700 mt-0.5">Notifikasi WA Dokter</div>
+                  </div>
+                  <div class="p-2.5 rounded-xl bg-indigo-50 border border-indigo-200">
+                    <div class="text-[10px] font-bold text-indigo-600">Tahap 4</div>
+                    <div class="font-extrabold text-indigo-900 text-[11px] mt-0.5">Diajukan ke Kemenkes</div>
+                    <div class="text-[10px] text-indigo-700 mt-0.5">No. Registrasi / Resi</div>
+                  </div>
+                  <div class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200">
+                    <div class="text-[10px] font-bold text-[#006948]">Tahap 5</div>
+                    <div class="font-extrabold text-[#006948] text-[11px] mt-0.5">Terbit &amp; Selesai</div>
+                    <div class="text-[10px] text-emerald-700 mt-0.5">Dokumen Resmi Keluar</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- C. 4 KARTU KPI METRIK PENGURUSAN NASIONAL -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
+                <div class="bg-white border border-slate-200/90 rounded-2xl p-4 shadow-2xs flex flex-col justify-between">
+                  <div class="flex items-center justify-between gap-1">
+                    <span class="text-[10px] font-extrabold tracking-wider text-slate-500 uppercase">TOTAL TIKET AKTIF</span>
+                    <span class="px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-[#006948] text-[10px] font-bold">Nasional</span>
+                  </div>
+                  <div id="kpiTotalDoctors" class="text-2xl font-extrabold text-slate-900 mt-2">148</div>
+                  <div class="mt-2 text-[11px] text-slate-500">92 B2C Mandiri • 56 B2B Mitra</div>
+                </div>
+
+                <div role="button" tabindex="0" onclick="setTableStatusTab('curation')" class="bg-white border border-slate-200/90 hover:border-blue-300 rounded-2xl p-4 shadow-2xs flex flex-col justify-between cursor-pointer transition">
+                  <div class="flex items-center justify-between gap-1">
+                    <span class="text-[10px] font-extrabold tracking-wider text-slate-500 uppercase">DALAM KURASI ADMIN</span>
+                    <span class="px-2 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-[10px] font-bold">Tahap 2</span>
+                  </div>
+                  <div id="kpiPsvPending" class="text-2xl font-extrabold text-blue-800 mt-2">28</div>
+                  <div class="mt-2 text-[11px] text-slate-500">Pengecekan sebelum disubmit</div>
+                </div>
+
+                <div role="button" tabindex="0" onclick="setTableStatusTab('submitted_instansi')" class="bg-white border border-slate-200/90 hover:border-indigo-300 rounded-2xl p-4 shadow-2xs flex flex-col justify-between cursor-pointer transition">
+                  <div class="flex items-center justify-between gap-1">
+                    <span class="text-[10px] font-extrabold tracking-wider text-slate-500 uppercase">DIAJUKAN KE KEMENKES</span>
+                    <span class="px-2 py-0.5 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-[10px] font-bold">Tahap 4</span>
+                  </div>
+                  <div id="kpiCompletePct" class="text-2xl font-extrabold text-indigo-700 mt-2">64</div>
+                  <div class="mt-2 text-[11px] text-slate-500">Menunggu validasi e-STR / SIP</div>
+                </div>
+
+                <div role="button" tabindex="0" onclick="setTableStatusTab('completed')" class="bg-white border border-slate-200/90 hover:border-emerald-300 rounded-2xl p-4 shadow-2xs flex flex-col justify-between cursor-pointer transition">
+                  <div class="flex items-center justify-between gap-1">
+                    <span class="text-[10px] font-extrabold tracking-wider text-slate-500 uppercase">TERBIT &amp; SELESAI</span>
+                    <span class="px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-[#006948] text-[10px] font-bold">Bulan Ini</span>
+                  </div>
+                  <div id="kpiCriticalCount" class="text-2xl font-extrabold text-[#006948] mt-2">56</div>
+                  <div class="mt-2 text-[11px] text-slate-500">Tingkat lolos berkas 98.2%</div>
+                </div>
+              </div>
+
+              <!-- C. KARTU TABEL MONITORING PENGURUSAN DOKTER NASIONAL -->
+              <div class="bg-white border border-slate-200/90 rounded-2xl shadow-xs overflow-hidden">
+                <!-- Header Kartu: Rapi, Ringkas, Elegan -->
+                <div class="p-4 sm:px-5 sm:py-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-white">
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <h3 class="text-sm sm:text-base font-extrabold text-slate-900">Monitoring Permohonan Berkas Dokter</h3>
+                      <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-[#006948] border border-emerald-200/80 text-[10.5px] font-bold">148 Tiket Nasional</span>
+                    </div>
+                    <p class="text-[11.5px] text-slate-500 mt-0.5">Pelacakan alur pengurusan STR 5 tahunan, e-SIP Kemenkes, dan kurasi berkas perizinan.</p>
+                  </div>
+                  <button type="button" onclick="switchView('doctors')" class="text-xs font-bold text-[#006948] hover:text-[#005137] hover:underline flex items-center gap-1 self-start sm:self-center shrink-0 transition">
+                    <span>Direktori Lengkap Klien</span>
+                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                  </button>
+                </div>
+
+                <!-- 1. Segmented Pill Tabs Pipeline (Modern & Responsif) -->
+                <div class="px-4 py-2.5 sm:px-5 bg-slate-50/70 border-b border-slate-100 flex flex-wrap items-center justify-between gap-2">
+                  <div class="flex items-center gap-1.5 flex-wrap text-xs">
+                    <button type="button" id="tabStatus-all" onclick="setTableStatusTab('all')" class="px-3 py-1.5 rounded-xl bg-[#006948] text-white font-bold transition shadow-2xs">
+                      Semua (148)
+                    </button>
+                    <button type="button" id="tabStatus-curation" onclick="setTableStatusTab('curation')" class="px-3 py-1.5 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-100 font-semibold transition">
+                      Kurasi Admin (28)
+                    </button>
+                    <button type="button" id="tabStatus-need_revision" onclick="setTableStatusTab('need_revision')" class="px-3 py-1.5 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-100 font-semibold transition">
+                      Perlu Revisi (14)
+                    </button>
+                    <button type="button" id="tabStatus-submitted_instansi" onclick="setTableStatusTab('submitted_instansi')" class="px-3 py-1.5 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-100 font-semibold transition">
+                      Diajukan ke Kemenkes (64)
+                    </button>
+                    <button type="button" id="tabStatus-completed" onclick="setTableStatusTab('completed')" class="px-3 py-1.5 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-100 font-semibold transition">
+                      Terbit &amp; Selesai (56)
+                    </button>
+                    <button type="button" id="tabStatus-cancelled" onclick="setTableStatusTab('cancelled')" class="px-3 py-1.5 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-100 font-semibold transition">
+                      Dibatalkan (<span id="countDashCancelled">0</span>)
+                    </button>
+                  </div>
+                  <div id="submissionCounterLabel" class="text-[11px] font-semibold text-slate-400">
+                    Menampilkan 5 tiket per halaman
+                  </div>
+                </div>
+
+                <!-- 2. Clean Unified Search & Filter Toolbar (Satu Baris Rapi) -->
+                <div class="p-3.5 sm:px-5 bg-white border-b border-slate-100 flex flex-wrap items-center gap-2 text-xs">
+                  <!-- Search input -->
+                  <div class="relative flex-1 min-w-[220px]">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-base">search</span>
+                    <input id="tableSearchInput" type="text" oninput="state.tablePage=1; renderDashboardTable()" placeholder="Cari nama dokter, STR, atau ID tiket..." class="w-full pl-9 pr-3 py-2 bg-slate-50/70 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#006948] focus:bg-white transition" />
+                  </div>
+
+                  <!-- Dropdown Filter Segmen -->
+                  <select id="filterClientSegment" onchange="state.clientSegmentFilter=this.value; state.tablePage=1; renderDashboardTable()" class="bg-slate-50/70 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 font-semibold focus:outline-none focus:border-[#006948] focus:bg-white transition cursor-pointer">
+                    <option value="all">Semua Segmen</option>
+                    <option value="B2C">B2C Dokter Mandiri</option>
+                    <option value="B2B">B2B Mitra Klinik/RS</option>
+                  </select>
+
+                  <!-- Dropdown Filter Layanan -->
+                  <select id="filterServicePackage" onchange="state.servicePackageFilter=this.value; state.tablePage=1; renderDashboardTable()" class="bg-slate-50/70 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 font-semibold focus:outline-none focus:border-[#006948] focus:bg-white transition cursor-pointer">
+                    <option value="all">Semua Layanan Instansi</option>
+                    <option value="srv-str">Pembaruan STR 5 Tahun</option>
+                    <option value="srv-jafung">Kenaikan Jabatan Fungsional</option>
+                    <option value="srv-kolegium">Rekomendasi Kolegium</option>
+                    <option value="srv-sip">Penerbitan SIP Baru</option>
+                  </select>
+
+                  <!-- Tombol Unduh CSV & Reset -->
+                  <div class="flex items-center gap-1.5 shrink-0 ml-auto sm:ml-0">
+                    <button type="button" onclick="downloadIncompleteCsv()" class="px-3 py-2 bg-slate-50/80 hover:bg-slate-100 border border-slate-200 text-slate-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs" title="Unduh Rekap Berkas (.CSV)">
+                      <span class="material-symbols-outlined text-sm text-slate-500">download</span>
+                      <span>Ekspor CSV</span>
+                    </button>
+                    <button type="button" onclick="resetDashboardFilters()" class="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition" title="Reset Pencarian &amp; Filter">
+                      <span class="material-symbols-outlined text-base">restart_alt</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- MOBILE TOUCH CARDS (< md) -->
+                <div id="doctorMobileCards" class="md:hidden divide-y divide-slate-100"></div>
+
+                <!-- DESKTOP & TABLET TABLE (md+) -->
+                <div class="hidden md:block overflow-x-auto">
+                  <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                      <tr class="bg-slate-50/80 border-b border-slate-200/90 text-slate-400 font-extrabold uppercase text-[10px] tracking-wider">
+                        <th class="py-3 px-4 w-[16%]">TIKET &amp; SEGMEN</th>
+                        <th class="py-3 px-4 w-[28%]">DOKTER &amp; ASAL FASKES</th>
+                        <th class="py-3 px-4 w-[24%]">LAYANAN &amp; RESI INSTANSI</th>
+                        <th class="py-3 px-4 w-[18%]">STATUS PIPELINE</th>
+                        <th class="py-3 px-4 w-[14%] text-right">AKSI</th>
+                      </tr>
+                    </thead>
+                    <tbody id="doctorTableBody" class="divide-y divide-slate-100 text-slate-700"></tbody>
+                  </table>
+                </div>
+
+                <!-- Pagination Footer: Dinamis & Elegan -->
+                <div class="px-4 py-3 bg-slate-50/70 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-2.5 text-xs text-slate-500">
+                  <div id="paginationSummary" class="font-medium text-[11px] text-slate-600">
+                    Menampilkan 1 - 5 dari 14 tiket
+                  </div>
+                  <div id="paginationControls" class="flex items-center gap-1 text-xs">
+                    <!-- Tombol Pagination di-render dinamis oleh JavaScript -->
+                  </div>
+                </div>
+              </div>
+
+              <!-- D. BANNER INTEGRASI KKI & SATU SEHAT SDMK AKTIF -->
+              <div role="button" tabindex="0" onclick="switchView('settings')" title="Klik untuk membuka konsol integrasi API" class="bg-white border border-slate-200/90 hover:border-emerald-300 rounded-2xl p-4 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 cursor-pointer transition">
+                <div class="flex items-start sm:items-center gap-3 min-w-0">
+                  <div class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 text-[#006948] flex items-center justify-center shrink-0">
+                    <span class="material-symbols-outlined text-xl">sync_alt</span>
+                  </div>
+                  <div class="min-w-0">
+                    <div class="text-xs sm:text-sm font-extrabold text-slate-900">
+                      Integrasi Portal Konsil Kedokteran Indonesia (KKI) &amp; Satu Sehat SDMK Aktif
+                    </div>
+                    <div class="text-[11px] text-slate-500 mt-0.5">
+                      Konsil Kedokteran Indonesia (KKI) • Sistem Informasi SDM Kesehatan (SISDMK) Kemenkes
+                    </div>
+                  </div>
+                </div>
+                <span class="self-start sm:self-center inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[#006948] text-[11px] font-bold shrink-0">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  Tersambung Normal
+                </span>
+              </div>
+            </div>
+
+            <!-- ============================================================= -->
+            <!-- PANEL KANAN: AKSI CEPAT & KEPATUHAN REAL-TIME (4 KOLOM XL)    -->
+            <!-- ============================================================= -->
+            <div class="xl:col-span-4 space-y-4 min-w-0">
+
+              <!-- E. SEKSI 'AKSI CEPAT KREDENSIALING' -->
+              <div class="flex items-center justify-between px-0.5">
+                <h3 class="text-sm font-extrabold text-slate-900">Aksi Cepat Kredensialing</h3>
+                <span class="material-symbols-outlined text-[#006948] text-lg">bolt</span>
+              </div>
+
+              <!-- Quick Action 1: + Daftarkan Dokter Baru -->
+              <div class="bg-white border border-slate-200/90 rounded-2xl p-4 shadow-2xs space-y-3">
+                <div class="flex items-start gap-3">
+                  <div class="w-9 h-9 rounded-xl bg-emerald-50 text-[#006948] flex items-center justify-center shrink-0">
+                    <span class="material-symbols-outlined text-lg">person_add</span>
+                  </div>
+                  <div class="min-w-0">
+                    <div class="text-xs font-extrabold text-slate-900">+ Daftarkan Dokter Baru</div>
+                    <div class="text-[11px] text-slate-500 mt-0.5 leading-snug">Masukkan STR atau NIK untuk memulai pengumpulan berkas otomatis.</div>
+                  </div>
+                </div>
+                <form onsubmit="handleQuickInviteDoctor(event)" class="flex items-center gap-2">
+                  <input id="quickInviteInput" type="text" placeholder="Masukkan 16 digit STR / NIK..." class="flex-1 min-w-0 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono text-slate-800 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:border-[#006948]" />
+                  <button type="submit" class="px-3.5 py-2 bg-[#006948] hover:bg-[#005137] text-white rounded-xl text-xs font-bold shrink-0 transition">
+                    Undang
+                  </button>
+                </form>
+              </div>
+
+              <!-- Quick Action 2: Buat Tautan Unggah QR Dokter -->
+              <div class="bg-white border border-slate-200/90 rounded-2xl p-4 shadow-2xs space-y-3">
+                <div class="flex items-start justify-between gap-2">
+                  <div class="flex items-start gap-3 min-w-0">
+                    <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                      <span class="material-symbols-outlined text-lg">qr_code_2</span>
+                    </div>
+                    <div class="min-w-0">
+                      <div class="text-xs font-extrabold text-slate-900">Buat Tautan Unggah QR Dokter</div>
+                      <div class="text-[11px] text-slate-500 mt-0.5 leading-snug">Buat kode QR dinamis terenkripsi untuk pendaftaran dan unggah dokumen langsung via ponsel.</div>
+                    </div>
+                  </div>
+                  <span class="material-symbols-outlined text-slate-400 text-base shrink-0">lock</span>
+                </div>
+                <button type="button" onclick="openQrModal()" class="w-full py-2.5 px-3 bg-indigo-50/90 hover:bg-indigo-100 border border-indigo-200/80 text-indigo-800 rounded-xl text-xs font-extrabold transition flex items-center justify-center gap-1.5">
+                  <span class="material-symbols-outlined text-base">qr_code_scanner</span>
+                  <span>Buat Kode QR Terenkripsi</span>
+                </button>
+              </div>
+
+              <!-- Quick Action 3: Jalankan Verifikasi Sumber Primer (PSV) Massal -->
+              <div class="bg-white border border-slate-200/90 rounded-2xl p-4 shadow-2xs space-y-3">
+                <div class="flex items-start gap-3">
+                  <div class="w-9 h-9 rounded-xl bg-emerald-50 text-[#006948] flex items-center justify-center shrink-0">
+                    <span class="material-symbols-outlined text-lg">fact_check</span>
+                  </div>
+                  <div class="min-w-0">
+                    <div class="text-xs font-extrabold text-slate-900">Jalankan Verifikasi Sumber Primer (PSV) Massal</div>
+                    <div class="text-[11px] text-slate-500 mt-0.5 leading-snug">Audit batch otomatis ke database KKI, SISDMK Kemenkes, dan Konsil Spesialis.</div>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between gap-2 pt-0.5">
+                  <span id="batchPsvTimestamp" class="text-[10px] text-slate-400">Terakhir dijalankan: 4 jam lalu</span>
+                  <button type="button" id="btnBatchPsv" onclick="runBatchPsvVerification()" class="px-3 py-2 bg-slate-100 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 text-slate-800 hover:text-[#006948] rounded-xl text-[11px] font-bold transition flex items-center gap-1 shrink-0">
+                    <span class="material-symbols-outlined text-sm">chevron_right</span>
+                    <span id="btnBatchPsvLabel">Jalankan Batch PSV (43)</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Quick Action 4: Kirim Pengingat Massal (107 Dokter Belum Lengkap) -->
+              <div class="bg-white border border-slate-200/90 rounded-2xl p-4 shadow-2xs space-y-3">
+                <div class="flex items-start gap-3">
+                  <div class="w-9 h-9 rounded-xl bg-emerald-50 text-[#006948] flex items-center justify-center shrink-0">
+                    <span class="material-symbols-outlined text-lg">mark_email_unread</span>
+                  </div>
+                  <div class="min-w-0">
+                    <div class="text-xs font-extrabold text-slate-900">Kirim Pengingat Massal (107 Dokter Belum Lengkap)</div>
+                    <div class="text-[11px] text-slate-500 mt-0.5 leading-snug">Kirim email &amp; notifikasi WhatsApp otomatis terkait tautan pembaruan berkas ke 107 dokter.</div>
+                  </div>
+                </div>
+                <button type="button" onclick="openMassReminderModal()" class="w-full py-2.5 px-3 bg-[#006948] hover:bg-[#005137] text-white rounded-xl text-xs font-bold shadow-xs transition flex items-center justify-center gap-1.5">
+                  <span class="material-symbols-outlined text-base">send</span>
+                  <span>Kirim Notifikasi ke 107 Dokter</span>
+                </button>
+              </div>
+
+              <!-- Quick Action 5: Kirim Notifikasi Dokumen Kedaluwarsa -->
+              <div class="bg-white border border-slate-200/90 rounded-2xl p-4 shadow-2xs space-y-3">
+                <div class="flex items-start gap-3">
+                  <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center shrink-0">
+                    <span class="material-symbols-outlined text-lg">notification_important</span>
+                  </div>
+                  <div class="min-w-0">
+                    <div class="text-xs font-extrabold text-slate-900">Kirim Notifikasi Dokumen Kedaluwarsa</div>
+                    <div class="text-[11px] text-slate-500 mt-0.5 leading-snug">Kirim SMS otomatis &amp; email aman dengan tautan unggah mandiri.</div>
+                  </div>
+                </div>
+                <button type="button" onclick="openUrgentExpiryModal()" class="w-full py-2.5 px-3 bg-[#7c4d03] hover:bg-[#633c02] text-white rounded-xl text-xs font-bold shadow-xs transition flex items-center justify-center gap-1.5">
+                  <span class="material-symbols-outlined text-base">warning</span>
+                  <span>Kirim 7 Peringatan Mendesak</span>
+                </button>
+              </div>
+
+              <!-- F. KARTU 'RINGKASAN KEPATUHAN REAL-TIME' -->
+              <div class="bg-white border border-slate-200/90 rounded-2xl p-4 shadow-2xs space-y-3.5">
+                <div class="flex items-start justify-between gap-2">
+                  <div>
+                    <h4 class="text-xs sm:text-sm font-extrabold text-slate-900">Ringkasan Kepatuhan Real-time</h4>
+                    <p class="text-[11px] text-slate-500">Kemajuan audit berkas klinis secara langsung</p>
+                  </div>
+                  <button type="button" onclick="refreshRealtimeCompliance()" class="p-2 rounded-lg hover:bg-slate-100 text-[#006948] transition" title="Segarkan Kepatuhan Real-time">
+                    <span id="complianceRefreshIcon" class="material-symbols-outlined text-lg">sync</span>
+                  </button>
+                </div>
+
+                <div class="space-y-3 text-xs">
+                  <!-- Bar 1 -->
+                  <div>
+                    <div class="flex items-center justify-between text-[11px] mb-1">
+                      <span class="font-bold text-slate-700">STR Dokter Aktif</span>
+                      <span class="font-mono font-bold text-[#006948]">98% (1.223/1.248)</span>
+                    </div>
+                    <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                      <div class="h-2 bg-[#006948] rounded-full" style="width: 98%"></div>
+                    </div>
+                  </div>
+
+                  <!-- Bar 2 -->
+                  <div>
+                    <div class="flex items-center justify-between text-[11px] mb-1">
+                      <span class="font-bold text-slate-700">SIP (Surat Izin Praktik)</span>
+                      <span class="font-mono font-bold text-[#006948]">98% (1.223/1.248)</span>
+                    </div>
+                    <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                      <div class="h-2 bg-[#006948] rounded-full" style="width: 98%"></div>
+                    </div>
+                  </div>
+
+                  <!-- Bar 3 -->
+                  <div>
+                    <div class="flex items-center justify-between text-[11px] mb-1">
+                      <span class="font-bold text-slate-700">Asuransi Tanggung Gugat Profesi</span>
+                      <span class="font-mono font-bold text-[#006948]">92% (1.148/1.248)</span>
+                    </div>
+                    <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                      <div class="h-2 bg-[#006948] rounded-full" style="width: 92%"></div>
+                    </div>
+                  </div>
+
+                  <!-- Bar 4 -->
+                  <div>
+                    <div class="flex items-center justify-between text-[11px] mb-1">
+                      <span class="font-bold text-slate-700">Rekomendasi Subkomite Kredensial</span>
+                      <span class="font-mono font-bold text-amber-700">85% (1.061/1.248)</span>
+                    </div>
+                    <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                      <div class="h-2 bg-amber-600 rounded-full" style="width: 85%"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pt-2.5 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500">
+                  <span>Terakhir disinkronisasi Kemenkes/KKI</span>
+                  <span id="lastKkiSyncTime" class="font-bold text-slate-700">Hari ini, 09:00 WIB</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  
+
+  <!-- Data Store & Shared Shell Scripts -->
+  <script src="js/state.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Page-Specific Module Script -->
+  <script>
+function updateDashboardKpis() {
+      const baseTotal = 1242 + state.doctors.length;
+      const incompleteInState = state.doctors.filter(d => !getDocCompletion(d).isComplete).length;
+      const incompleteTotal = 104 + incompleteInState;
+      const completeTotal = baseTotal - incompleteTotal;
+      const pct = ((completeTotal / baseTotal) * 100).toFixed(1);
+
+      const elTotal = document.getElementById('kpiTotalDoctors');
+      const elPct = document.getElementById('kpiCompletePct');
+      const elBreakdown = document.getElementById('kpiCompleteBreakdown');
+      const elPsv = document.getElementById('kpiPsvPending');
+      const elCrit = document.getElementById('kpiCriticalCount');
+
+      if (elTotal) elTotal.textContent = baseTotal.toLocaleString('id-ID');
+      if (elPct) elPct.textContent = `${pct}%`;
+      if (elBreakdown) elBreakdown.textContent = `${completeTotal.toLocaleString('id-ID')} Berkas Lengkap • ${incompleteTotal} Belum Lengkap`;
+      if (elPsv) elPsv.textContent = String(state.psvPendingCount);
+      if (elCrit) elCrit.textContent = String(state.criticalCount);
+    }
+
+    function setTableStatusTab(tab) {
+      state.tableStatusTab = tab;
+      state.tablePage = 1;
+      ['all', 'curation', 'need_revision', 'submitted_instansi', 'completed', 'cancelled'].forEach(key => {
+        const btn = document.getElementById('tabStatus-' + key);
+        if (!btn) return;
+        if (key === tab) {
+          btn.className = 'px-3 py-1.5 rounded-xl bg-[#006948] text-white font-bold transition shadow-2xs';
+        } else {
+          btn.className = 'px-3 py-1.5 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-100 font-semibold transition';
+        }
+      });
+      renderDashboardTable();
+    }
+
+    function setTablePage(pageNum) {
+      state.tablePage = pageNum;
+      renderDashboardTable();
+    }
+
+    function changeTablePage(delta) {
+      state.tablePage += delta;
+      renderDashboardTable();
+    }
+
+    function resetDashboardFilters() {
+      const s = document.getElementById('tableSearchInput');
+      const cs = document.getElementById('filterClientSegment');
+      const sp = document.getElementById('filterServicePackage');
+      if (s) s.value = '';
+      if (cs) cs.value = 'all';
+      if (sp) sp.value = 'all';
+      state.clientSegmentFilter = 'all';
+      state.servicePackageFilter = 'all';
+      state.tablePage = 1;
+      setTableStatusTab('all');
+      showToast('Filter Direset', 'Menampilkan seluruh permohonan pengurusan berkas dokter nasional.', 'info');
+    }
+
+    function handleGlobalSearch(query) {
+      const q = (query || '').trim();
+      const tableSearch = document.getElementById('tableSearchInput');
+      if (tableSearch) tableSearch.value = q;
+      const dashSection = document.getElementById('view-dashboard');
+      if (dashSection && !dashSection.classList.contains('active')) {
+        switchView('dashboard');
+      } else {
+        renderDashboardTable();
+      }
+    }
+
+    function sendWhatsAppConcierge(docId) {
+      const doc = state.doctors.find(d => d.id === docId);
+      if (!doc) return;
+      const msg = doc.pipelineStatus === 'need_revision'
+        ? `Halo ${doc.name}, kami dari Tim MedCred Concierge menginfokan berkas ${doc.serviceType} memerlukan revisi: ${doc.revisionNote}. Mohon perbarui via tautan mandiri.`
+        : `Halo ${doc.name}, kami dari Tim MedCred Concierge menginfokan pengurusan ${doc.serviceType} saat ini berstatus: ${doc.pipelineLabel} (No Resi: ${doc.instansiRegNo}).`;
+      showToast('Pesan WhatsApp Concierge Terkirim', `Pemberitahuan diteruskan ke kontak ${doc.phone} (${doc.name}).`, 'success');
+    }
+
+    function advancePipelineStage(docId, nextStage) {
+      const doc = state.doctors.find(d => d.id === docId);
+      if (!doc) return;
+      doc.pipelineStatus = nextStage;
+      if (nextStage === 'submitted_instansi') {
+        doc.pipelineLabel = 'Diajukan ke Kemenkes RI';
+        doc.pipelineBadgeClass = 'bg-indigo-100 text-indigo-800 border-indigo-200';
+        if (doc.instansiRegNo.includes('Menunggu')) {
+          doc.instansiRegNo = `KMK-STR-2026-${Math.floor(10000 + Math.random() * 90000)}`;
+        }
+        showToast('Diajukan ke Kemenkes RI', `Tiket ${doc.regId} milik ${doc.name} resmi disubmit ke portal Kemenkes. No Resi: ${doc.instansiRegNo}`, 'success');
+      } else if (nextStage === 'need_revision') {
+        doc.pipelineLabel = 'Perlu Revisi Dokter';
+        doc.pipelineBadgeClass = 'bg-amber-100 text-amber-800 border-amber-200';
+        showToast('Permintaan Revisi Dikirim', `Notifikasi revisi berkas telah dikirimkan ke ${doc.name}.`, 'warning');
+      } else if (nextStage === 'completed') {
+        doc.pipelineLabel = 'Selesai & Izin Terbit';
+        doc.pipelineBadgeClass = 'bg-emerald-100 text-emerald-800 border-emerald-200';
+        showToast('Pengurusan Selesai & Terbit', `Dokumen resmi perizinan untuk ${doc.name} telah selesai diterbitkan Kemenkes/Dinkes.`, 'success');
+      } else if (nextStage === 'cancelled') {
+        doc.pipelineLabel = 'Dibatalkan (Cancelled)';
+        doc.pipelineBadgeClass = 'bg-rose-100 text-rose-800 border-rose-200';
+        showToast('Pengajuan Dibatalkan', `Tiket ${doc.regId} milik ${doc.name} telah dibatalkan resmi.`, 'info');
+      }
+      renderDashboardTable();
+    }
+
+    function renderDashboardTable() {
+      const tbody = document.getElementById('doctorTableBody');
+      const mobileCards = document.getElementById('doctorMobileCards');
+      if (!tbody || !mobileCards) return;
+
+      const q = (document.getElementById('tableSearchInput')?.value || '').toLowerCase().trim();
+      const segFilter = document.getElementById('filterClientSegment')?.value || state.clientSegmentFilter || 'all';
+      const srvFilter = document.getElementById('filterServicePackage')?.value || state.servicePackageFilter || 'all';
+
+      const filtered = state.doctors.filter(doc => {
+        // Tab Status Filter
+        if (state.tableStatusTab === 'curation' && doc.pipelineStatus !== 'curation') return false;
+        if (state.tableStatusTab === 'need_revision' && doc.pipelineStatus !== 'need_revision') return false;
+        if (state.tableStatusTab === 'submitted_instansi' && doc.pipelineStatus !== 'submitted_instansi' && doc.pipelineStatus !== 'instansi_progress') return false;
+        if (state.tableStatusTab === 'completed' && doc.pipelineStatus !== 'completed') return false;
+        if (state.tableStatusTab === 'cancelled' && doc.pipelineStatus !== 'cancelled') return false;
+
+        // Segment Filter (B2C / B2B)
+        if (segFilter !== 'all' && doc.clientType !== segFilter) return false;
+
+        // Service Filter
+        if (srvFilter !== 'all' && doc.serviceCode !== srvFilter) return false;
+
+        // Text search
+        if (q) {
+          const hay = `${doc.regId} ${doc.name} ${doc.specialty} ${doc.str} ${doc.nip} ${doc.clientOrg} ${doc.serviceType} ${doc.instansiRegNo} ${doc.instansiTarget}`.toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+
+      // Pagination math (5 per page)
+      const pageSize = 5;
+      const totalPages = Math.ceil(filtered.length / pageSize) || 1;
+      if (state.tablePage > totalPages) state.tablePage = totalPages;
+      if (state.tablePage < 1) state.tablePage = 1;
+
+      const startIdx = (state.tablePage - 1) * pageSize;
+      const pageData = filtered.slice(startIdx, startIdx + pageSize);
+
+      const counterLabel = document.getElementById('submissionCounterLabel');
+      const pagSummary = document.getElementById('paginationSummary');
+      const pagControls = document.getElementById('paginationControls');
+
+      if (counterLabel) {
+        counterLabel.textContent = `Menampilkan ${filtered.length} dari ${state.doctors.length} tiket`;
+      }
+
+      if (pagSummary) {
+        const startNum = filtered.length > 0 ? startIdx + 1 : 0;
+        const endNum = Math.min(startIdx + pageSize, filtered.length);
+        pagSummary.textContent = `Menampilkan ${startNum} - ${endNum} dari ${filtered.length} tiket (Halaman ${state.tablePage}/${totalPages})`;
+      }
+
+      // Render pagination buttons
+      if (pagControls) {
+        let btnsHtml = `
+          <button type="button" onclick="changeTablePage(-1)" ${state.tablePage <= 1 ? 'disabled class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-300 cursor-not-allowed"' : 'class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 transition"'}>‹</button>
+        `;
+        for (let p = 1; p <= totalPages; p++) {
+          if (p === state.tablePage) {
+            btnsHtml += `<button type="button" onclick="setTablePage(${p})" class="w-7 h-7 rounded-lg bg-[#006948] text-white font-bold flex items-center justify-center shadow-2xs">${p}</button>`;
+          } else {
+            btnsHtml += `<button type="button" onclick="setTablePage(${p})" class="w-7 h-7 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-medium flex items-center justify-center transition">${p}</button>`;
+          }
+        }
+        btnsHtml += `
+          <button type="button" onclick="changeTablePage(1)" ${state.tablePage >= totalPages ? 'disabled class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-300 cursor-not-allowed"' : 'class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 transition"'}>›</button>
+        `;
+        pagControls.innerHTML = btnsHtml;
+      }
+
+      if (filtered.length === 0) {
+        const emptyHtml = `
+          <div class="p-8 text-center text-xs text-slate-500 space-y-2">
+            <span class="material-symbols-outlined text-3xl text-slate-300">search_off</span>
+            <div class="font-bold text-slate-800">Tidak ada tiket permohonan yang sesuai filter</div>
+            <p class="text-[11px] text-slate-400">Coba ubah kata kunci pencarian atau reset filter.</p>
+            <button type="button" onclick="resetDashboardFilters()" class="px-3 py-1.5 bg-[#006948] text-white rounded-lg font-bold">Reset Filter</button>
+          </div>
+        `;
+        mobileCards.innerHTML = emptyHtml;
+        tbody.innerHTML = `<tr><td colspan="5">${emptyHtml}</td></tr>`;
+        return;
+      }
+
+      // Render Mobile Touch Cards
+      mobileCards.innerHTML = pageData.map(doc => {
+        return `
+          <div onclick="openDoctorDetail('${doc.id}')" class="p-4 hover:bg-slate-50/80 transition cursor-pointer space-y-2.5">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <div class="w-9 h-9 rounded-full ${doc.avatarBg} font-extrabold text-xs flex items-center justify-center shrink-0 shadow-2xs">${doc.initials}</div>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <span class="text-[10px] font-mono font-bold text-slate-500">${doc.regId}</span>
+                    <span class="px-1.5 py-0.2 rounded text-[9px] font-bold ${doc.clientType === 'B2C' ? 'bg-indigo-50 text-indigo-700' : 'bg-purple-50 text-purple-700'}">${doc.clientType === 'B2C' ? 'B2C Mandiri' : 'B2B Mitra'}</span>
+                  </div>
+                  <div class="text-xs font-extrabold text-slate-900 truncate">${doc.name}</div>
+                  <div class="text-[10.5px] text-slate-500 truncate">${doc.clientOrg}</div>
+                </div>
+              </div>
+              <div class="shrink-0">${getStatusBadgeHtml(doc)}</div>
+            </div>
+
+            <div class="text-[11px] bg-slate-50 rounded-xl p-2.5 border border-slate-100 space-y-1">
+              <div class="font-bold text-slate-800">${doc.serviceType}</div>
+              <div class="flex items-center justify-between text-[10px] text-slate-500 pt-0.5">
+                <span>Resi: <strong class="font-mono text-emerald-800">${doc.instansiRegNo}</strong></span>
+                <span>PIC: <strong>${doc.picConcierge ? doc.picConcierge.split('(')[0].trim() : 'Tim MedCred'}</strong></span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 pt-0.5" onclick="event.stopPropagation()">
+              <button type="button" onclick="openDoctorDetail('${doc.id}')" class="py-2 bg-[#006948] text-white rounded-xl text-[11px] font-bold text-center">Detail Tiket</button>
+              <button type="button" onclick="sendWhatsAppConcierge('${doc.id}')" class="py-2 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-[11px] font-bold flex items-center justify-center gap-1">
+                <span class="material-symbols-outlined text-sm">chat</span> Chat WA
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Render Desktop Table Rows (5 Clean Columns)
+      tbody.innerHTML = pageData.map(doc => {
+        return `
+          <tr onclick="openDoctorDetail('${doc.id}')" class="hover:bg-emerald-50/40 transition cursor-pointer">
+            <td class="py-3 px-4 whitespace-nowrap">
+              <div class="font-mono text-xs font-extrabold text-slate-900">${doc.regId}</div>
+              <span class="inline-block mt-0.5 px-2 py-0.5 rounded text-[9.5px] font-bold ${doc.clientType === 'B2C' ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'bg-purple-50 text-purple-700 border border-purple-200'}">
+                ${doc.clientType === 'B2C' ? 'B2C Mandiri' : 'B2B Mitra'}
+              </span>
+            </td>
+            <td class="py-3 px-4">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full ${doc.avatarBg} font-extrabold text-[11px] flex items-center justify-center shrink-0 shadow-2xs">${doc.initials}</div>
+                <div class="min-w-0">
+                  <div class="font-bold text-slate-900 truncate text-xs">${doc.name}</div>
+                  <div class="text-[10.5px] text-slate-500 truncate">${doc.clientOrg}</div>
+                </div>
+              </div>
+            </td>
+            <td class="py-3 px-4">
+              <div class="text-xs font-semibold text-slate-900 truncate max-w-[210px]" title="${doc.serviceType}">${doc.serviceType}</div>
+              <div class="text-[10.5px] text-[#006948] font-bold mt-0.5 flex items-center gap-1 font-mono">
+                <span class="material-symbols-outlined text-xs">account_balance</span>
+                <span class="truncate">${doc.instansiTarget} • ${doc.instansiRegNo}</span>
+              </div>
+            </td>
+            <td class="py-3 px-4 whitespace-nowrap">
+              ${getStatusBadgeHtml(doc)}
+              <div class="text-[10px] text-slate-400 mt-0.5 font-medium">SLA: ${doc.targetSla}</div>
+            </td>
+            <td class="py-3 px-4 text-right whitespace-nowrap" onclick="event.stopPropagation()">
+              <div class="inline-flex items-center justify-end gap-1.5">
+                <button type="button" onclick="openDoctorDetail('${doc.id}')" class="px-3 py-1.5 bg-[#006948] hover:bg-[#005137] text-white rounded-lg text-[11px] font-bold transition shadow-2xs">
+                  Detail
+                </button>
+                <button type="button" onclick="sendWhatsAppConcierge('${doc.id}')" class="p-1.5 bg-emerald-50 hover:bg-emerald-100 text-[#006948] border border-emerald-200 rounded-lg text-xs font-bold transition" title="Kirim Update WA ke Dokter">
+                  <span class="material-symbols-outlined text-sm">chat</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+    function handleQuickInviteDoctor(e) {
+      e.preventDefault();
+      const input = document.getElementById('quickInviteInput');
+      const val = (input?.value || '').trim();
+      if (!val) {
+        openQrSelfPortal(null, 'new');
+        return;
+      }
+      if (input) input.value = '';
+      openQrSelfPortal(null, 'new');
+      setTimeout(() => {
+        const strField = document.getElementById('qrInputStr');
+        if (strField) strField.value = val;
+      }, 40);
+      showToast('Formulir Pendaftaran QR Dibuka', `Nomor STR/NIK ${val} siap dilengkapi melalui tautan QR dokter.`, 'success');
+    }
+
+    function runBatchPsvVerification() {
+      const btnLabel = document.getElementById('btnBatchPsvLabel');
+      const ts = document.getElementById('batchPsvTimestamp');
+      if (btnLabel) btnLabel.textContent = 'Memverifikasi ke KKI...';
+      setTimeout(() => {
+        state.doctors.forEach(doc => {
+          doc.credentials.forEach(c => {
+            if (c.status === 'psv') {
+              c.status = 'valid';
+              c.detail = 'Terverifikasi Sah via Batch PSV KKI & SatuSehat SDMK';
+            }
+          });
+          if (getDocCompletion(doc).isComplete) doc.statusLabel = 'Terverifikasi';
+        });
+        state.psvPendingCount = Math.max(0, state.psvPendingCount - 12);
+        if (btnLabel) btnLabel.textContent = `Jalankan Batch PSV (${state.psvPendingCount})`;
+        if (ts) ts.textContent = 'Terakhir dijalankan: Baru saja';
+        addAuditEntry(
+          'Inspektur Batch PSV MedCred',
+          'Batch Verifikasi PSV KKI',
+          'bg-emerald-100 text-emerald-800',
+          '12 Dokter Antrean PSV',
+          'Sinkronisasi batch ke database KKI dan SISDMK Kemenkes berhasil.'
+        );
+        renderDashboardTable();
+        showToast('Batch PSV Selesai', '12 berkas dokter berhasil divalidasi langsung terhadap database KKI & SatuSehat SDMK.', 'success');
+      }, 600);
+    }
+
+    function sendUrgentExpiryAlerts() {
+      addAuditEntry(
+        'Dr. Eleanor Vance (Ketua Subkomite)',
+        'Peringatan Kedaluwarsa (<30 Hari)',
+        'bg-amber-100 text-amber-800',
+        '7 Dokter Masa Berlaku Kritis',
+        'Mengirim SMS & email mendesak beserta tautan QR perpanjangan SIP/STR.'
+      );
+      showToast('7 Peringatan Mendesak Terkirim', 'Notifikasi SMS & Email dengan tautan unggah QR mandiri telah dikirim ke 7 dokter kritis.', 'warning');
+    }
+
+    function refreshRealtimeCompliance() {
+      const icon = document.getElementById('complianceRefreshIcon');
+      const syncLabel = document.getElementById('lastKkiSyncTime');
+      if (icon) icon.classList.add('animate-spin');
+      setTimeout(() => {
+        if (icon) icon.classList.remove('animate-spin');
+        const now = new Date();
+        const pad = n => String(n).padStart(2, '0');
+        if (syncLabel) syncLabel.textContent = `Hari ini, ${pad(now.getHours())}:${pad(now.getMinutes())} WIB`;
+        showToast('Kepatuhan Real-time Diperbarui', 'Data STR, SIP, Asuransi Profesi, dan Rekomendasi Subkomite telah disinkronisasi.', 'success');
+      }, 500);
+    }
+
+    function downloadAuditReportCsv() {
+      const rows = [
+        ['ID Registrasi', 'Nama Dokter', 'Spesialisasi', 'Nomor STR', 'Kelengkapan', 'Status', 'PIN Portal QR'],
+        ...state.doctors.map(d => {
+          const c = getDocCompletion(d);
+          return [d.regId, d.name, d.specialty, d.str, `${c.validCount}/${c.total} (${c.pct}%)`, c.isComplete ? 'Terverifikasi' : 'Perlu Tindakan', d.pin];
+        })
+      ];
+      triggerCsvDownload(rows, 'Laporan_Audit_Komite_Medik_2026Q4.csv');
+      showToast('Laporan Audit Diunduh', 'Berkas Laporan_Audit_Komite_Medik_2026Q4.csv berhasil diunduh.', 'success');
+    }
+
+    function downloadIncompleteCsv() {
+      const incomplete = state.doctors.filter(d => !getDocCompletion(d).isComplete);
+      const rows = [
+        ['ID Registrasi', 'Nama Dokter', 'Spesialisasi', 'Nomor STR', 'Kelengkapan', 'Tautan QR'],
+        ...incomplete.map(d => {
+          const c = getDocCompletion(d);
+          return [d.regId, d.name, d.specialty, d.str, `${c.validCount}/${c.total}`, `https://kredensial.rsud.go.id/unggah/${d.qrSlug}`];
+        })
+      ];
+      triggerCsvDownload(rows, 'Daftar_Dokter_Belum_Lengkap_107.csv');
+      showToast('Daftar Belum Lengkap Diunduh', 'Berkas Daftar_Dokter_Belum_Lengkap_107.csv berhasil diunduh.', 'success');
+    }
+
+    function triggerCsvDownload(rows, filename) {
+      try {
+        const csvContent = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      } catch (e) {
+        console.error('CSV download fallback:', e);
+      }
+    }
+
+    // =========================================================================
+    // QR GENERATOR MODAL (#qrGeneratorModal)
+    // =========================================================================
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initAppShell('dashboard');
+      renderDashboardTable();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full bg-[#f4f7f6]">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MedCred Concierge - Mitra Klinik & Faskes (B2B)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Core Fonts & Styles -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="h-full bg-[#f4f7f6] text-slate-800 antialiased font-sans">
+  <!-- MOBILE BACKDROP OVERLAY -->
+  <div id="sidebarOverlay" onclick="toggleMobileSidebar(false)" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-40 hidden pointer-events-none transition-opacity lg:hidden"></div>
+
+  <div class="flex h-screen overflow-hidden">
+    <!-- APP SIDEBAR -->
+    <aside id="appSidebar" class="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] lg:w-64 bg-white border-r border-slate-200/90 flex flex-col shrink-0 transition-transform duration-300 ease-in-out -translate-x-full lg:translate-x-0 lg:static lg:inset-auto shadow-2xl lg:shadow-none">
+      <!-- Top Brand Header -->
+      <div class="px-4 py-4 border-b border-slate-100 flex items-center justify-between gap-2">
+        <div role="button" tabindex="0" data-nav-view="dashboard" onclick="switchView('dashboard')" class="flex items-center gap-2.5 cursor-pointer min-w-0">
+          <div class="w-9 h-9 rounded-xl bg-[#006948] flex items-center justify-center text-white shadow-xs shrink-0">
+            <span class="material-symbols-outlined text-xl fill">shield_with_heart</span>
+          </div>
+          <div class="min-w-0">
+            <div class="font-extrabold text-[13px] tracking-tight text-[#006948] leading-none">MEDCRED CONCIERGE</div>
+            <div class="text-[8.5px] text-slate-500 font-semibold leading-tight mt-0.5 truncate">Tata Kelola Medik &amp; Kredensial</div>
+          </div>
+        </div>
+        <button type="button" onclick="toggleMobileSidebar(false)" class="lg:hidden p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition" aria-label="Tutup Menu">
+          <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+      </div>
+
+      <!-- Navigation Menu ('MENU UTAMA') with Event Delegation + Clean onclick -->
+      <div id="sidebarNavContainer" class="px-3 py-4 flex-1 overflow-y-auto">
+        <div class="px-3 mb-2.5 text-[10px] font-bold tracking-wider text-slate-400 uppercase">
+          MENU UTAMA
+        </div>
+        <nav class="space-y-1">
+          <button type="button" id="nav-dashboard" data-nav-view="dashboard" onclick="switchView('dashboard')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold transition bg-[#006948] text-white shadow-xs active">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">grid_view</span>
+            <span class="pointer-events-none">Ringkasan Utama</span>
+          </button>
+          <button type="button" id="nav-doctors" data-nav-view="doctors" onclick="switchView('doctors')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">group</span>
+            <span class="pointer-events-none">Daftar Dokter &amp; Nakes</span>
+          </button>
+          <button type="button" id="nav-psv" data-nav-view="psv" onclick="switchView('psv')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">verified_user</span>
+            <span class="pointer-events-none">Verifikasi Kredensial</span>
+          </button>
+          <button type="button" id="nav-compliance" data-nav-view="compliance" onclick="switchView('compliance')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">folder_shared</span>
+            <span class="pointer-events-none">Kepatuhan Dokumen</span>
+          </button>
+          <button type="button" id="nav-audit" data-nav-view="audit" onclick="switchView('audit')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">receipt_long</span>
+            <span class="pointer-events-none">Log Audit &amp; Kepatuhan</span>
+          </button>
+          <button type="button" id="nav-committee" data-nav-view="committee" onclick="switchView('committee')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">clinical_notes</span>
+            <span class="pointer-events-none">Komite Medik &amp; SPK/RKK</span>
+          </button>
+          <button type="button" id="nav-invoicing" data-nav-view="invoicing" onclick="switchView('invoicing')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">payments</span>
+            <span class="pointer-events-none">Penagihan &amp; Faktur</span>
+          </button>
+          <button type="button" id="nav-commissions" data-nav-view="commissions" onclick="switchView('commissions')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">account_balance_wallet</span>
+            <span class="pointer-events-none">Komisi Agen &amp; PIC</span>
+          </button>
+          <button type="button" id="nav-settings" data-nav-view="settings" onclick="switchView('settings')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">settings</span>
+            <span class="pointer-events-none">Pengaturan</span>
+          </button>
+        </nav>
+
+        <!-- Quick Portal Switcher for Doctor QR Self-Service -->
+        <div class="mt-6 pt-4 border-t border-slate-100">
+          <div class="px-3 mb-2 text-[10px] font-bold tracking-wider text-slate-400 uppercase">
+            PORTAL MANDIRI DOKTER
+          </div>
+          <button type="button" id="nav-qr-portal" data-nav-view="qr-portal" onclick="openQrSelfPortal('doc-elena', 'existing')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-emerald-50/70">
+            <span class="material-symbols-outlined text-[18px] text-[#006948] pointer-events-none">qr_code_2</span>
+            <span class="pointer-events-none">Form Registrasi &amp; QR Dokter</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Bottom Profile Card in Sidebar -->
+      <div class="p-3 border-t border-slate-100 bg-slate-50/60">
+        <div class="p-2.5 rounded-xl bg-white border border-slate-200/80 flex items-center justify-between gap-2 shadow-2xs">
+          <div role="button" tabindex="0" onclick="handleBottomProfileClick()" class="flex items-center gap-2.5 min-w-0 cursor-pointer">
+            <div id="sidebarBottomAvatar" class="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-800 to-teal-600 text-white font-bold text-xs flex items-center justify-center shrink-0 ring-2 ring-emerald-100">
+              EV
+            </div>
+            <div class="min-w-0">
+              <div id="sidebarBottomName" class="text-xs font-bold text-slate-900 truncate">Dr. Eleanor Vance</div>
+              <div id="sidebarBottomRole" class="text-[9px] font-bold text-[#006948] uppercase tracking-wider truncate">KETUA SUBKOMITE KREDENSIAL</div>
+            </div>
+          </div>
+          <button type="button" onclick="performLogout()" title="Keluar / Buka Halaman Login" class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition shrink-0">
+            <span class="material-symbols-outlined text-base">logout</span>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONSOLE WRAPPER -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <!-- TOP STICKY HEADER -->
+      <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-xs border-b border-slate-200/90 shrink-0 w-full">
+        <div class="h-14 sm:h-16 px-3.5 sm:px-6 flex items-center justify-between gap-2">
+          <!-- Left: Mobile Menu + Faskes Selector + Accreditation Badge -->
+          <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+            <button type="button" onclick="toggleMobileSidebar(true)" class="lg:hidden p-2 -ml-1 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition shrink-0" aria-label="Buka Menu">
+              <span class="material-symbols-outlined text-2xl">menu</span>
+            </button>
+
+            <div class="relative">
+              <button type="button" id="headerOrgScopeBtn" onclick="toggleOrgScopeDropdown()" class="flex items-center gap-2 bg-slate-50 hover:bg-slate-100 transition border border-slate-200/80 rounded-xl px-2.5 sm:px-3 py-1.5 cursor-pointer min-w-0 max-w-[190px] sm:max-w-sm">
+                <span class="material-symbols-outlined text-[#006948] text-base shrink-0">public</span>
+                <span id="selectedOrgScopeLabel" class="text-xs font-bold text-slate-800 truncate">Semua Wilayah Nasional (148)</span>
+                <span class="material-symbols-outlined text-sm text-slate-400 shrink-0">expand_more</span>
+              </button>
+              <div id="orgScopeDropdown" class="hidden absolute left-0 mt-2 w-80 bg-white rounded-2xl shadow-2xl border border-slate-200 py-2.5 z-50 text-xs">
+                <div class="px-3.5 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Filter Cakupan Layanan</div>
+                <button type="button" onclick="selectOrgScope('all')" class="w-full text-left px-3.5 py-2 hover:bg-emerald-50 text-slate-700 flex items-center justify-between font-semibold">
+                  <span class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-[#006948]">public</span> Semua Layanan Nasional</span>
+                  <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-[#006948] text-[10px] font-bold">148 Tiket</span>
+                </button>
+                <button type="button" onclick="selectOrgScope('b2c')" class="w-full text-left px-3.5 py-2 hover:bg-emerald-50 text-slate-700 flex items-center justify-between font-semibold">
+                  <span class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-blue-600">person</span> Jalur B2C Dokter Mandiri</span>
+                  <span class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 text-[10px] font-bold">92 Tiket</span>
+                </button>
+                <button type="button" onclick="selectOrgScope('b2b')" class="w-full text-left px-3.5 py-2 hover:bg-emerald-50 text-slate-700 flex items-center justify-between font-semibold">
+                  <span class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-purple-600">corporate_fare</span> Jalur B2B Mitra Faskes</span>
+                  <span class="px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 text-[10px] font-bold">56 Tiket</span>
+                </button>
+                <div class="my-1.5 border-t border-slate-100"></div>
+                <div class="px-3.5 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Mitra Faskes Spesifik</div>
+                <button type="button" onclick="selectPartnerScope('part-1')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 text-slate-700 flex items-center justify-between text-xs">
+                  <span class="truncate">Klinik Pratama Sehat Bersama (Surabaya)</span>
+                  <span class="text-[10px] text-slate-400 font-mono">12 Dr</span>
+                </button>
+                <button type="button" onclick="selectPartnerScope('part-2')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 text-slate-700 flex items-center justify-between text-xs">
+                  <span class="truncate">RS Citra Medika Jaringan Jabar (Bandung)</span>
+                  <span class="text-[10px] text-slate-400 font-mono">24 Dr</span>
+                </button>
+                <button type="button" onclick="selectPartnerScope('part-3')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 text-slate-700 flex items-center justify-between text-xs">
+                  <span class="truncate">Klinik Spesialis Kasih Medika (Yogyakarta)</span>
+                  <span class="text-[10px] text-slate-400 font-mono">8 Dr</span>
+                </button>
+              </div>
+            </div>
+
+
+          </div>
+
+          <!-- Center: Global Search Input (Admin) OR Doctor Status Pill (Doctor) -->
+          <div id="headerSearchContainer" class="relative flex-1 max-w-sm mx-2 hidden md:block">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-base">search</span>
+            <input id="globalSearchInput" type="text" oninput="handleGlobalSearch(this.value)" placeholder="Cari dokter, nomor STR, SIP, atau ..." class="w-full pl-9 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#006948] focus:bg-white transition" />
+          </div>
+
+          <div id="headerDoctorPill" class="hidden items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-xl text-xs font-bold text-[#006948] max-w-md truncate">
+            <span class="material-symbols-outlined text-base shrink-0">shield_with_heart</span>
+            <span id="headerDoctorPillText" class="truncate">Portal Mandiri Dokter</span>
+          </div>
+
+          <!-- Right: Quick Actions (QR) + Notification + User Avatar -->
+          <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            <button type="button" onclick="toggleMobileSearchBar()" class="md:hidden p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition" title="Cari Dokter">
+              <span class="material-symbols-outlined text-xl">search</span>
+            </button>
+
+            <button id="headerBtnQrModal" type="button" onclick="openQrModal()" class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-[#006948] rounded-xl text-[11px] font-bold transition">
+              <span class="material-symbols-outlined text-sm">qr_code_2</span>
+              <span class="hidden xl:inline">Link QR Dokter</span>
+            </button>
+
+            <div class="relative">
+              <button type="button" id="headerNotificationBtn" onclick="toggleNotificationDropdown()" class="relative p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition" title="Notifikasi Operasional">
+                <span class="material-symbols-outlined text-xl">notifications</span>
+                <span id="headerNotificationBadge" class="w-2 h-2 rounded-full bg-rose-500 absolute top-2 right-2 ring-2 ring-white"></span>
+              </button>
+              <div id="notificationDropdown" class="hidden absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-slate-200 z-50 overflow-hidden text-xs">
+                <div class="p-3.5 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[#006948] text-base">notifications_active</span>
+                    <span class="font-bold text-slate-900 text-xs">Notifikasi Operasional Concierge</span>
+                  </div>
+                  <button type="button" onclick="markAllNotificationsRead()" class="text-[10px] font-bold text-[#006948] hover:underline">Tandai Dibaca</button>
+                </div>
+                <div class="divide-y divide-slate-100 max-h-80 overflow-y-auto">
+                  <div class="p-3 hover:bg-slate-50 transition cursor-pointer flex gap-3 items-start" onclick="openDoctorDetailModal('doc-sophia'); toggleNotificationDropdown(false);">
+                    <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 font-bold text-xs mt-0.5">SA</div>
+                    <div class="flex-1 space-y-0.5">
+                      <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-900">Dr. Sophia Al-Mansoor</span>
+                        <span class="text-[9px] text-slate-400">10m lalu</span>
+                      </div>
+                      <p class="text-slate-600 text-[11px]">Unggah revisi SIP Faskes 2 (SIP2_Revisi.pdf). Menunggu kurasi admin.</p>
+                      <div class="pt-1 flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[9px] font-bold">Perlu Review</span>
+                        <span class="text-[10px] text-[#006948] font-bold hover:underline">Buka Berkas &rarr;</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="p-3 hover:bg-slate-50 transition cursor-pointer flex gap-3 items-start" onclick="openMassReminderModal('doc-elena'); toggleNotificationDropdown(false);">
+                    <div class="w-8 h-8 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 font-bold text-xs mt-0.5">ER</div>
+                    <div class="flex-1 space-y-0.5">
+                      <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-900">Dr. Elena Rostova</span>
+                        <span class="text-[9px] text-rose-500 font-bold">14 Hari Lagi</span>
+                      </div>
+                      <p class="text-slate-600 text-[11px]">STR Spesialis berakhir 15 Des 2026. Belum ada bukti perpanjangan.</p>
+                      <div class="pt-1 flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 text-[9px] font-bold">Peringatan Kritis</span>
+                        <span class="text-[10px] text-[#006948] font-bold hover:underline">Kirim Tautan QR WA &rarr;</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="p-3 hover:bg-slate-50 transition cursor-pointer flex gap-3 items-start" onclick="openDoctorDetailModal('doc-bagus'); toggleNotificationDropdown(false);">
+                    <div class="w-8 h-8 rounded-full bg-emerald-100 text-[#006948] flex items-center justify-center shrink-0 font-bold text-xs mt-0.5">BS</div>
+                    <div class="flex-1 space-y-0.5">
+                      <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-900">Dr. Bagus Setiawan</span>
+                        <span class="text-[9px] text-slate-400">1 jam lalu</span>
+                      </div>
+                      <p class="text-slate-600 text-[11px]">e-SIP Kemenkes &amp; Rekomendasi Kolegium Terbit (100% Selesai).</p>
+                      <div class="pt-1 flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-[#006948] text-[9px] font-bold">Selesai &amp; Terbit</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="p-3 hover:bg-slate-50 transition cursor-pointer flex gap-3 items-start" onclick="openDoctorDetailModal('doc-marcus'); toggleNotificationDropdown(false);">
+                    <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 font-bold text-xs mt-0.5">MV</div>
+                    <div class="flex-1 space-y-0.5">
+                      <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-900">Dr. Marcus Vance</span>
+                        <span class="text-[9px] text-slate-400">3 jam lalu</span>
+                      </div>
+                      <p class="text-slate-600 text-[11px]">Pengajuan Kenaikan Jenjang Jabatan Fungsional Utama disetujui BKN.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="p-2.5 bg-slate-50 border-t border-slate-100 text-center">
+                  <button type="button" onclick="switchView('doctors'); toggleNotificationDropdown(false);" class="text-[11px] font-bold text-[#006948] hover:underline">Lihat Semua 148 Permohonan Berkas &rarr;</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="relative">
+              <button type="button" onclick="toggleUserDropdown()" class="flex items-center gap-2 p-1 rounded-full hover:bg-slate-100 transition">
+                <div id="headerTopAvatar" class="w-8 h-8 rounded-full bg-[#006948] text-white font-bold text-xs flex items-center justify-center shadow-xs">
+                  EV
+                </div>
+              </button>
+              <div id="userDropdown" class="hidden pointer-events-none absolute right-0 mt-2 w-60 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50 text-xs">
+                <div class="px-4 py-2.5 border-b border-slate-100">
+                  <div id="dropdownUserName" class="font-bold text-slate-900">Dr. Eleanor Vance</div>
+                  <div id="dropdownUserRole" class="text-[10px] text-[#006948] font-bold">Ketua Subkomite Kredensial</div>
+                </div>
+
+                <!-- Admin Dropdown Items -->
+                <button type="button" onclick="openQrModal(); toggleUserDropdown(false);" class="dropdown-admin-item w-full text-left px-4 py-2.5 hover:bg-slate-50 flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-sm text-[#006948]">qr_code_2</span> Buat Link QR Dokter
+                </button>
+                <button type="button" onclick="switchView('audit'); toggleUserDropdown(false);" class="dropdown-admin-item w-full text-left px-4 py-2.5 hover:bg-slate-50 flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-sm text-slate-600">receipt_long</span> Log Audit &amp; Kepatuhan
+                </button>
+
+                <!-- Doctor Dropdown Items -->
+                <button type="button" onclick="openQrSelfPortal(state.currentUser?.doctorId, 'existing'); toggleUserDropdown(false);" class="dropdown-doctor-item hidden w-full text-left px-4 py-2.5 hover:bg-slate-50 flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-sm text-[#006948]">upload_file</span> Form Unggah Berkas Mandiri
+                </button>
+                <button type="button" onclick="openDoctorDetail(state.currentUser?.doctorId); toggleUserDropdown(false);" class="dropdown-doctor-item hidden w-full text-left px-4 py-2.5 hover:bg-slate-50 flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-sm text-blue-600">badge</span> Status Kredensial Saya
+                </button>
+                <button type="button" onclick="openDoctorRkk(state.currentUser?.doctorId); toggleUserDropdown(false);" class="dropdown-doctor-item hidden w-full text-left px-4 py-2.5 hover:bg-slate-50 flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-sm text-emerald-600">clinical_notes</span> Kewenangan Klinis (SPK/RKK)
+                </button>
+
+                <div class="border-t border-slate-100 my-1"></div>
+                <button type="button" onclick="performLogout()" class="w-full text-left px-4 py-2.5 hover:bg-red-50 flex items-center gap-2 text-red-600 font-bold">
+                  <span class="material-symbols-outlined text-sm">logout</span> Halaman Login / Keluar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Expandable Mobile Search Drawer (< md) -->
+        <div id="mobileSearchDrawer" class="hidden md:hidden px-3.5 pb-3 pt-1 border-t border-slate-100 bg-white">
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-base">search</span>
+            <input id="mobileGlobalSearchInput" type="text" oninput="handleGlobalSearch(this.value)" placeholder="Cari dokter, nomor STR, SIP, atau NIP..." class="w-full pl-9 pr-9 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#006948]" />
+            <button type="button" onclick="toggleMobileSearchBar(false)" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1">
+              <span class="material-symbols-outlined text-base">close</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- SCROLLABLE WORKSPACE -->
+      <main id="mainContent" class="flex-1 overflow-y-auto p-3.5 sm:p-5 lg:p-6 bg-[#f4f7f6] w-full max-w-full overflow-x-hidden">
+        <section id="view-compliance" class="spa-view active space-y-4 sm:space-y-5"></section>
+      </main>
+    </div>
+  </div>
+
+  <div id="addPartnerModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 transition-opacity">
+    <div class="bg-white rounded-3xl max-w-lg w-full shadow-2xl border border-slate-100 overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-200">
+      <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-emerald-100 text-[#006948] flex items-center justify-center">
+            <span class="material-symbols-outlined text-lg">add_business</span>
+          </div>
+          <div>
+            <h3 class="text-sm font-extrabold text-slate-900">Daftarkan Mitra Faskes / Klinik Baru (B2B)</h3>
+            <p class="text-[10px] text-slate-500">Fasilitasi kolektif pengurusan izin praktik dokter institusi mitra</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeAddPartnerModal()" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+      </div>
+      <form id="addPartnerForm" onsubmit="submitNewPartnerForm(event)" class="p-5 space-y-3.5 text-xs overflow-y-auto flex-1">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Nama Faskes / Klinik / Rumah Sakit *</label>
+          <input type="text" id="newPartnerName" required placeholder="Contoh: RS Ibu &amp; Anak Kasih Bunda" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:border-[#006948] text-xs">
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Jenis Fasilitas Pelayanan *</label>
+            <select id="newPartnerType" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:border-[#006948] text-xs">
+              <option value="Klinik Pratama &amp; Rawat Inap">Klinik Pratama &amp; Rawat Inap</option>
+              <option value="Klinik Utama Spesialis">Klinik Utama Spesialis</option>
+              <option value="Rumah Sakit Swasta Tipe C/D">Rumah Sakit Swasta Tipe C/D</option>
+              <option value="Jejaring Laboratorium / Diagnostik">Jejaring Laboratorium / Diagnostik</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Wilayah / Kota &amp; Provinsi *</label>
+            <input type="text" id="newPartnerCity" required placeholder="Contoh: Semarang, Jawa Tengah" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:border-[#006948] text-xs">
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Estimasi Jumlah Dokter Binaan *</label>
+            <input type="number" id="newPartnerDoctors" min="1" max="500" value="15" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:border-[#006948] text-xs">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Nama PIC / Penanggung Jawab *</label>
+            <input type="text" id="newPartnerPIC" required placeholder="Nama &amp; Gelar PIC SDM / Medis" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:border-[#006948] text-xs">
+          </div>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">No. WhatsApp PIC / Koordinator *</label>
+          <input type="text" id="newPartnerPhone" required placeholder="Contoh: 0812-3456-7890" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:border-[#006948] text-xs">
+        </div>
+        <div class="p-3 bg-emerald-50/70 border border-emerald-200 rounded-xl text-[11px] text-[#006948] leading-relaxed flex items-start gap-2">
+          <span class="material-symbols-outlined text-sm shrink-0 mt-0.5">verified_user</span>
+          <span>Setelah terdaftar, sistem akan mengenerate link dashboard kolektif dan batch QR onboarding untuk dibagikan kepada seluruh dokter binaan faskes ini.</span>
+        </div>
+        <div class="pt-2 flex items-center justify-end gap-2 border-t border-slate-100">
+          <button type="button" onclick="closeAddPartnerModal()" class="px-3.5 py-2 rounded-xl text-slate-600 hover:bg-slate-100 font-bold text-xs">Batal</button>
+          <button type="submit" class="px-4 py-2 bg-[#006948] hover:bg-[#005137] text-white rounded-xl font-bold text-xs shadow-xs transition flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-sm">check</span> Simpan &amp; Aktifkan Mitra
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+<div id="waPartnerDigestModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 transition-opacity">
+    <div class="bg-white rounded-3xl max-w-lg w-full shadow-2xl border border-slate-100 overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-200">
+      <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-emerald-950 text-white">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-emerald-800 text-emerald-200 flex items-center justify-center">
+            <span class="material-symbols-outlined text-lg">chat</span>
+          </div>
+          <div>
+            <h3 id="waDigestPartnerTitle" class="text-sm font-extrabold text-white">Kirim Rekap Progres WhatsApp</h3>
+            <p id="waDigestPartnerSubtitle" class="text-[10px] text-emerald-300">Laporan mingguan fasilitasi berkas ke PIC mitra</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeWaPartnerDigestModal()" class="text-emerald-300 hover:text-white p-1.5 rounded-lg">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+      </div>
+      <div class="p-5 space-y-4 text-xs overflow-y-auto flex-1">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Penerima WhatsApp PIC Faskes</label>
+          <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-emerald-600 text-base">person</span>
+              <span id="waDigestContactPerson" class="font-bold text-slate-800">PIC Faskes</span>
+            </div>
+            <span id="waDigestPhone" class="font-mono text-[11px] text-slate-600 bg-white px-2 py-0.5 rounded border border-slate-200 font-bold">0812-xxxx-xxxx</span>
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block font-bold text-slate-700">Pratinjau Pesan WhatsApp Otomatis</label>
+            <button type="button" onclick="copyWaDigestMessage()" class="text-[11px] font-bold text-[#006948] hover:underline flex items-center gap-1">
+              <span class="material-symbols-outlined text-xs">content_copy</span> Salin Teks
+            </button>
+          </div>
+          <div id="waDigestMessageText" class="p-3.5 bg-slate-900 text-emerald-300 font-mono text-[11px] rounded-2xl whitespace-pre-line leading-relaxed border border-slate-800 max-h-56 overflow-y-auto selection:bg-emerald-700"></div>
+        </div>
+        <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-[11px] text-amber-900 flex items-center gap-2">
+          <span class="material-symbols-outlined text-sm text-amber-600 shrink-0">info</span>
+          <span>Pesan mencakup rekap berkas selesai, berkas revisi yang tertunda, dan link tautan unduh e-SIP resmi.</span>
+        </div>
+      </div>
+      <div class="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-2">
+        <button type="button" onclick="closeWaPartnerDigestModal()" class="px-3.5 py-2 rounded-xl text-slate-600 hover:bg-slate-100 font-bold text-xs">Tutup</button>
+        <button type="button" onclick="copyWaDigestMessage()" class="px-3.5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-xl font-bold text-xs flex items-center gap-1.5 transition">
+          <span class="material-symbols-outlined text-sm">content_copy</span> Salin
+        </button>
+        <button type="button" onclick="sendWaDigestToWeb()" class="px-4 py-2 bg-[#006948] hover:bg-[#005137] text-white rounded-xl font-bold text-xs shadow-xs flex items-center gap-1.5 transition">
+          <span class="material-symbols-outlined text-sm">open_in_new</span> Buka WhatsApp Web &rarr;
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data Store & Shared Shell Scripts -->
+  <script src="js/state.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Page-Specific Module Script -->
+  <script>
+function renderComplianceView() {
+      const container = document.getElementById('view-compliance');
+      if (!container) return;
+
+      container.innerHTML = `
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <div class="text-[10px] font-bold text-[#006948] uppercase tracking-wider">KEMITRAAN KOLEKTIF B2B • KLINIK &amp; FASKES</div>
+            <h2 class="text-base sm:text-xl font-extrabold text-slate-900">Monitoring Mitra Klinik, Faskes &amp; RS Swasta (B2B)</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Pengurusan izin praktik dan berkas kenaikan jabatan dokter secara kolektif untuk klinik mitra.</p>
+          </div>
+          <button type="button" onclick="openAddPartnerModal()" class="px-3.5 py-2 bg-[#006948] hover:bg-[#005137] text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 self-start sm:self-center">
+            <span class="material-symbols-outlined text-sm">add_business</span> + Daftarkan Mitra Faskes
+          </button>
+        </div>
+
+        <!-- 4 KPI B2B -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+            <span class="text-[10px] font-bold text-slate-400 uppercase">MITRA FASKES AKTIF</span>
+            <div class="text-xl font-extrabold text-slate-900 mt-1">${state.partners.length} Klinik &amp; RS</div>
+            <div class="text-[10px] text-slate-500 mt-1">Jawa Timur, Jabar &amp; DIY</div>
+          </div>
+          <div class="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+            <span class="text-[10px] font-bold text-slate-400 uppercase">DOKTER BINAAN</span>
+            <div class="text-xl font-extrabold text-slate-900 mt-1">44 Dokter</div>
+            <div class="text-[10px] text-slate-500 mt-1">Spesialis &amp; Dokter Umum</div>
+          </div>
+          <div class="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+            <span class="text-[10px] font-bold text-slate-400 uppercase">IZIN TERBIT RESMI</span>
+            <div class="text-xl font-extrabold text-[#006948] mt-1">35 Berkas</div>
+            <div class="text-[10px] text-slate-500 mt-1">Tingkat kelulusan 100%</div>
+          </div>
+          <div class="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+            <span class="text-[10px] font-bold text-slate-400 uppercase">DALAM PROSES KEMENKES</span>
+            <div class="text-xl font-extrabold text-indigo-700 mt-1">9 Pengajuan</div>
+            <div class="text-[10px] text-slate-500 mt-1">SLA aman &lt; 14 hari</div>
+          </div>
+        </div>
+
+        <!-- Daftar Mitra Klinik -->
+        <div class="space-y-3">
+          <h3 class="text-xs font-extrabold text-slate-900 uppercase tracking-wider">Daftar Mitra Faskes &amp; Rekap Status Pengurusan:</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            ${state.partners.map(p => `
+              <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-2xs space-y-3 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-start justify-between gap-2">
+                    <span class="px-2 py-0.5 rounded text-[9.5px] font-extrabold bg-emerald-50 text-[#006948] border border-emerald-200">${p.type}</span>
+                    <span class="text-xs font-mono font-bold text-slate-400">${p.city}</span>
+                  </div>
+                  <h4 class="text-sm font-extrabold text-slate-900 mt-2">${p.name}</h4>
+                  <div class="text-[11px] text-slate-500 mt-1">PIC: <strong>${p.contactPerson}</strong></div>
+                </div>
+
+                <div class="bg-slate-50 rounded-xl p-3 border border-slate-100 space-y-1.5 text-xs">
+                  <div class="flex justify-between">
+                    <span class="text-slate-500">Total Dokter:</span>
+                    <strong>${p.totalDoctors} Dokter</strong>
+                  </div>
+                  <div class="flex justify-between text-emerald-800">
+                    <span>Selesai &amp; Izin Terbit:</span>
+                    <strong>${p.completedCount} Berkas</strong>
+                  </div>
+                  <div class="flex justify-between text-indigo-700">
+                    <span>Proses Kemenkes:</span>
+                    <strong>${p.inProgressCount} Berkas</strong>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-2 pt-1">
+                  <button type="button" onclick="state.clientSegmentFilter='B2B'; renderDashboardTable(); switchView('dashboard');" class="flex-1 py-2 bg-[#006948] text-white rounded-xl text-xs font-bold transition text-center">
+                    Lihat Dokter
+                  </button>
+                  <button type="button" onclick="openPartnerWhatsappDigest('${p.id}')" class="p-2 bg-emerald-50 hover:bg-emerald-100 text-[#006948] border border-emerald-200 rounded-xl transition" title="Pratinjau &amp; Kirim Rekap WhatsApp">
+                    <span class="material-symbols-outlined text-sm">chat</span>
+                  </button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+function openAddPartnerModal() {
+      const modal = document.getElementById('addPartnerModal');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeAddPartnerModal() {
+      const modal = document.getElementById('addPartnerModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function submitNewPartnerForm(e) {
+      e.preventDefault();
+      const name = document.getElementById('newPartnerName')?.value || 'Mitra Baru';
+      const type = document.getElementById('newPartnerType')?.value || 'Klinik Pratama & Rawat Inap';
+      const city = document.getElementById('newPartnerCity')?.value || 'Indonesia';
+      const totalDoctors = parseInt(document.getElementById('newPartnerDoctors')?.value || '15', 10);
+      const contactPerson = document.getElementById('newPartnerPIC')?.value || 'Penanggung Jawab Medis';
+      const phone = document.getElementById('newPartnerPhone')?.value || '0812-0000-0000';
+
+      const newPartner = {
+        id: 'part-' + (state.partners.length + 1),
+        name: name,
+        city: city,
+        type: type,
+        totalDoctors: totalDoctors,
+        completedCount: 0,
+        inProgressCount: totalDoctors,
+        contactPerson: contactPerson,
+        phone: phone
+      };
+
+      state.partners.unshift(newPartner);
+      renderComplianceView();
+      closeAddPartnerModal();
+      showToast('Mitra Baru Terdaftar', `${name} (${city}) berhasil diaktifkan dengan alokasi ${totalDoctors} dokter.`, 'success');
+    }
+
+    let currentWaPartner = null;
+
+    function openPartnerWhatsappDigest(partnerId) {
+      const partner = state.partners.find(p => p.id === partnerId) || state.partners[0];
+      if (!partner) return;
+      currentWaPartner = partner;
+
+      const title = document.getElementById('waDigestPartnerTitle');
+      const sub = document.getElementById('waDigestPartnerSubtitle');
+      const contact = document.getElementById('waDigestContactPerson');
+      const phone = document.getElementById('waDigestPhone');
+      const msg = document.getElementById('waDigestMessageText');
+
+      if (title) title.textContent = `Rekap Progres: ${partner.name}`;
+      if (sub) sub.textContent = `${partner.type} • ${partner.city}`;
+      if (contact) contact.textContent = partner.contactPerson;
+      if (phone) phone.textContent = partner.phone;
+
+      const pct = Math.round((partner.completedCount / partner.totalDoctors) * 100);
+      const text = `*MEDCRED CONCIERGE — REKAP PROGRES BERKAS DOKTER*
+Halo ${partner.contactPerson},
+Berikut update berkala pengurusan izin & registrasi kredensial dokter di *${partner.name}*:
+
+📊 *Ringkasan Kepatuhan Kolektif:*
+- Total Dokter Binaan: *${partner.totalDoctors} Dokter*
+- Berkas Terbit & Selesai: *${partner.completedCount} (${pct}%)*
+- Sedang Diproses MedCred: *${partner.inProgressCount} Dokter*
+
+📌 *Catatan Penting Tim Concierge:*
+- Validasi e-STR di Konsil Kedokteran Indonesia (KKI) terpantau lancar.
+- Terdapat 2 dokter yang perlu melengkapi dokumen logbook tindakan 5 tahunan.
+
+🔗 *Tautan Dashboard Kolektif Mitra:*
+https://kredensial.rsud.go.id/mitra/${partner.id}?token=b2b-secure
+
+Terima kasih atas kerja samanya.
+_Salam hangat, Tim Concierge Tata Kelola Medik MedCred_`;
+
+      if (msg) msg.textContent = text;
+      const modal = document.getElementById('waPartnerDigestModal');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeWaPartnerDigestModal() {
+      const modal = document.getElementById('waPartnerDigestModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function copyWaDigestMessage() {
+      const msg = document.getElementById('waDigestMessageText');
+      if (msg && navigator.clipboard) {
+        navigator.clipboard.writeText(msg.textContent);
+        showToast('Teks Tersalin', 'Format pesan WhatsApp berhasil disalin ke clipboard.', 'success');
+      } else {
+        showToast('Teks Tersalin', 'Pesan siap ditempel di WhatsApp Web.', 'info');
+      }
+    }
+
+    function sendWaDigestToWeb() {
+      if (!currentWaPartner) return;
+      const cleanPhone = currentWaPartner.phone.replace(/[^0-9]/g, '');
+      const indonesianPhone = cleanPhone.startsWith('0') ? '62' + cleanPhone.slice(1) : cleanPhone;
+      const msg = document.getElementById('waDigestMessageText')?.textContent || '';
+      const url = `https://web.whatsapp.com/send?phone=${indonesianPhone}&text=${encodeURIComponent(msg)}`;
+      window.open(url, '_blank');
+      showToast('Membuka WhatsApp Web', `Menghubungkan ke ${currentWaPartner.contactPerson} (${currentWaPartner.phone})...`, 'success');
+      closeWaPartnerDigestModal();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initAppShell('compliance');
+      renderComplianceView();
+    });
+  </script>
+</body>
+</html>

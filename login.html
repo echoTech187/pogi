@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full bg-[#021d15]">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MedCred Concierge - Masuk Konsol & SSO Portal</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Core Fonts & Styles -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="h-full bg-[#021d15] text-slate-800 antialiased font-sans">
+  <div id="view-login" class="flex min-h-[100dvh] w-full flex-col lg:flex-row bg-[#021d15] overflow-x-hidden">
+
+    <!-- Mobile & Tablet Compact Top Brand Bar (< lg) -->
+    <div class="lg:hidden bg-gradient-to-r from-[#022b1f] via-[#004d34] to-[#01140f] px-4 py-4 sm:px-8 border-b border-emerald-800/40 flex items-center gap-3 text-white">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center text-slate-950 shadow-md shadow-emerald-500/30 shrink-0">
+          <span class="material-symbols-outlined text-2xl fill">shield_with_heart</span>
+        </div>
+        <div class="min-w-0">
+          <h1 class="font-extrabold text-lg tracking-tight text-white leading-none">MEDCRED</h1>
+          <p class="text-[10px] text-emerald-300 font-bold tracking-wider uppercase mt-1 truncate">Tata Kelola Medik &amp; Kredensial</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Autentikasi (Mobile-First: Tampil Pertama di Mobile/Tablet, Kanan di Desktop) -->
+    <div class="order-1 lg:order-2 lg:w-1/2 bg-white flex flex-col justify-center px-4 py-7 sm:p-10 lg:p-14 xl:p-16">
+      <div class="max-w-md w-full mx-auto space-y-5">
+        <div>
+          <div class="text-[11px] font-bold text-[#006948] uppercase tracking-wider">PORTAL MASUK TERPADU</div>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">Masuk MedCred Concierge</h2>
+        </div>
+        <p class="text-xs text-slate-500 -mt-2">Pusat layanan perantara resmi pengurusan administrasi dokter ke Kemenkes RI: perpanjangan STR 5 tahunan, SKP Plataran Sehat, dan kenaikan jabatan fungsional dokter se-Indonesia.</p>
+
+        <!-- Segmented Tabs -->
+        <div class="grid grid-cols-2 p-1 bg-slate-100 rounded-xl text-xs font-bold text-slate-600">
+          <button id="tab-login-admin" type="button" onclick="switchLoginTab('admin')" class="py-2.5 px-2 rounded-lg bg-white text-slate-900 shadow-xs transition">
+            Tim Concierge / Admin
+          </button>
+          <button id="tab-login-doctor" type="button" onclick="switchLoginTab('doctor')" class="py-2.5 px-2 rounded-lg text-slate-500 hover:text-slate-900 transition">
+            Dokter Mandiri / Mitra Faskes
+          </button>
+        </div>
+
+        <!-- Pengisian Demo 3 Skenario Klien -->
+        <div class="space-y-1.5 p-3 rounded-xl bg-emerald-50/70 border border-emerald-200/80 text-[11px]">
+          <div class="text-[10px] font-extrabold text-[#006948] uppercase tracking-wider flex items-center justify-between">
+            <span>Akses Cepat Demo Sesuai Kebutuhan Klien:</span>
+            <span class="text-[9px] bg-emerald-200 text-emerald-900 px-1.5 py-0.5 rounded font-bold">1-Klik Masuk</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-1.5 pt-0.5">
+            <button type="button" onclick="quickLoginAs('admin')" class="p-2 rounded-lg bg-white hover:bg-emerald-100/70 border border-emerald-300/80 text-left transition shadow-2xs">
+              <div class="font-bold text-[#006948] leading-tight">1. Tim Concierge</div>
+              <div class="text-[10px] text-slate-500 mt-0.5 leading-snug">Operator Perantara Nasional</div>
+            </button>
+            <button type="button" onclick="quickLoginAs('doctor')" class="p-2 rounded-lg bg-white hover:bg-indigo-100/70 border border-indigo-300/80 text-left transition shadow-2xs">
+              <div class="font-bold text-indigo-700 leading-tight">2. Dokter Mandiri (B2C)</div>
+              <div class="text-[10px] text-slate-500 mt-0.5 leading-snug">Dr. Elena (STR 5 Tahunan)</div>
+            </button>
+            <button type="button" onclick="quickLoginAs('partner')" class="p-2 rounded-lg bg-white hover:bg-amber-100/70 border border-amber-300/80 text-left transition shadow-2xs">
+              <div class="font-bold text-amber-800 leading-tight">3. Mitra Klinik (B2B)</div>
+              <div class="text-[10px] text-slate-500 mt-0.5 leading-snug">Dr. Bagus (Klinik Pratama)</div>
+            </button>
+          </div>
+        </div>
+
+        <form id="loginForm" onsubmit="event.preventDefault(); performLogin();" class="space-y-4">
+          <div id="field-identifier">
+            <label id="label-identifier" class="block text-xs font-bold text-slate-700 mb-1.5">Email Institusi RS / NIP / NIRA</label>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-base">badge</span>
+              <input id="inputIdentifier" type="text" required value="eleanor.vance@rsud.go.id" class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm sm:text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#006948] focus:bg-white transition" />
+            </div>
+          </div>
+
+          <div id="field-password">
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="text-xs font-bold text-slate-700">Kata Sandi Institusi</label>
+              <button type="button" onclick="openForgotPasswordModal()" class="text-[11px] text-[#006948] font-semibold hover:underline">Lupa Sandi?</button>
+            </div>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-base">lock</span>
+              <input id="inputPassword" type="password" required value="Kredensial2026!" class="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm sm:text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#006948] focus:bg-white transition" />
+              <button type="button" onclick="togglePasswordVisibility()" class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-base p-1">visibility</button>
+            </div>
+          </div>
+
+          <div id="field-doctor-pin" class="hidden space-y-2">
+            <label class="block text-xs font-bold text-slate-700">6-Digit PIN Akses Portofolio Mandiri (QR)</label>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-base">pin</span>
+              <input id="inputDoctorPin" type="text" maxlength="7" value="892-019" class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm sm:text-xs font-mono font-bold tracking-widest text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#006948] focus:bg-white transition" />
+            </div>
+            <p class="text-[11px] text-slate-500">PIN tertera pada tautan QR Code yang dikirimkan Subkomite Kredensial.</p>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-between gap-2 text-xs pt-0.5">
+            <label class="flex items-center gap-2 cursor-pointer text-slate-600 font-medium">
+              <input type="checkbox" checked class="rounded border-slate-300 text-[#006948] focus:ring-[#006948]" />
+              <span>Ingat sesi di perangkat ini (30 hari)</span>
+            </label>
+            <span class="text-[11px] text-slate-400 font-mono">RSUD-REGIONAL</span>
+          </div>
+
+          <button id="btnLoginSubmit" type="submit" class="w-full py-3 px-4 bg-[#006948] hover:bg-[#005137] active:scale-[0.99] text-white rounded-xl text-xs font-bold shadow-md shadow-emerald-700/20 transition flex items-center justify-center gap-2">
+            <span>Autentikasi &amp; Buka Konsol Operasional</span>
+            <span class="material-symbols-outlined text-base font-bold">arrow_forward</span>
+          </button>
+        </form>
+
+        <div class="relative flex py-1 items-center">
+          <div class="flex-grow border-t border-slate-200"></div>
+          <span class="flex-shrink mx-3 text-slate-400 text-[10px] uppercase font-bold tracking-wider text-center">Atau masuk dengan Single Sign-On</span>
+          <div class="flex-grow border-t border-slate-200"></div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2 text-xs">
+          <button type="button" onclick="performLogin('SSO SatuSehat SDMK')" class="flex flex-col items-center justify-center p-2.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl transition group">
+            <span class="material-symbols-outlined text-[#006948] text-lg group-hover:scale-110 transition-transform">health_and_safety</span>
+            <span class="font-bold text-[11px] text-slate-700 mt-1">SatuSehat</span>
+          </button>
+          <button type="button" onclick="performLogin('SSO SIMRS / EHR')" class="flex flex-col items-center justify-center p-2.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl transition group">
+            <span class="material-symbols-outlined text-blue-600 text-lg group-hover:scale-110 transition-transform">domain</span>
+            <span class="font-bold text-[11px] text-slate-700 mt-1">SIMRS / EHR</span>
+          </button>
+          <button type="button" onclick="performLogin('SSO Portal KKI')" class="flex flex-col items-center justify-center p-2.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl transition group">
+            <span class="material-symbols-outlined text-amber-600 text-lg group-hover:scale-110 transition-transform">verified_user</span>
+            <span class="font-bold text-[11px] text-slate-700 mt-1">Portal KKI</span>
+          </button>
+        </div>
+
+        <!-- Quick QR Self-Upload Portal Access -->
+        <div class="p-3.5 rounded-xl bg-emerald-50/80 border border-emerald-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+          <div class="flex items-start sm:items-center gap-2.5">
+            <span class="material-symbols-outlined text-[#006948] text-xl shrink-0 mt-0.5 sm:mt-0">qr_code_scanner</span>
+            <div>
+              <div class="font-bold text-emerald-950">Pendaftaran &amp; Unggah Berkas Dokter via QR</div>
+              <div class="text-[11px] text-emerald-800">Akses formulir mandiri dokter tanpa login intranet rumah sakit.</div>
+            </div>
+          </div>
+          <button type="button" onclick="openQrSelfPortal('doc-elena', 'existing')" class="w-full sm:w-auto px-3.5 py-2.5 bg-[#006948] hover:bg-[#005137] text-white rounded-lg text-[11px] font-bold shrink-0 transition text-center">
+            Buka Portal QR →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero Branding Kiri (Desktop Kiri, Mobile/Tablet Bawah) -->
+    <div class="order-2 lg:order-1 lg:w-1/2 bg-gradient-to-br from-[#022b1f] via-[#004d34] to-[#01140f] px-4 py-8 sm:p-10 lg:p-14 flex flex-col justify-between text-white relative overflow-hidden border-t lg:border-t-0 lg:border-r border-emerald-800/40">
+      <div class="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-emerald-600/10 blur-3xl pointer-events-none"></div>
+      <div class="absolute -left-20 -bottom-20 w-80 h-80 rounded-full bg-teal-500/10 blur-3xl pointer-events-none"></div>
+
+      <div class="hidden lg:block relative z-10 space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-xl bg-emerald-500 flex items-center justify-center text-slate-950 shadow-lg shadow-emerald-500/30">
+            <span class="material-symbols-outlined text-3xl fill">shield_with_heart</span>
+          </div>
+          <div>
+            <h1 class="font-extrabold text-2xl tracking-tight text-white leading-none">MEDCRED</h1>
+            <p class="text-[11px] text-emerald-400 font-bold tracking-widest uppercase mt-1">TATA KELOLA MEDIK &amp; KREDENSIAL RS</p>
+          </div>
+        </div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-900/60 border border-emerald-600/30 text-xs text-emerald-300">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Operasional Kredensial Komite Medik • Periode 2026-Q4</span>
+        </div>
+      </div>
+
+      <div class="relative z-10 my-2 lg:my-10 space-y-5 max-w-xl mx-auto lg:mx-0 w-full">
+        <div class="space-y-2.5">
+          <h2 class="text-xl sm:text-2xl lg:text-4xl font-extrabold tracking-tight text-white leading-tight">
+            Kredensialing &amp; Verifikasi Dokter <span class="text-emerald-400">Terintegrasi KKI &amp; SatuSehat SDMK</span>.
+          </h2>
+          <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+            Pencatatan pendaftaran dokter baru, validasi kelengkapan berkas STR, SIP, Sertifikat Kompetensi Kolegium, serta penetapan Surat Penugasan Klinis (SPK) &amp; Rincian Kewenangan Klinis (RKK).
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-3 pt-1">
+          <div class="p-3.5 rounded-xl bg-white/5 border border-white/10 flex items-start gap-3">
+            <span class="material-symbols-outlined text-emerald-400 text-xl mt-0.5 shrink-0">qr_code_scanner</span>
+            <div>
+              <h4 class="text-xs font-bold text-white">Tautan QR Pendaftaran &amp; Unggah Mandiri</h4>
+              <p class="text-[11px] text-slate-300 mt-0.5 leading-relaxed">Kirim kode QR unik ke masing-masing dokter untuk melengkapi berkas via ponsel pintar.</p>
+            </div>
+          </div>
+          <div class="p-3.5 rounded-xl bg-white/5 border border-white/10 flex items-start gap-3">
+            <span class="material-symbols-outlined text-emerald-400 text-xl mt-0.5 shrink-0">fact_check</span>
+            <div>
+              <h4 class="text-xs font-bold text-white">Primary Source Verification (PSV) Otomatis</h4>
+              <p class="text-[11px] text-slate-300 mt-0.5 leading-relaxed">Pencocokan langsung nomor STR &amp; masa berlaku ke Konsil Kedokteran Indonesia (KKI).</p>
+            </div>
+          </div>
+          <div class="p-3.5 rounded-xl bg-white/5 border border-white/10 flex items-start gap-3">
+            <span class="material-symbols-outlined text-emerald-400 text-xl mt-0.5 shrink-0">verified_user</span>
+            <div>
+              <h4 class="text-xs font-bold text-white">Kepatuhan Standar Akreditasi KARS</h4>
+              <p class="text-[11px] text-slate-300 mt-0.5 leading-relaxed">Pemantauan kedaluwarsa SIP/STR (&lt;30 hari) dan log audit forensik tidak terubah.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative z-10 mt-6 pt-5 border-t border-emerald-800/40 flex flex-wrap items-center justify-between gap-3 text-xs text-emerald-300/80 max-w-xl mx-auto lg:mx-0 w-full">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-emerald-400 fill text-lg shrink-0">verified</span>
+          <span>Kepatuhan Standar Akreditasi KARS / Kemenkes RI</span>
+        </div>
+        <div class="font-mono text-[11px] text-slate-400">SHA-256 Verified</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="forgotPasswordModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 transition-opacity">
+    <div class="bg-white rounded-3xl max-w-md w-full shadow-2xl border border-slate-100 overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-200">
+      <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-emerald-100 text-[#006948] flex items-center justify-center">
+            <span class="material-symbols-outlined text-lg">lock_reset</span>
+          </div>
+          <div>
+            <h3 class="text-sm font-extrabold text-slate-900">Pemulihan Akses Akun</h3>
+            <p class="text-[10px] text-slate-500">Atur ulang kata sandi atau dapatkan tautan login darurat</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeForgotPasswordModal()" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+      </div>
+      <form id="forgotPasswordForm" onsubmit="submitForgotPassword(event)" class="p-5 space-y-4 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Identitas Akun / NIK / No. STR / Email *</label>
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">badge</span>
+            <input type="text" id="forgotIdentifier" required placeholder="Contoh: sitirahma@rsud.go.id atau nomor STR" class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3 py-2 text-slate-800 font-semibold focus:outline-none focus:border-[#006948] text-xs">
+          </div>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Metode Pengiriman Token Verifikasi</label>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-emerald-300 bg-emerald-50/50 cursor-pointer text-xs font-semibold text-slate-800">
+              <input type="radio" name="forgotChannel" value="wa" checked class="text-[#006948] focus:ring-[#006948]">
+              <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-sm text-[#006948]">chat</span> WhatsApp Resmi</span>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer text-xs font-semibold text-slate-800">
+              <input type="radio" name="forgotChannel" value="email" class="text-[#006948] focus:ring-[#006948]">
+              <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-sm text-blue-600">mail</span> Email Terdaftar</span>
+            </label>
+          </div>
+        </div>
+        <div id="forgotSuccessNotice" class="hidden p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-[#006948] text-[11px] leading-relaxed">
+          <div class="font-bold flex items-center gap-1 mb-0.5"><span class="material-symbols-outlined text-sm">check_circle</span> Tautan Pemulihan Terkirim!</div>
+          <div id="forgotSuccessMessage">Tautan reset sandi 6-digit telah dikirimkan ke WhatsApp resmi Anda. Silakan cek pesan masuk.</div>
+        </div>
+        <div class="pt-2 flex items-center justify-end gap-2 border-t border-slate-100">
+          <button type="button" onclick="closeForgotPasswordModal()" class="px-3.5 py-2 rounded-xl text-slate-600 hover:bg-slate-100 font-bold text-xs">Batal</button>
+          <button type="submit" id="btnSubmitForgot" class="px-4 py-2 bg-[#006948] hover:bg-[#005137] text-white rounded-xl font-bold text-xs shadow-xs transition flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-sm">send</span> Kirim Tautan Pemulihan
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm pointer-events-none"></div>
+
+  <!-- Data Store & Shared Shell Scripts -->
+  <script src="js/state.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Login Module Script -->
+  <script>
+function switchLoginTab(role) {
+      state.loginRole = role;
+      const tabAdmin = document.getElementById('tab-login-admin');
+      const tabDoc = document.getElementById('tab-login-doctor');
+      const labelId = document.getElementById('label-identifier');
+      const inputId = document.getElementById('inputIdentifier');
+      const fieldPass = document.getElementById('field-password');
+      const fieldPin = document.getElementById('field-doctor-pin');
+      const btn = document.getElementById('btnLoginSubmit');
+      if (!tabAdmin || !tabDoc) return;
+
+      if (role === 'admin') {
+        tabAdmin.className = 'py-2.5 px-2 rounded-lg bg-white text-slate-900 shadow-xs transition';
+        tabDoc.className = 'py-2.5 px-2 rounded-lg text-slate-500 hover:text-slate-900 transition';
+        if (labelId) labelId.textContent = 'Email Institusi RS / NIP / NIRA';
+        if (inputId) inputId.value = 'eleanor.vance@rsud.go.id';
+        fieldPass?.classList.remove('hidden');
+        fieldPin?.classList.add('hidden');
+        if (btn) btn.innerHTML = `<span>Autentikasi &amp; Buka Konsol Operasional</span><span class="material-symbols-outlined text-base font-bold">arrow_forward</span>`;
+      } else {
+        tabDoc.className = 'py-2.5 px-2 rounded-lg bg-white text-slate-900 shadow-xs transition';
+        tabAdmin.className = 'py-2.5 px-2 rounded-lg text-slate-500 hover:text-slate-900 transition';
+        if (labelId) labelId.textContent = 'Nomor STR / SISDMK Dokter';
+        if (inputId) inputId.value = '9833073462';
+        fieldPass?.classList.add('hidden');
+        fieldPin?.classList.remove('hidden');
+        if (btn) btn.innerHTML = `<span>Buka Portofolio Mandiri Dokter</span><span class="material-symbols-outlined text-base font-bold">arrow_forward</span>`;
+      }
+    }
+
+    function togglePasswordVisibility() {
+      const input = document.getElementById('inputPassword');
+      if (input) input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    function fillDemoCredentials(role) {
+      switchLoginTab(role);
+      if (role === 'admin') {
+        const idInput = document.getElementById('inputIdentifier');
+        const passInput = document.getElementById('inputPassword');
+        if (idInput) idInput.value = 'eleanor.vance@rsud.go.id';
+        if (passInput) passInput.value = 'Kredensial2026!';
+        showToast('Kredensial Demo Admin Diisi', 'Akun Dr. Eleanor Vance (Ketua Subkomite Kredensial) siap digunakan.', 'info');
+      } else {
+        const idInput = document.getElementById('inputIdentifier');
+        const pinInput = document.getElementById('inputDoctorPin');
+        if (idInput) idInput.value = '9833073462';
+        if (pinInput) pinInput.value = '892-019';
+        showToast('Kredensial Demo Dokter Diisi', 'STR & PIN Dr. Elena Rostova, Sp.A(K) siap membuka portal mandiri.', 'info');
+      }
+    }
+
+    function performLogin(ssoName = null) {
+      const loginEl = document.getElementById('view-login');
+      const shellEl = document.getElementById('view-app-shell');
+      if (loginEl) {
+        loginEl.classList.add('hidden', 'pointer-events-none');
+        loginEl.classList.remove('flex');
+      }
+      if (shellEl) {
+        shellEl.classList.remove('hidden', 'pointer-events-none');
+        shellEl.classList.add('flex');
+      }
+
+      if (state.loginRole === 'doctor') {
+        const strVal = (document.getElementById('inputIdentifier')?.value || '').trim();
+        const pinVal = (document.getElementById('inputDoctorPin')?.value || '').trim();
+        const found = state.doctors.find(d => d.str === strVal || d.pin === pinVal || d.pin === strVal) || state.doctors[1];
+
+        state.currentUser = {
+          role: 'doctor',
+          doctorId: found.id,
+          name: found.name,
+          title: found.specialty,
+          str: found.str,
+          regId: found.regId,
+          initials: found.initials,
+          avatarBg: found.avatarBg
+        };
+        state.selectedDoctorId = found.id;
+        state.qrPortalDoctorId = found.id;
+        state.committeeDoctorId = found.id;
+        state.qrPortalMode = 'existing';
+
+        applyRoleAccessUI('doctor');
+        switchView('qr-portal');
+        showToast(ssoName ? `Autentikasi ${ssoName} Berhasil` : 'Portal Dokter Aktif', `Selamat datang, ${found.name}. Anda masuk sebagai Dokter Mandiri.`, 'success');
+      } else {
+        state.currentUser = {
+          role: 'admin',
+          doctorId: null,
+          name: 'Dr. Eleanor Vance, Sp.A(K)',
+          title: 'Ketua Subkomite Kredensial',
+          str: '198009142006041002',
+          regId: 'ADM-KOMITE',
+          initials: 'EV',
+          avatarBg: 'bg-emerald-700 text-white'
+        };
+        state.selectedDoctorId = 'doc-marcus';
+        state.qrPortalDoctorId = 'doc-elena';
+        state.committeeDoctorId = 'doc-james';
+
+        applyRoleAccessUI('admin');
+        switchView('dashboard');
+        showToast(ssoName ? `Autentikasi ${ssoName} Berhasil` : 'Autentikasi Berhasil', 'Selamat datang di Konsol Operasional Komite Medik RSUD.', 'success');
+      }
+    }
+
+    function performLogout() {
+      toggleMobileSidebar(false);
+      toggleUserDropdown(false);
+      closeQrModal();
+      closeMassReminderModal();
+      closeAddCustomDocModal();
+      closePreviewDocModal();
+
+      state.currentUser = null;
+
+      const shellEl = document.getElementById('view-app-shell');
+      const loginEl = document.getElementById('view-login');
+      if (shellEl) {
+        shellEl.classList.add('hidden', 'pointer-events-none');
+        shellEl.classList.remove('flex');
+      }
+      if (loginEl) {
+        loginEl.classList.remove('hidden', 'pointer-events-none');
+        loginEl.classList.add('flex');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // =========================================================================
+    // DASHBOARD TABLE, FILTERS, KPI METRICS & QUICK ACTIONS
+    // =========================================================================
+
+function openForgotPasswordModal() {
+      const modal = document.getElementById('forgotPasswordModal');
+      const notice = document.getElementById('forgotSuccessNotice');
+      if (notice) notice.classList.add('hidden');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeForgotPasswordModal() {
+      const modal = document.getElementById('forgotPasswordModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function submitForgotPassword(e) {
+      e.preventDefault();
+      const identifier = document.getElementById('forgotIdentifier')?.value || '';
+      const channel = document.querySelector('input[name="forgotChannel"]:checked')?.value || 'wa';
+      const notice = document.getElementById('forgotSuccessNotice');
+      const msg = document.getElementById('forgotSuccessMessage');
+      const btn = document.getElementById('btnSubmitForgot');
+
+      if (btn) btn.disabled = true;
+      if (notice && msg) {
+        if (channel === 'wa') {
+          msg.textContent = `Tautan reset sandi 6-digit dikirimkan ke WhatsApp terdaftar untuk identitas "${identifier}".`;
+        } else {
+          msg.textContent = `Tautan pemulihan dan token verifikasi telah dikirimkan ke Email "${identifier}".`;
+        }
+        notice.classList.remove('hidden');
+      }
+
+      setTimeout(() => {
+        if (btn) btn.disabled = false;
+        showToast('Pemulihan Terkirim', 'Tautan pemulihan berhasil disiarkan.', 'success');
+        setTimeout(() => {
+          closeForgotPasswordModal();
+        }, 1200);
+      }, 700);
+    }
+
+    function performLogin(ssoName = null) {
+      if (ssoName) {
+        showToast('SSO Berhasil Terhubung', `Autentikasi terpadu via ${ssoName} terverifikasi aman.`, 'success');
+      } else {
+        showToast('Selamat Datang di MedCred Concierge', 'Sesi operasional aktif. Selamat bertugas!', 'success');
+      }
+      if (state.loginRole === 'doctor') {
+        const docElena = state.doctors.find(d => d.id === 'doc-elena') || state.doctors[0];
+        state.currentUser = {
+          role: 'doctor',
+          doctorId: docElena.id,
+          name: docElena.name,
+          title: docElena.specialty,
+          str: docElena.str,
+          regId: docElena.regId,
+          initials: 'ER',
+          avatarBg: 'bg-emerald-100 text-emerald-800'
+        };
+        saveState();
+        setTimeout(() => { window.location.href = 'qr-portal.html'; }, 300);
+      } else if (state.loginRole === 'partner') {
+        const docBagus = state.doctors.find(d => d.id === 'doc-bagus') || state.doctors[3];
+        state.currentUser = {
+          role: 'partner',
+          partnerId: 'part-1',
+          doctorId: docBagus.id,
+          name: 'dr. Bagus Setiawan (PIC Klinik)',
+          title: 'Koordinator Klinik Pratama Sehat Bersama',
+          str: docBagus.str,
+          regId: 'MITRA-B2B-01',
+          initials: 'KP',
+          avatarBg: 'bg-amber-100 text-amber-800'
+        };
+        saveState();
+        setTimeout(() => { window.location.href = 'partners.html'; }, 300);
+      } else {
+        state.currentUser = {
+          id: 'user-siti',
+          name: 'Siti Rahma, S.Farm',
+          role: 'admin',
+          roleLabel: 'LEAD CONCIERGE PERIZINAN & KREDENSIAL',
+          badge: 'Admin Concierge Nasional',
+          avatarBg: 'bg-[#006948]'
+        };
+        saveState();
+        setTimeout(() => { window.location.href = 'dashboard.html'; }, 300);
+      }
+    }
+  </script>
+</body>
+</html>

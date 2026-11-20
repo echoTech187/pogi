@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full bg-[#f4f7f6]">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MedCred Concierge - Daftar Klien Dokter (B2C & B2B)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Core Fonts & Styles -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="h-full bg-[#f4f7f6] text-slate-800 antialiased font-sans">
+  <!-- MOBILE BACKDROP OVERLAY -->
+  <div id="sidebarOverlay" onclick="toggleMobileSidebar(false)" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-40 hidden pointer-events-none transition-opacity lg:hidden"></div>
+
+  <div class="flex h-screen overflow-hidden">
+    <!-- APP SIDEBAR -->
+    <aside id="appSidebar" class="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] lg:w-64 bg-white border-r border-slate-200/90 flex flex-col shrink-0 transition-transform duration-300 ease-in-out -translate-x-full lg:translate-x-0 lg:static lg:inset-auto shadow-2xl lg:shadow-none">
+      <!-- Top Brand Header -->
+      <div class="px-4 py-4 border-b border-slate-100 flex items-center justify-between gap-2">
+        <div role="button" tabindex="0" data-nav-view="dashboard" onclick="switchView('dashboard')" class="flex items-center gap-2.5 cursor-pointer min-w-0">
+          <div class="w-9 h-9 rounded-xl bg-[#006948] flex items-center justify-center text-white shadow-xs shrink-0">
+            <span class="material-symbols-outlined text-xl fill">shield_with_heart</span>
+          </div>
+          <div class="min-w-0">
+            <div class="font-extrabold text-[13px] tracking-tight text-[#006948] leading-none">MEDCRED CONCIERGE</div>
+            <div class="text-[8.5px] text-slate-500 font-semibold leading-tight mt-0.5 truncate">Tata Kelola Medik &amp; Kredensial</div>
+          </div>
+        </div>
+        <button type="button" onclick="toggleMobileSidebar(false)" class="lg:hidden p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition" aria-label="Tutup Menu">
+          <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+      </div>
+
+      <!-- Navigation Menu ('MENU UTAMA') with Event Delegation + Clean onclick -->
+      <div id="sidebarNavContainer" class="px-3 py-4 flex-1 overflow-y-auto">
+        <div class="px-3 mb-2.5 text-[10px] font-bold tracking-wider text-slate-400 uppercase">
+          MENU UTAMA
+        </div>
+        <nav class="space-y-1">
+          <button type="button" id="nav-dashboard" data-nav-view="dashboard" onclick="switchView('dashboard')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold transition bg-[#006948] text-white shadow-xs active">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">grid_view</span>
+            <span class="pointer-events-none">Ringkasan Utama</span>
+          </button>
+          <button type="button" id="nav-doctors" data-nav-view="doctors" onclick="switchView('doctors')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">group</span>
+            <span class="pointer-events-none">Daftar Dokter &amp; Nakes</span>
+          </button>
+          <button type="button" id="nav-psv" data-nav-view="psv" onclick="switchView('psv')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">verified_user</span>
+            <span class="pointer-events-none">Verifikasi Kredensial</span>
+          </button>
+          <button type="button" id="nav-compliance" data-nav-view="compliance" onclick="switchView('compliance')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">folder_shared</span>
+            <span class="pointer-events-none">Kepatuhan Dokumen</span>
+          </button>
+          <button type="button" id="nav-audit" data-nav-view="audit" onclick="switchView('audit')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">receipt_long</span>
+            <span class="pointer-events-none">Log Audit &amp; Kepatuhan</span>
+          </button>
+          <button type="button" id="nav-committee" data-nav-view="committee" onclick="switchView('committee')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">clinical_notes</span>
+            <span class="pointer-events-none">Komite Medik &amp; SPK/RKK</span>
+          </button>
+          <button type="button" id="nav-invoicing" data-nav-view="invoicing" onclick="switchView('invoicing')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">payments</span>
+            <span class="pointer-events-none">Penagihan &amp; Faktur</span>
+          </button>
+          <button type="button" id="nav-commissions" data-nav-view="commissions" onclick="switchView('commissions')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">account_balance_wallet</span>
+            <span class="pointer-events-none">Komisi Agen &amp; PIC</span>
+          </button>
+          <button type="button" id="nav-settings" data-nav-view="settings" onclick="switchView('settings')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+            <span class="material-symbols-outlined text-[18px] pointer-events-none">settings</span>
+            <span class="pointer-events-none">Pengaturan</span>
+          </button>
+        </nav>
+
+        <!-- Quick Portal Switcher for Doctor QR Self-Service -->
+        <div class="mt-6 pt-4 border-t border-slate-100">
+          <div class="px-3 mb-2 text-[10px] font-bold tracking-wider text-slate-400 uppercase">
+            PORTAL MANDIRI DOKTER
+          </div>
+          <button type="button" id="nav-qr-portal" data-nav-view="qr-portal" onclick="openQrSelfPortal('doc-elena', 'existing')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition text-slate-600 hover:text-slate-900 hover:bg-emerald-50/70">
+            <span class="material-symbols-outlined text-[18px] text-[#006948] pointer-events-none">qr_code_2</span>
+            <span class="pointer-events-none">Form Registrasi &amp; QR Dokter</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Bottom Profile Card in Sidebar -->
+      <div class="p-3 border-t border-slate-100 bg-slate-50/60">
+        <div class="p-2.5 rounded-xl bg-white border border-slate-200/80 flex items-center justify-between gap-2 shadow-2xs">
+          <div role="button" tabindex="0" onclick="handleBottomProfileClick()" class="flex items-center gap-2.5 min-w-0 cursor-pointer">
+            <div id="sidebarBottomAvatar" class="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-800 to-teal-600 text-white font-bold text-xs flex items-center justify-center shrink-0 ring-2 ring-emerald-100">
+              EV
+            </div>
+            <div class="min-w-0">
+              <div id="sidebarBottomName" class="text-xs font-bold text-slate-900 truncate">Dr. Eleanor Vance</div>
+              <div id="sidebarBottomRole" class="text-[9px] font-bold text-[#006948] uppercase tracking-wider truncate">KETUA SUBKOMITE KREDENSIAL</div>
+            </div>
+          </div>
+          <button type="button" onclick="performLogout()" title="Keluar / Buka Halaman Login" class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition shrink-0">
+            <span class="material-symbols-outlined text-base">logout</span>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONSOLE WRAPPER -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <!-- TOP STICKY HEADER -->
+      <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-xs border-b border-slate-200/90 shrink-0 w-full">
+        <div class="h-14 sm:h-16 px-3.5 sm:px-6 flex items-center justify-between gap-2">
+          <!-- Left: Mobile Menu + Faskes Selector + Accreditation Badge -->
+          <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+            <button type="button" onclick="toggleMobileSidebar(true)" class="lg:hidden p-2 -ml-1 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition shrink-0" aria-label="Buka Menu">
+              <span class="material-symbols-outlined text-2xl">menu</span>
+            </button>
+
+            <div class="relative">
+              <button type="button" id="headerOrgScopeBtn" onclick="toggleOrgScopeDropdown()" class="flex items-center gap-2 bg-slate-50 hover:bg-slate-100 transition border border-slate-200/80 rounded-xl px-2.5 sm:px-3 py-1.5 cursor-pointer min-w-0 max-w-[190px] sm:max-w-sm">
+                <span class="material-symbols-outlined text-[#006948] text-base shrink-0">public</span>
+                <span id="selectedOrgScopeLabel" class="text-xs font-bold text-slate-800 truncate">Semua Wilayah Nasional (148)</span>
+                <span class="material-symbols-outlined text-sm text-slate-400 shrink-0">expand_more</span>
+              </button>
+              <div id="orgScopeDropdown" class="hidden absolute left-0 mt-2 w-80 bg-white rounded-2xl shadow-2xl border border-slate-200 py-2.5 z-50 text-xs">
+                <div class="px-3.5 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Filter Cakupan Layanan</div>
+                <button type="button" onclick="selectOrgScope('all')" class="w-full text-left px-3.5 py-2 hover:bg-emerald-50 text-slate-700 flex items-center justify-between font-semibold">
+                  <span class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-[#006948]">public</span> Semua Layanan Nasional</span>
+                  <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-[#006948] text-[10px] font-bold">148 Tiket</span>
+                </button>
+                <button type="button" onclick="selectOrgScope('b2c')" class="w-full text-left px-3.5 py-2 hover:bg-emerald-50 text-slate-700 flex items-center justify-between font-semibold">
+                  <span class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-blue-600">person</span> Jalur B2C Dokter Mandiri</span>
+                  <span class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 text-[10px] font-bold">92 Tiket</span>
+                </button>
+                <button type="button" onclick="selectOrgScope('b2b')" class="w-full text-left px-3.5 py-2 hover:bg-emerald-50 text-slate-700 flex items-center justify-between font-semibold">
+                  <span class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-purple-600">corporate_fare</span> Jalur B2B Mitra Faskes</span>
+                  <span class="px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 text-[10px] font-bold">56 Tiket</span>
+                </button>
+                <div class="my-1.5 border-t border-slate-100"></div>
+                <div class="px-3.5 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Mitra Faskes Spesifik</div>
+                <button type="button" onclick="selectPartnerScope('part-1')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 text-slate-700 flex items-center justify-between text-xs">
+                  <span class="truncate">Klinik Pratama Sehat Bersama (Surabaya)</span>
+                  <span class="text-[10px] text-slate-400 font-mono">12 Dr</span>
+                </button>
+                <button type="button" onclick="selectPartnerScope('part-2')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 text-slate-700 flex items-center justify-between text-xs">
+                  <span class="truncate">RS Citra Medika Jaringan Jabar (Bandung)</span>
+                  <span class="text-[10px] text-slate-400 font-mono">24 Dr</span>
+                </button>
+                <button type="button" onclick="selectPartnerScope('part-3')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 text-slate-700 flex items-center justify-between text-xs">
+                  <span class="truncate">Klinik Spesialis Kasih Medika (Yogyakarta)</span>
+                  <span class="text-[10px] text-slate-400 font-mono">8 Dr</span>
+                </button>
+              </div>
+            </div>
+
+
+          </div>
+
+          <!-- Center: Global Search Input (Admin) OR Doctor Status Pill (Doctor) -->
+          <div id="headerSearchContainer" class="relative flex-1 max-w-sm mx-2 hidden md:block">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-base">search</span>
+            <input id="globalSearchInput" type="text" oninput="handleGlobalSearch(this.value)" placeholder="Cari dokter, nomor STR, SIP, atau ..." class="w-full pl-9 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#006948] focus:bg-white transition" />
+          </div>
+
+          <div id="headerDoctorPill" class="hidden items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-xl text-xs font-bold text-[#006948] max-w-md truncate">
+            <span class="material-symbols-outlined text-base shrink-0">shield_with_heart</span>
+            <span id="headerDoctorPillText" class="truncate">Portal Mandiri Dokter</span>
+          </div>
+
+          <!-- Right: Quick Actions (QR) + Notification + User Avatar -->
+          <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            <button type="button" onclick="toggleMobileSearchBar()" class="md:hidden p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition" title="Cari Dokter">
+              <span class="material-symbols-outlined text-xl">search</span>
+            </button>
+
+            <button id="headerBtnQrModal" type="button" onclick="openQrModal()" class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-[#006948] rounded-xl text-[11px] font-bold transition">
+              <span class="material-symbols-outlined text-sm">qr_code_2</span>
+              <span class="hidden xl:inline">Link QR Dokter</span>
+            </button>
+
+            <div class="relative">
+              <button type="button" id="headerNotificationBtn" onclick="toggleNotificationDropdown()" class="relative p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition" title="Notifikasi Operasional">
+                <span class="material-symbols-outlined text-xl">notifications</span>
+                <span id="headerNotificationBadge" class="w-2 h-2 rounded-full bg-rose-500 absolute top-2 right-2 ring-2 ring-white"></span>
+              </button>
+              <div id="notificationDropdown" class="hidden absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-slate-200 z-50 overflow-hidden text-xs">
+                <div class="p-3.5 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[#006948] text-base">notifications_active</span>
+                    <span class="font-bold text-slate-900 text-xs">Notifikasi Operasional Concierge</span>
+                  </div>
+                  <button type="button" onclick="markAllNotificationsRead()" class="text-[10px] font-bold text-[#006948] hover:underline">Tandai Dibaca</button>
+                </div>
+                <div class="divide-y divide-slate-100 max-h-80 overflow-y-auto">
+                  <div class="p-3 hover:bg-slate-50 transition cursor-pointer flex gap-3 items-start" onclick="openDoctorDetailModal('doc-sophia'); toggleNotificationDropdown(false);">
+                    <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 font-bold text-xs mt-0.5">SA</div>
+                    <div class="flex-1 space-y-0.5">
+                      <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-900">Dr. Sophia Al-Mansoor</span>
+                        <span class="text-[9px] text-slate-400">10m lalu</span>
+                      </div>
+                      <p class="text-slate-600 text-[11px]">Unggah revisi SIP Faskes 2 (SIP2_Revisi.pdf). Menunggu kurasi admin.</p>
+                      <div class="pt-1 flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[9px] font-bold">Perlu Review</span>
+                        <span class="text-[10px] text-[#006948] font-bold hover:underline">Buka Berkas &rarr;</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="p-3 hover:bg-slate-50 transition cursor-pointer flex gap-3 items-start" onclick="openMassReminderModal('doc-elena'); toggleNotificationDropdown(false);">
+                    <div class="w-8 h-8 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 font-bold text-xs mt-0.5">ER</div>
+                    <div class="flex-1 space-y-0.5">
+                      <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-900">Dr. Elena Rostova</span>
+                        <span class="text-[9px] text-rose-500 font-bold">14 Hari Lagi</span>
+                      </div>
+                      <p class="text-slate-600 text-[11px]">STR Spesialis berakhir 15 Des 2026. Belum ada bukti perpanjangan.</p>
+                      <div class="pt-1 flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 text-[9px] font-bold">Peringatan Kritis</span>
+                        <span class="text-[10px] text-[#006948] font-bold hover:underline">Kirim Tautan QR WA &rarr;</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="p-3 hover:bg-slate-50 transition cursor-pointer flex gap-3 items-start" onclick="openDoctorDetailModal('doc-bagus'); toggleNotificationDropdown(false);">
+                    <div class="w-8 h-8 rounded-full bg-emerald-100 text-[#006948] flex items-center justify-center shrink-0 font-bold text-xs mt-0.5">BS</div>
+                    <div class="flex-1 space-y-0.5">
+                      <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-900">Dr. Bagus Setiawan</span>
+                        <span class="text-[9px] text-slate-400">1 jam lalu</span>
+                      </div>
+                      <p class="text-slate-600 text-[11px]">e-SIP Kemenkes &amp; Rekomendasi Kolegium Terbit (100% Selesai).</p>
+                      <div class="pt-1 flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-[#006948] text-[9px] font-bold">Selesai &amp; Terbit</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="p-3 hover:bg-slate-50 transition cursor-pointer flex gap-3 items-start" onclick="openDoctorDetailModal('doc-marcus'); toggleNotificationDropdown(false);">
+                    <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 font-bold text-xs mt-0.5">MV</div>
+                    <div class="flex-1 space-y-0.5">
+                      <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-900">Dr. Marcus Vance</span>
+                        <span class="text-[9px] text-slate-400">3 jam lalu</span>
+                      </div>
+                      <p class="text-slate-600 text-[11px]">Pengajuan Kenaikan Jenjang Jabatan Fungsional Utama disetujui BKN.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="p-2.5 bg-slate-50 border-t border-slate-100 text-center">
+                  <button type="button" onclick="switchView('doctors'); toggleNotificationDropdown(false);" class="text-[11px] font-bold text-[#006948] hover:underline">Lihat Semua 148 Permohonan Berkas &rarr;</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="relative">
+              <button type="button" onclick="toggleUserDropdown()" class="flex items-center gap-2 p-1 rounded-full hover:bg-slate-100 transition">
+                <div id="headerTopAvatar" class="w-8 h-8 rounded-full bg-[#006948] text-white font-bold text-xs flex items-center justify-center shadow-xs">
+                  EV
+                </div>
+              </button>
+              <div id="userDropdown" class="hidden pointer-events-none absolute right-0 mt-2 w-60 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50 text-xs">
+                <div class="px-4 py-2.5 border-b border-slate-100">
+                  <div id="dropdownUserName" class="font-bold text-slate-900">Dr. Eleanor Vance</div>
+                  <div id="dropdownUserRole" class="text-[10px] text-[#006948] font-bold">Ketua Subkomite Kredensial</div>
+                </div>
+
+                <!-- Admin Dropdown Items -->
+                <button type="button" onclick="openQrModal(); toggleUserDropdown(false);" class="dropdown-admin-item w-full text-left px-4 py-2.5 hover:bg-slate-50 flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-sm text-[#006948]">qr_code_2</span> Buat Link QR Dokter
+                </button>
+                <button type="button" onclick="switchView('audit'); toggleUserDropdown(false);" class="dropdown-admin-item w-full text-left px-4 py-2.5 hover:bg-slate-50 flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-sm text-slate-600">receipt_long</span> Log Audit &amp; Kepatuhan
+                </button>
+
+                <!-- Doctor Dropdown Items -->
+                <button type="button" onclick="openQrSelfPortal(state.currentUser?.doctorId, 'existing'); toggleUserDropdown(false);" class="dropdown-doctor-item hidden w-full text-left px-4 py-2.5 hover:bg-slate-50 flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-sm text-[#006948]">upload_file</span> Form Unggah Berkas Mandiri
+                </button>
+                <button type="button" onclick="openDoctorDetail(state.currentUser?.doctorId); toggleUserDropdown(false);" class="dropdown-doctor-item hidden w-full text-left px-4 py-2.5 hover:bg-slate-50 flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-sm text-blue-600">badge</span> Status Kredensial Saya
+                </button>
+                <button type="button" onclick="openDoctorRkk(state.currentUser?.doctorId); toggleUserDropdown(false);" class="dropdown-doctor-item hidden w-full text-left px-4 py-2.5 hover:bg-slate-50 flex items-center gap-2 text-slate-700">
+                  <span class="material-symbols-outlined text-sm text-emerald-600">clinical_notes</span> Kewenangan Klinis (SPK/RKK)
+                </button>
+
+                <div class="border-t border-slate-100 my-1"></div>
+                <button type="button" onclick="performLogout()" class="w-full text-left px-4 py-2.5 hover:bg-red-50 flex items-center gap-2 text-red-600 font-bold">
+                  <span class="material-symbols-outlined text-sm">logout</span> Halaman Login / Keluar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Expandable Mobile Search Drawer (< md) -->
+        <div id="mobileSearchDrawer" class="hidden md:hidden px-3.5 pb-3 pt-1 border-t border-slate-100 bg-white">
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-base">search</span>
+            <input id="mobileGlobalSearchInput" type="text" oninput="handleGlobalSearch(this.value)" placeholder="Cari dokter, nomor STR, SIP, atau NIP..." class="w-full pl-9 pr-9 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#006948]" />
+            <button type="button" onclick="toggleMobileSearchBar(false)" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1">
+              <span class="material-symbols-outlined text-base">close</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- SCROLLABLE WORKSPACE -->
+      <main id="mainContent" class="flex-1 overflow-y-auto p-3.5 sm:p-5 lg:p-6 bg-[#f4f7f6] w-full max-w-full overflow-x-hidden">
+        <section id="view-doctors" class="spa-view active space-y-4 sm:space-y-5"></section>
+      </main>
+    </div>
+  </div>
+
+  
+
+  <!-- Data Store & Shared Shell Scripts -->
+  <script src="js/state.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Page-Specific Module Script -->
+  <script>
+function filterDoctorsDirectory(q) {
+      onDirectorySearchChange(q);
+    }
+
+    function setDirectoryStatusTab(tab) {
+      state.directoryTab = tab;
+      state.directoryPage = 1;
+      updateDoctorsDirectoryContent();
+    }
+
+    function onDirectorySearchChange(val) {
+      state.directorySearch = (val || '').trim();
+      state.directoryPage = 1;
+      updateDoctorsDirectoryContent();
+    }
+
+    function onDirectorySegmentChange(val) {
+      state.directorySegment = val;
+      state.directoryPage = 1;
+      updateDoctorsDirectoryContent();
+    }
+
+    function onDirectoryServiceChange(val) {
+      state.directoryService = val;
+      state.directoryPage = 1;
+      updateDoctorsDirectoryContent();
+    }
+
+    function onDirectoryCompletenessChange(val) {
+      state.directoryCompleteness = val;
+      state.directoryPage = 1;
+      updateDoctorsDirectoryContent();
+    }
+
+    function onDirectorySpecialtyChange(val) {
+      state.directorySpecialty = val;
+      state.directoryPage = 1;
+      updateDoctorsDirectoryContent();
+    }
+
+    function changeDirectoryPage(page) {
+      state.directoryPage = page;
+      updateDoctorsDirectoryContent();
+      const el = document.getElementById('doctorsDirectoryTableWrapper');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function changeDirectoryPerPage(perPage) {
+      state.directoryPerPage = perPage;
+      state.directoryPage = 1;
+      updateDoctorsDirectoryContent();
+    }
+
+    function resetDirectoryFilters() {
+      state.directoryTab = 'all';
+      state.directorySearch = '';
+      state.directorySegment = 'all';
+      state.directoryService = 'all';
+      state.directoryCompleteness = 'all';
+      state.directorySpecialty = 'all';
+      state.directoryPage = 1;
+
+      const sInp = document.getElementById('dirSearchInput');
+      if (sInp) sInp.value = '';
+      const segSel = document.getElementById('dirFilterSegment');
+      if (segSel) segSel.value = 'all';
+      const srvSel = document.getElementById('dirFilterService');
+      if (srvSel) srvSel.value = 'all';
+      const cmpSel = document.getElementById('dirFilterCompleteness');
+      if (cmpSel) cmpSel.value = 'all';
+      const spcSel = document.getElementById('dirFilterSpecialty');
+      if (spcSel) spcSel.value = 'all';
+
+      updateDoctorsDirectoryContent();
+      showToast('Filter Direset', 'Seluruh filter direktori dokter telah dikembalikan ke kondisi awal.', 'info');
+    }
+
+    function downloadFilteredDoctorsCsv() {
+      const filtered = getFilteredDoctorsDirectory();
+      const rows = [
+        ['ID Registrasi', 'Segmen Klien', 'Nama Dokter', 'Spesialisasi', 'Faskes / Organisasi', 'Nomor STR', 'Masa Berlaku STR', 'Layanan Pengurusan', 'Status Pipeline', 'No. Resi Instansi', 'Kelengkapan', 'PIN Portal QR'],
+        ...filtered.map(d => {
+          const comp = getDocCompletion(d);
+          return [
+            d.regId,
+            d.clientType,
+            d.name,
+            d.specialty,
+            d.clientOrg,
+            d.str,
+            d.strExpiry || '-',
+            d.serviceType,
+            d.pipelineLabel || d.statusLabel,
+            d.instansiRegNo,
+            `${comp.validCount}/${comp.total} (${comp.pct}%)`,
+            d.pin
+          ];
+        })
+      ];
+      triggerCsvDownload(rows, `Direktori_Dokter_MedCred_${state.directoryTab}_${new Date().toISOString().slice(0, 10)}.csv`);
+      showToast('Data CSV Diunduh', `${filtered.length} baris data dokter berhasil diekspor.`, 'success');
+    }
+
+    function copyDoctorPin(pin) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(pin);
+      }
+      showToast('PIN Disalin', `PIN Portal Mandiri ${pin} telah disalin ke clipboard.`, 'success');
+    }
+
+    function getFilteredDoctorsDirectory() {
+      const q = (state.directorySearch || '').toLowerCase().trim();
+      return state.doctors.filter(doc => {
+        // Tab Status Pipeline
+        if (state.directoryTab === 'curation' && doc.pipelineStatus !== 'curation') return false;
+        if (state.directoryTab === 'need_revision' && doc.pipelineStatus !== 'need_revision') return false;
+        if (state.directoryTab === 'submitted_instansi' && doc.pipelineStatus !== 'submitted_instansi' && doc.pipelineStatus !== 'instansi_progress') return false;
+        if (state.directoryTab === 'completed' && doc.pipelineStatus !== 'completed') return false;
+        if (state.directoryTab === 'cancelled' && doc.pipelineStatus !== 'cancelled') return false;
+
+        // Segmen Klien B2C / B2B
+        if (state.directorySegment !== 'all' && doc.clientType !== state.directorySegment) return false;
+
+        // Layanan
+        if (state.directoryService !== 'all' && doc.serviceCode !== state.directoryService) return false;
+
+        // Kelengkapan
+        if (state.directoryCompleteness === 'complete' && !getDocCompletion(doc).isComplete) return false;
+        if (state.directoryCompleteness === 'incomplete' && getDocCompletion(doc).isComplete) return false;
+
+        // Spesialisasi
+        if (state.directorySpecialty !== 'all') {
+          const spcMatch = (doc.specialtyCode === state.directorySpecialty) ||
+                            (doc.deptFilter === state.directorySpecialty) ||
+                            (doc.specialty && doc.specialty.toLowerCase().includes(state.directorySpecialty.toLowerCase()));
+          if (!spcMatch) return false;
+        }
+
+        // Search text
+        if (q) {
+          const hay = `${doc.regId} ${doc.name} ${doc.specialty} ${doc.str} ${doc.nip} ${doc.clientOrg} ${doc.serviceType} ${doc.instansiRegNo} ${doc.pin} ${doc.clientType}`.toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+
+        return true;
+      });
+    }
+
+    function renderDoctorsDirectoryView() {
+      const container = document.getElementById('view-doctors');
+      if (!container) return;
+
+      container.innerHTML = `
+        <!-- HEADER DIREKTORI DOKTER -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-[#006948] text-[10px] font-extrabold uppercase">DIREKTORI NASIONAL TERPADU</span>
+              <h2 class="text-lg sm:text-xl font-extrabold text-slate-900">Daftar Dokter &amp; Tenaga Kesehatan (1.248 Terdaftar)</h2>
+            </div>
+            <p class="text-xs text-slate-500 mt-0.5">Direktori kredensialing aktif, pemantauan pengurusan perizinan instansi &amp; akses QR Code perorangan (B2C &amp; B2B).</p>
+          </div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <button type="button" onclick="downloadFilteredDoctorsCsv()" class="px-3.5 py-2.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-2xs transition">
+              <span class="material-symbols-outlined text-base text-slate-500">download</span>
+              <span>Unduh CSV</span>
+            </button>
+            <button type="button" onclick="openQrSelfPortal(null, 'new')" class="px-4 py-2.5 bg-[#006948] hover:bg-[#005137] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-2xs transition shrink-0">
+              <span class="material-symbols-outlined text-base">person_add</span>
+              <span>+ Daftarkan Dokter Baru</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- TAHAPAN PIPELINE QUICK TABS -->
+        <div class="bg-white border border-slate-200/90 rounded-2xl p-3 sm:p-4 shadow-2xs space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+            <div class="flex items-center gap-1.5 flex-wrap text-xs">
+              <span class="text-[10px] font-extrabold text-slate-400 uppercase mr-1">STATUS PIPELINE:</span>
+              <button type="button" id="dirTab-all" onclick="setDirectoryStatusTab('all')" class="px-3 py-1.5 rounded-xl font-bold transition text-xs">
+                Semua (${state.doctors.length})
+              </button>
+              <button type="button" id="dirTab-curation" onclick="setDirectoryStatusTab('curation')" class="px-3 py-1.5 rounded-xl font-bold transition text-xs">
+                Kurasi Admin (${state.doctors.filter(d => d.pipelineStatus === 'curation').length})
+              </button>
+              <button type="button" id="dirTab-need_revision" onclick="setDirectoryStatusTab('need_revision')" class="px-3 py-1.5 rounded-xl font-bold transition text-xs">
+                Perlu Revisi (${state.doctors.filter(d => d.pipelineStatus === 'need_revision').length})
+              </button>
+              <button type="button" id="dirTab-submitted_instansi" onclick="setDirectoryStatusTab('submitted_instansi')" class="px-3 py-1.5 rounded-xl font-bold transition text-xs">
+                Diajukan ke Kemenkes (${state.doctors.filter(d => d.pipelineStatus === 'submitted_instansi' || d.pipelineStatus === 'instansi_progress').length})
+              </button>
+              <button type="button" id="dirTab-completed" onclick="setDirectoryStatusTab('completed')" class="px-3 py-1.5 rounded-xl font-bold transition text-xs">
+                Terbit &amp; Selesai (${state.doctors.filter(d => d.pipelineStatus === 'completed').length})
+              </button>
+              <button type="button" id="dirTab-cancelled" onclick="setDirectoryStatusTab('cancelled')" class="px-3 py-1.5 rounded-xl font-bold transition text-xs">
+                Dibatalkan (${state.doctors.filter(d => d.pipelineStatus === 'cancelled').length})
+              </button>
+            </div>
+            <span id="dirCounterLabel" class="text-[11px] text-slate-500 font-medium">Memuat data...</span>
+          </div>
+
+          <!-- MULTI-FILTER CONTROLS -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-2.5">
+            <!-- Search bar -->
+            <div class="relative lg:col-span-4">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+              <input id="dirSearchInput" type="text" value="${state.directorySearch || ''}" oninput="onDirectorySearchChange(this.value)" placeholder="Cari nama, STR, NIP, spesialisasi, atau faskes..." class="w-full pl-9 pr-3 py-2 bg-slate-50/70 hover:bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:border-[#006948]" />
+            </div>
+
+            <!-- Filter Segmen Klien B2C / B2B -->
+            <div class="lg:col-span-2">
+              <select id="dirFilterSegment" onchange="onDirectorySegmentChange(this.value)" class="w-full bg-white border border-slate-200 rounded-xl px-2.5 py-2 text-xs text-slate-700 font-semibold focus:outline-none focus:border-[#006948]">
+                <option value="all" ${state.directorySegment === 'all' ? 'selected' : ''}>SEGMEN: Semua (B2C &amp; B2B)</option>
+                <option value="B2C" ${state.directorySegment === 'B2C' ? 'selected' : ''}>B2C: Dokter Mandiri</option>
+                <option value="B2B" ${state.directorySegment === 'B2B' ? 'selected' : ''}>B2B: Mitra Klinik / Faskes</option>
+              </select>
+            </div>
+
+            <!-- Filter Jenis Layanan -->
+            <div class="lg:col-span-3">
+              <select id="dirFilterService" onchange="onDirectoryServiceChange(this.value)" class="w-full bg-white border border-slate-200 rounded-xl px-2.5 py-2 text-xs text-slate-700 font-medium focus:outline-none focus:border-[#006948]">
+                <option value="all" ${state.directoryService === 'all' ? 'selected' : ''}>LAYANAN: Semua Jenis</option>
+                <option value="srv-str" ${state.directoryService === 'srv-str' ? 'selected' : ''}>Pembaruan STR 5 Thn &amp; SKP Kemenkes</option>
+                <option value="srv-jafung" ${state.directoryService === 'srv-jafung' ? 'selected' : ''}>Kenaikan Jabatan Fungsional (Jafung)</option>
+                <option value="srv-kolegium" ${state.directoryService === 'srv-kolegium' ? 'selected' : ''}>Rekomendasi Kolegium &amp; Serkom</option>
+                <option value="srv-sip" ${state.directoryService === 'srv-sip' ? 'selected' : ''}>Penerbitan SIP Baru / Jejaring</option>
+              </select>
+            </div>
+
+            <!-- Filter Kelengkapan Berkas -->
+            <div class="lg:col-span-3">
+              <select id="dirFilterCompleteness" onchange="onDirectoryCompletenessChange(this.value)" class="w-full bg-white border border-slate-200 rounded-xl px-2.5 py-2 text-xs text-slate-700 font-medium focus:outline-none focus:border-[#006948]">
+                <option value="all" ${state.directoryCompleteness === 'all' ? 'selected' : ''}>KELENGKAPAN: Semua Status</option>
+                <option value="complete" ${state.directoryCompleteness === 'complete' ? 'selected' : ''}>Lengkap 100% (Sah Semua)</option>
+                <option value="incomplete" ${state.directoryCompleteness === 'incomplete' ? 'selected' : ''}>Belum Lengkap (&lt; 100%)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Filter Action Bar (Reset, Pagination Per Page, Notifikasi) -->
+          <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 text-xs">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-[11px] text-slate-400 font-bold uppercase">Tampilkan:</span>
+              <select id="dirPerPageSelect" onchange="changeDirectoryPerPage(Number(this.value))" class="bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs font-bold text-slate-700 focus:outline-none focus:border-[#006948]">
+                <option value="5" ${state.directoryPerPage === 5 ? 'selected' : ''}>5 per halaman</option>
+                <option value="10" ${state.directoryPerPage === 10 ? 'selected' : ''}>10 per halaman</option>
+                <option value="20" ${state.directoryPerPage === 20 ? 'selected' : ''}>20 per halaman</option>
+              </select>
+
+              <button type="button" onclick="resetDirectoryFilters()" class="px-2.5 py-1 text-xs font-semibold text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg flex items-center gap-1 transition">
+                <span class="material-symbols-outlined text-sm">restart_alt</span>
+                <span>Reset Filter</span>
+              </button>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="openMassReminderModal()" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-[#006948] rounded-xl text-xs font-bold transition flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm">notifications</span>
+                <span>Kirim Pengingat Berkas</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TABLE CARD & PAGINATION WRAPPER -->
+        <div id="doctorsDirectoryTableWrapper" class="bg-white border border-slate-200/90 rounded-2xl shadow-2xs overflow-hidden">
+          <!-- Mobile Touch Cards (< lg) -->
+          <div id="doctorsDirectoryMobileCards" class="lg:hidden divide-y divide-slate-100"></div>
+
+          <!-- Desktop Table (lg+) -->
+          <div class="hidden lg:block overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-50/90 border-b border-slate-200 text-slate-400 font-extrabold uppercase text-[10px] tracking-wider">
+                  <th class="py-3.5 px-4">ID &amp; SEGMEN</th>
+                  <th class="py-3.5 px-4">DOKTER &amp; ASAL FASKES</th>
+                  <th class="py-3.5 px-4">NOMOR STR &amp; BERLAKU</th>
+                  <th class="py-3.5 px-4">KELENGKAPAN BERKAS</th>
+                  <th class="py-3.5 px-4">PIN PORTAL QR</th>
+                  <th class="py-3.5 px-4">STATUS TIKET INSTANSI</th>
+                  <th class="py-3.5 px-4 text-right">AKSI CONCIERGE</th>
+                </tr>
+              </thead>
+              <tbody id="doctorsDirectoryTableBody" class="divide-y divide-slate-100 text-slate-700"></tbody>
+            </table>
+          </div>
+
+          <!-- Interactive Pagination Footer -->
+          <div id="doctorsDirectoryPagination" class="px-4 py-3.5 bg-slate-50/80 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs"></div>
+        </div>
+      `;
+
+      updateDoctorsDirectoryContent();
+    }
+
+    function updateDoctorsDirectoryContent() {
+      const tbody = document.getElementById('doctorsDirectoryTableBody');
+      const mobileContainer = document.getElementById('doctorsDirectoryMobileCards');
+      const paginationEl = document.getElementById('doctorsDirectoryPagination');
+      const counterLabel = document.getElementById('dirCounterLabel');
+      if (!tbody || !mobileContainer) return;
+
+      // Update tab active classes
+      const tabs = ['all', 'curation', 'need_revision', 'submitted_instansi', 'completed', 'cancelled'];
+      tabs.forEach(t => {
+        const btn = document.getElementById('dirTab-' + t);
+        if (btn) {
+          if (state.directoryTab === t) {
+            btn.className = 'px-3 py-1.5 rounded-xl font-extrabold transition text-xs bg-[#006948] text-white shadow-2xs';
+          } else {
+            btn.className = 'px-3 py-1.5 rounded-xl font-bold transition text-xs bg-white border border-slate-200 text-slate-600 hover:bg-slate-50';
+          }
+        }
+      });
+
+      const filtered = getFilteredDoctorsDirectory();
+      const totalFiltered = filtered.length;
+      const perPage = state.directoryPerPage || 5;
+      const totalPages = Math.max(1, Math.ceil(totalFiltered / perPage));
+
+      if (state.directoryPage > totalPages) state.directoryPage = totalPages;
+      if (state.directoryPage < 1) state.directoryPage = 1;
+
+      const startIdx = (state.directoryPage - 1) * perPage;
+      const endIdx = Math.min(startIdx + perPage, totalFiltered);
+      const pageDoctors = filtered.slice(startIdx, endIdx);
+
+      if (counterLabel) {
+        counterLabel.textContent = `Menampilkan ${totalFiltered === 0 ? 0 : startIdx + 1} — ${endIdx} dari ${totalFiltered} dokter terfilter`;
+      }
+
+      // Empty State
+      if (totalFiltered === 0) {
+        const emptyHtml = `
+          <div class="p-10 text-center text-xs text-slate-500 space-y-3">
+            <div class="w-12 h-12 mx-auto rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
+              <span class="material-symbols-outlined text-2xl">search_off</span>
+            </div>
+            <div class="font-bold text-slate-800 text-sm">Tidak ada dokter yang sesuai kriteria filter</div>
+            <p class="text-[11px] text-slate-400 max-w-md mx-auto">Silakan sesuaikan kata kunci pencarian, ubah pilihan segmen/layanan, atau klik reset filter di bawah.</p>
+            <button type="button" onclick="resetDirectoryFilters()" class="px-4 py-2 bg-[#006948] hover:bg-[#005137] text-white rounded-xl font-bold text-xs shadow-2xs transition">
+              Reset Semua Filter
+            </button>
+          </div>
+        `;
+        tbody.innerHTML = `<tr><td colspan="7">${emptyHtml}</td></tr>`;
+        mobileContainer.innerHTML = emptyHtml;
+        if (paginationEl) {
+          paginationEl.innerHTML = `<span class="text-slate-400 text-xs">Tidak ada data untuk ditampilkan</span>`;
+        }
+        return;
+      }
+
+      // Render Desktop Rows
+      tbody.innerHTML = pageDoctors.map(doc => {
+        const comp = getDocCompletion(doc);
+        return `
+          <tr onclick="openDoctorDetail('${doc.id}')" class="hover:bg-slate-50/90 transition cursor-pointer">
+            <!-- ID & SEGMEN -->
+            <td class="py-3.5 px-4">
+              <div class="font-mono text-xs font-extrabold text-slate-700">${doc.regId}</div>
+              <span class="inline-block mt-1 px-1.5 py-0.5 rounded text-[9px] font-extrabold ${doc.clientType === 'B2C' ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'bg-amber-50 text-amber-800 border border-amber-200'}">
+                ${doc.clientType === 'B2C' ? 'B2C Mandiri' : 'B2B Mitra'}
+              </span>
+            </td>
+
+            <!-- DOKTER & ASAL FASKES -->
+            <td class="py-3.5 px-4">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-full ${doc.avatarBg} font-extrabold text-xs flex items-center justify-center shrink-0">
+                  ${doc.initials}
+                </div>
+                <div class="min-w-0">
+                  <div class="font-extrabold text-slate-900 hover:text-[#006948] transition truncate">${doc.name}</div>
+                  <div class="text-[11px] font-semibold text-slate-600 truncate">${doc.specialty}</div>
+                  <div class="text-[10px] text-slate-400 truncate flex items-center gap-1 mt-0.5">
+                    <span class="material-symbols-outlined text-[11px]">domain</span>
+                    <span>${doc.clientOrg}</span>
+                  </div>
+                </div>
+              </div>
+            </td>
+
+            <!-- NOMOR STR & BERLAKU -->
+            <td class="py-3.5 px-4 font-mono">
+              <div class="font-bold text-slate-800 text-xs">${doc.str}</div>
+              <div class="text-[10.5px] text-slate-400 font-sans mt-0.5">${doc.validUntilLabel || doc.strExpiry || 'Siklus 5 Thn'}</div>
+            </td>
+
+            <!-- KELENGKAPAN BERKAS -->
+            <td class="py-3.5 px-4">
+              <div class="flex items-center justify-between text-[11px] mb-1">
+                <span class="font-bold ${comp.isComplete ? 'text-[#006948]' : 'text-slate-700'}">${comp.validCount}/${comp.total} Berkas</span>
+                <span class="font-mono font-extrabold ${comp.isComplete ? 'text-[#006948]' : 'text-amber-700'}">${comp.pct}%</span>
+              </div>
+              <div class="w-28 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-1.5 rounded-full ${comp.isComplete ? 'bg-[#006948]' : 'bg-amber-500'}" style="width: ${comp.pct}%"></div>
+              </div>
+            </td>
+
+            <!-- PIN PORTAL QR -->
+            <td class="py-3.5 px-4" onclick="event.stopPropagation()">
+              <div class="inline-flex items-center gap-1.5 bg-indigo-50/80 border border-indigo-200/80 px-2 py-1 rounded-lg">
+                <span class="font-mono font-black text-indigo-900 text-xs">${doc.pin}</span>
+                <button type="button" onclick="copyDoctorPin('${doc.pin}')" title="Salin PIN" class="text-indigo-600 hover:text-indigo-900 p-0.5">
+                  <span class="material-symbols-outlined text-xs">content_copy</span>
+                </button>
+              </div>
+            </td>
+
+            <!-- STATUS TIKET INSTANSI -->
+            <td class="py-3.5 px-4">
+              <div>${getStatusBadgeHtml(doc)}</div>
+              <div class="text-[10px] text-slate-400 font-mono mt-1 truncate max-w-[150px]" title="${doc.instansiRegNo}">
+                Resi: ${doc.instansiRegNo}
+              </div>
+            </td>
+
+            <!-- AKSI CONCIERGE -->
+            <td class="py-3.5 px-4 text-right" onclick="event.stopPropagation()">
+              <div class="inline-flex items-center gap-1.5">
+                <button type="button" onclick="openDoctorDetail('${doc.id}')" class="px-2.5 py-1.5 bg-[#006948] hover:bg-[#005137] text-white rounded-lg text-[11px] font-bold shadow-2xs transition">
+                  Detail Berkas
+                </button>
+                <button type="button" onclick="openQrModal('${doc.id}')" title="Buka Tautan QR Portal Mandiri" class="p-1.5 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-800 rounded-lg transition">
+                  <span class="material-symbols-outlined text-base">qr_code_2</span>
+                </button>
+                <button type="button" onclick="sendWhatsAppConcierge('${doc.id}')" title="WhatsApp Konsultan MedCred" class="p-1.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-[#006948] rounded-lg transition">
+                  <span class="material-symbols-outlined text-base">chat</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      // Render Mobile Touch Cards
+      mobileContainer.innerHTML = pageDoctors.map(doc => {
+        const comp = getDocCompletion(doc);
+        return `
+          <div onclick="openDoctorDetail('${doc.id}')" class="p-4 hover:bg-slate-50 transition cursor-pointer space-y-3">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <div class="w-10 h-10 rounded-full ${doc.avatarBg} font-extrabold text-xs flex items-center justify-center shrink-0">
+                  ${doc.initials}
+                </div>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-[10px] font-mono font-bold text-slate-400">${doc.regId}</span>
+                    <span class="px-1.5 py-0.2 rounded text-[9px] font-bold ${doc.clientType === 'B2C' ? 'bg-indigo-50 text-indigo-700' : 'bg-amber-50 text-amber-800'}">${doc.clientType}</span>
+                  </div>
+                  <div class="text-xs font-extrabold text-slate-900 truncate">${doc.name}</div>
+                  <div class="text-[11px] text-slate-500 truncate">${doc.specialty}</div>
+                </div>
+              </div>
+              <div class="shrink-0">${getStatusBadgeHtml(doc)}</div>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs space-y-1.5">
+              <div class="flex justify-between"><span class="text-slate-500">Nomor STR:</span><strong class="font-mono text-slate-800">${doc.str}</strong></div>
+              <div class="flex justify-between"><span class="text-slate-500">Kelengkapan:</span><strong class="${comp.isComplete ? 'text-[#006948]' : 'text-amber-700'}">${comp.validCount}/${comp.total} (${comp.pct}%)</strong></div>
+              <div class="flex justify-between"><span class="text-slate-500">PIN Portal QR:</span><strong class="font-mono text-indigo-700">${doc.pin}</strong></div>
+              <div class="flex justify-between text-[11px] pt-1 border-t border-slate-200/60"><span class="text-slate-500">Layanan:</span><span class="font-bold text-slate-700 text-right truncate max-w-[180px]">${doc.serviceType}</span></div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2" onclick="event.stopPropagation()">
+              <button type="button" onclick="openDoctorDetail('${doc.id}')" class="py-2.5 bg-[#006948] hover:bg-[#005137] text-white rounded-xl text-xs font-bold text-center transition">
+                Detail Berkas
+              </button>
+              <button type="button" onclick="openQrModal('${doc.id}')" class="py-2.5 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-800 rounded-xl text-xs font-bold flex items-center justify-center gap-1 transition">
+                <span class="material-symbols-outlined text-sm">qr_code_2</span> Link QR
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Render Pagination Footer
+      let paginationButtonsHtml = '';
+
+      // Prev button
+      paginationButtonsHtml += `
+        <button type="button" onclick="changeDirectoryPage(${state.directoryPage - 1})" ${state.directoryPage === 1 ? 'disabled class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-300 text-xs font-bold cursor-not-allowed flex items-center gap-1"' : 'class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-bold flex items-center gap-1 transition shadow-2xs"'}>
+          <span class="material-symbols-outlined text-sm">chevron_left</span>
+          <span>Sebelumnya</span>
+        </button>
+      `;
+
+      // Page numbers (1 .. totalPages)
+      for (let p = 1; p <= totalPages; p++) {
+        const isActive = (p === state.directoryPage);
+        paginationButtonsHtml += `
+          <button type="button" onclick="changeDirectoryPage(${p})" class="w-8 h-8 rounded-lg text-xs font-bold transition flex items-center justify-center ${isActive ? 'bg-[#006948] text-white shadow-2xs' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'}">
+            ${p}
+          </button>
+        `;
+      }
+
+      // Next button
+      paginationButtonsHtml += `
+        <button type="button" onclick="changeDirectoryPage(${state.directoryPage + 1})" ${state.directoryPage === totalPages ? 'disabled class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-300 text-xs font-bold cursor-not-allowed flex items-center gap-1"' : 'class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-bold flex items-center gap-1 transition shadow-2xs"'}>
+          <span>Selanjutnya</span>
+          <span class="material-symbols-outlined text-sm">chevron_right</span>
+        </button>
+      `;
+
+      if (paginationEl) {
+        paginationEl.innerHTML = `
+          <div class="text-slate-500 font-medium">
+            Menampilkan <strong class="text-slate-900">${startIdx + 1} — ${endIdx}</strong> dari <strong class="text-slate-900">${totalFiltered}</strong> dokter (${state.doctors.length} percontohan nasional)
+          </div>
+          <div class="flex items-center gap-1.5 flex-wrap">
+            ${paginationButtonsHtml}
+          </div>
+        `;
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initAppShell('doctors');
+      renderDoctorsDirectoryView();
+    });
+  </script>
+</body>
+</html>
